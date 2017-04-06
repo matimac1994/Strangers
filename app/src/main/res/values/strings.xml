@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Strangers</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="search_button">Wyszukaj</string>
+    <string name="search_edit_text">Wyszukaj Event</string>
+    <string name="nearest_events">Wyświetl Eventy w pobliżu</string>
+
+    <string name="drawer_main_page">Główna</string>
+    <string name="drawer_profile">Profil</string>
+    <string name="drawer_my_events">Moje Eventy</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
