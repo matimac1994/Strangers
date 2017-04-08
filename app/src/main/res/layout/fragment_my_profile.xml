@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/user_data_and_photo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintTop_toBottomOf="@+id/three_buttons">
+
+        <LinearLayout
+            android:id="@+id/user_data"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/username_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/username_label"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/username" />
+
+                <TextView
+                    android:id="@+id/username"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/username" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/surname_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/surname_label"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/surname_label" />
+
+                <TextView
+                    android:id="@+id/surname"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/surname" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/age_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/age_label"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/age_label" />
+
+                <TextView
+                    android:id="@+id/age"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/age" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/gender_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal" >
+
+                <TextView
+                        android:id="@+id/gender_label"
+                        android:layout_width="110dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/gender_label" />
+
+                <TextView
+                    android:id="@+id/gender"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/gender" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/profile_picture"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            app:srcCompat="@drawable/temp_logo_picture"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:contentDescription="@string/profile_picture_description"
+            android:layout_toEndOf="@+id/user_data"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/three_buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="431dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintVertical_bias="0.0">
+
+
+        <Button
+            android:id="@+id/my_events_button"
+            style="@android:style/Widget.Holo.Light.Button.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:drawableStart="@drawable/ic_action_event"
+            android:text="@string/my_events" />
+
+        <Button
+            android:id="@+id/my_location_button"
+            style="@android:style/Widget.Holo.Light.Button.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:drawableStart="@drawable/ic_action_location_found"
+            android:text="@string/my_location" />
+
+        <Button
+            android:id="@+id/my_friends_button"
+            style="@android:style/Widget.Holo.Light.Button.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:drawableStart="@drawable/ic_action_group"
+            android:text="@string/my_friends" />
+
+    </LinearLayout>
+
+
+
+</android.support.constraint.ConstraintLayout>

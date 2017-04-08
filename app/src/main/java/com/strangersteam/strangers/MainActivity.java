@@ -79,9 +79,9 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
             fragmentManager.beginTransaction().replace(R.id.fragment_map, new GMapFragment()).commit();
-        } else if (id == R.id.nav_profile) {
-
-        } else if (id == R.id.nav_my_events) {
+        } else if (id == R.id.nav_profile){
+            fragmentManager.beginTransaction().replace(R.id.fragment_map, new MyProfileFragment()).commit();
+        } else if (id == R.id.nav_my_events){
             fragmentManager.beginTransaction().replace(R.id.fragment_map, new MyEventsFragment()).commit();
         }
 
@@ -89,4 +89,5 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

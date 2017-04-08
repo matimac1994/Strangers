@@ -16,4 +16,30 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="event_name_of_event">Nazwa Eventu</string>
+
+    <string name="username_label">Imię</string>
+    <string name="surname_label">Nazwisko</string>
+    <string name="age_label">Wiek</string>
+    <string name="gender_label">Płeć</string>
+
+    <string name="username">Mateusz</string>
+    <string name="surname">Maciejak</string>
+    <string name="age">22</string>
+    <string name="gender">Mężczyzna</string>
+
+    <string name="event_when_label">Kiedy?:</string>
+    <string name="event_where_label">Gdzie?:</string>
+
+    <string name="event_button_join">Dołącz!</string>
+
+    <string name="event_already_joined">Biorą udział</string>
+
+
+    <string name="profile_picture_description">Zdjęcie profilowe</string>
+
+    <string name="my_events">Eventy</string>
+    <string name="my_location">Lokalizacja</string>
+    <string name="my_friends">Przyjaciele</string>
 </resources>
