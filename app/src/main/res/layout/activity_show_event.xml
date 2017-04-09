@@ -98,11 +98,13 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/show_event_when_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/event_when_label" />
 
             <TextView
+                android:id="@+id/show_event_where_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/event_where_label" />

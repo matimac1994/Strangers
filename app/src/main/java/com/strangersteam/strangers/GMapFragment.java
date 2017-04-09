@@ -14,6 +14,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.strangersteam.strangers.model.EventType;
+import com.strangersteam.strangers.model.StrangersEventMarker;
+
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 public class GMapFragment extends Fragment implements
         OnMapReadyCallback,
@@ -72,10 +78,58 @@ public class GMapFragment extends Fragment implements
     }
 
     private void addMarkersToMap(){
-        LatLng politechnikaKrakowska = new LatLng(50.071665, 19.942853);
-        mMarker = mMap.addMarker(new MarkerOptions().position(politechnikaKrakowska)
-                .title("Spotkanie zespołu Politechnika Krakowska"));
+
+        List<StrangersEventMarker> mockEvents = new ArrayList<>();
+
+        StrangersEventMarker strangersEventMarker1 = new StrangersEventMarker();
+        strangersEventMarker1.setPosition(new LatLng(50.071665, 19.942853));//pk
+        strangersEventMarker1.setTitle("Spotkanie zespołu Strangers");
+        strangersEventMarker1.setDetails("Stwórz z nami społeczność!");
+        strangersEventMarker1.setDate(new GregorianCalendar(2017, 3,11,7,30));
+        mockEvents.add(strangersEventMarker1);
+
+        StrangersEventMarker strangersEventMarker2 = new StrangersEventMarker();
+        strangersEventMarker2.setPosition(new LatLng(50.067685, 19.946097));//galeria
+        strangersEventMarker2.setTitle("SZOPING");
+        strangersEventMarker2.setDetails("zapraszam do galerii na małe zakupy albo kawe i ciastko :D");
+        strangersEventMarker2.setDate(new GregorianCalendar(2017, 3,11,7,30));
+        mockEvents.add(strangersEventMarker2);
+
+
+        StrangersEventMarker strangersEventMarker3 = new StrangersEventMarker();
+        strangersEventMarker3.setPosition(new LatLng(50.064375, 19.939535));//rynek
+        strangersEventMarker3.setTitle("piwko w pijalni");
+        strangersEventMarker3.setDetails("Wieczorem na piwko ?? :>>");
+        strangersEventMarker3.setDate(new GregorianCalendar(2017, 3,11,20,30));
+
+        mockEvents.add(strangersEventMarker3);
+
+
+        for(StrangersEventMarker event: mockEvents){
+            mMarker = mMap.addMarker(generateMarkerOpt(event));
+            mMarker.setTag(event.getId());
+        }
+
     }
+
+    private MarkerOptions generateMarkerOpt(StrangersEventMarker event){
+        MarkerOptions mopt = new MarkerOptions();
+        mopt.position(event.getPosition());
+        mopt.title(event.getTitle());
+        mopt.draggable(false);
+        mopt.snippet(event.getDetails());
+        if(event.getType() == EventType.FUTURE){
+            mopt.alpha(0.5f);
+        }else{
+            mopt.alpha(0.9f);
+        }
+
+        mopt.flat(true);
+
+        return mopt;
+    }
+
+
 
     @Override
     public boolean onMarkerClick(final Marker marker) {
@@ -87,12 +141,9 @@ public class GMapFragment extends Fragment implements
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-
+//przekażemy tam tylko id eventa, reszte będzie trzeba pobrać w tamtej aktywnosci
         Intent intent = new Intent(getContext(), ShowEventActivity.class);
-        Bundle args = new Bundle();
-        args.putParcelable("LatLng", marker.getPosition());
-        intent.putExtra("MARKER_POSITION", args);
-        intent.putExtra("MARKER_TITLE", marker.getTitle());
+        intent.putExtra("EVENT_ID", (Long)marker.getTag());
         startActivity(intent);
     }
 
