@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 
 public class ShowEventActivity extends AppCompatActivity implements OnMapReadyCallback{
@@ -81,12 +82,13 @@ public class ShowEventActivity extends AppCompatActivity implements OnMapReadyCa
         //teraz trzeba te dane z eventu ktory pobierzemy z internetu ustawic do poszczegółnych pól
         //todo przemyslec jak będa wyswietlani użytkownicy którzy dołączyli oraz wiadomosci eventu, to musza być jakieś listy czy coś
         //podstawowe info o evencie
-        TextView titleTV = (TextView) findViewById(R.id.show_event_name_of_event);
+        TextView titleTV = (TextView) findViewById(R.id.show_event_name_of_event_tv);
         titleTV.setText(event.getTitle());
-        TextView whenTV = (TextView) findViewById(R.id.show_event_when_tv);
-        whenTV.setText(new SimpleDateFormat("hh:mm dd-MMM-yyyy").format(new Date(event.getDate().getTimeInMillis())));//pewnie da sie jakos ladniej xDD
-        TextView whereTV = (TextView) findViewById(R.id.show_event_where_tv);
-        whereTV.setText(event.getWhere());
+        TextView whenTV = (TextView) findViewById(R.id.show_event_when_where_tv);
+        whenTV.setText(new SimpleDateFormat("HH:mm EEEE, dd-MMM-yyyy", new Locale("pl","PL")).format(new Date(event.getDate().getTimeInMillis())));//pewnie da sie jakos ladniej xDD
+        whenTV.append(", " + event.getWhere());
+        TextView whereTV = (TextView) findViewById(R.id.show_event_details_tv);
+        whereTV.setText(event.getDetails());
 
         //zalozyciel eventu
         TextView ownerNickTV = (TextView) findViewById(R.id.show_event_username);

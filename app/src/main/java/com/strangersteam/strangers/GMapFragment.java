@@ -17,9 +17,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.strangersteam.strangers.model.EventType;
 import com.strangersteam.strangers.model.StrangersEventMarker;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 public class GMapFragment extends Fragment implements
         OnMapReadyCallback,
@@ -86,6 +89,7 @@ public class GMapFragment extends Fragment implements
         strangersEventMarker1.setTitle("Spotkanie zespołu Strangers");
         strangersEventMarker1.setDetails("Stwórz z nami społeczność!");
         strangersEventMarker1.setDate(new GregorianCalendar(2017, 3,11,7,30));
+        strangersEventMarker1.setType(EventType.NOW);
         mockEvents.add(strangersEventMarker1);
 
         StrangersEventMarker strangersEventMarker2 = new StrangersEventMarker();
@@ -93,6 +97,7 @@ public class GMapFragment extends Fragment implements
         strangersEventMarker2.setTitle("SZOPING");
         strangersEventMarker2.setDetails("zapraszam do galerii na małe zakupy albo kawe i ciastko :D");
         strangersEventMarker2.setDate(new GregorianCalendar(2017, 3,11,7,30));
+        strangersEventMarker2.setType(EventType.NOW);
         mockEvents.add(strangersEventMarker2);
 
 
@@ -101,7 +106,7 @@ public class GMapFragment extends Fragment implements
         strangersEventMarker3.setTitle("piwko w pijalni");
         strangersEventMarker3.setDetails("Wieczorem na piwko ?? :>>");
         strangersEventMarker3.setDate(new GregorianCalendar(2017, 3,11,20,30));
-
+        strangersEventMarker3.setType(EventType.FUTURE);
         mockEvents.add(strangersEventMarker3);
 
 
@@ -117,11 +122,13 @@ public class GMapFragment extends Fragment implements
         mopt.position(event.getPosition());
         mopt.title(event.getTitle());
         mopt.draggable(false);
-        mopt.snippet(event.getDetails());
+
         if(event.getType() == EventType.FUTURE){
-            mopt.alpha(0.5f);
+            mopt.alpha(0.6f);//trzeba zrobic cos zeby rozrozniac eventy pod wzgledem wygladu
+            mopt.snippet(new SimpleDateFormat("HH:mm EEEE, dd-MMM", new Locale("pl","PL")).format(new Date(event.getDate().getTimeInMillis())));
         }else{
-            mopt.alpha(0.9f);
+            mopt.snippet("teraz!");
+            mopt.alpha(1.0f);
         }
 
         mopt.flat(true);
