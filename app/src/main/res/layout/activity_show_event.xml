@@ -142,30 +142,13 @@
                 android:text="@string/event_already_joined"
                 android:textSize="20sp" />
 
-            <LinearLayout
+  <!--          <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:id="@+id/show_event_already_joined_items">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:id="@+id/show_event_already_joined_item" >
 
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:src="@drawable/temp_logo_picture"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/username"
-                        />
-
-                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -188,7 +171,12 @@
                 </LinearLayout>
 
 
-            </LinearLayout>
+            </LinearLayout>-->
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/show_event_attenders_recycler_view"
+                android:scrollbars="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
         </LinearLayout>
 
