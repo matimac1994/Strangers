@@ -3,6 +3,9 @@ package com.strangersteam.strangers;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.OrientationHelper;
+import android.support.v7.widget.RecyclerView;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -13,6 +16,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.strangersteam.strangers.adapters.AttendersListAdapter;
 import com.strangersteam.strangers.model.EventMessage;
 import com.strangersteam.strangers.model.StrangerUser;
 import com.strangersteam.strangers.model.StrangersEvent;
@@ -20,6 +24,8 @@ import com.strangersteam.strangers.model.StrangersEventMarker;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -33,6 +39,9 @@ public class ShowEventActivity extends AppCompatActivity implements
     Marker mMarker;
 
     StrangersEvent event;
+
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +50,18 @@ public class ShowEventActivity extends AppCompatActivity implements
 
         SupportMapFragment mapFragment = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.show_event_map_view);
         mapFragment.getMapAsync(this);
+
+        //----lista biorących udział
+        RecyclerView attendersRecyclerView = (RecyclerView) findViewById(R.id.show_event_attenders_recycler_view);
+        // nie wiem XD
+        attendersRecyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this, OrientationHelper.HORIZONTAL,false);
+        attendersRecyclerView.setLayoutManager(mLayoutManager);
+
+        RecyclerView.Adapter attendersListAdapter = new AttendersListAdapter(Collections.EMPTY_LIST);
+        attendersRecyclerView.setAdapter(attendersListAdapter);
+
+
 
         Long eventId = this.getIntent().getLongExtra("EVENT_ID",0);
         //teraz będzie trzeba puknąć na serwer po informacje o evencie o id eventId;
@@ -65,10 +86,42 @@ public class ShowEventActivity extends AppCompatActivity implements
         StrangerUser attender1 = new StrangerUser();
         attender1.setId(1);
         attender1.setNick("Dominik");
+        attender1.setPhotoResId(R.drawable.dominik);
         attenders.add(attender1);
+        StrangerUser attender3 = new StrangerUser();
+        attender3.setId(2);
+        attender3.setNick("Oldzi");
+        attender3.setPhotoResId(R.drawable.olga);
+        attenders.add(attender3);
+        StrangerUser attender4 = new StrangerUser();
+        attender4.setId(2);
+        attender4.setNick("Linczi");
+        attender4.setPhotoResId(R.drawable.linko);
+        attenders.add(attender4);
+        StrangerUser attender5 = new StrangerUser();
+        attender5.setId(2);
+        attender5.setNick("KordiXXX");
+        attender5.setPhotoResId(R.drawable.kordix);
+        attenders.add(attender5);
+        StrangerUser attender6 = new StrangerUser();
+        attender6.setId(2);
+        attender6.setNick("Kapeć");
+        attender6.setPhotoResId(R.drawable.kopcio);
+        attenders.add(attender6);
+        StrangerUser attender7 = new StrangerUser();
+        attender7.setId(2);
+        attender7.setNick("Macek");
+        attender7.setPhotoResId(R.drawable.macek);
+        attenders.add(attender7);
+        StrangerUser attender8 = new StrangerUser();
+        attender8.setId(2);
+        attender8.setNick("Kasia");
+        attender8.setPhotoResId(R.drawable.temp_logo_picture);
+        attenders.add(attender8);
         StrangerUser attender2 = new StrangerUser();
         attender2.setId(2);
         attender2.setNick("Kaziu102");
+        attender2.setPhotoResId(R.drawable.temp_logo_picture);
         attenders.add(attender2);
         event.setAttenders(attenders);
 
@@ -98,6 +151,10 @@ public class ShowEventActivity extends AppCompatActivity implements
         ownerAgeTV.setText(String.valueOf(event.getOwner().getAge()));//jak nie dalem toString to brało int jako id stringa z resourcesow zamist "22" xD
         TextView ownerSexTV = (TextView) findViewById(R.id.show_event_gender);
         ownerSexTV.setText(event.getOwner().isFemale()?"kobieta":"mezczyzna");//to taki skrócony zapis ifa warunek?jesli_prawda:jesli_falsz
+
+        //lista attendersow
+        RecyclerView.Adapter adapter = new AttendersListAdapter(event.getAttenders());
+        attendersRecyclerView.swapAdapter(adapter,false);
 
 
     }
