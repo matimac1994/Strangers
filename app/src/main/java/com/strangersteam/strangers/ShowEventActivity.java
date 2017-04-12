@@ -26,7 +26,8 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class ShowEventActivity extends AppCompatActivity implements OnMapReadyCallback{
+public class ShowEventActivity extends AppCompatActivity implements
+        OnMapReadyCallback{
 
     GoogleMap mMap;
     Marker mMarker;
@@ -55,7 +56,7 @@ public class ShowEventActivity extends AppCompatActivity implements OnMapReadyCa
         StrangerUser eventOwner = new StrangerUser();
         eventOwner.setId(3);
         eventOwner.setNick("Mateusz69");
-        eventOwner.setAge(22);
+        eventOwner.setAge(52);
         eventOwner.setFemale(false);
         event.setOwner(eventOwner);
 
@@ -94,7 +95,7 @@ public class ShowEventActivity extends AppCompatActivity implements OnMapReadyCa
         TextView ownerNickTV = (TextView) findViewById(R.id.show_event_username);
         ownerNickTV.setText(event.getOwner().getNick());
         TextView ownerAgeTV = (TextView) findViewById(R.id.show_event_age);
-        ownerAgeTV.setText(Integer.toString(event.getOwner().getAge()));//jak nie dalem toString to brało int jako id stringa z resourcesow zamist "22" xD
+        ownerAgeTV.setText(String.valueOf(event.getOwner().getAge()));//jak nie dalem toString to brało int jako id stringa z resourcesow zamist "22" xD
         TextView ownerSexTV = (TextView) findViewById(R.id.show_event_gender);
         ownerSexTV.setText(event.getOwner().isFemale()?"kobieta":"mezczyzna");//to taki skrócony zapis ifa warunek?jesli_prawda:jesli_falsz
 
