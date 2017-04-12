@@ -6,7 +6,7 @@
 
     <string name="action_settings">Settings</string>
 
-    <string name="search_button">Wyszukaj</string>
+    <string name="search_button">Szukaj</string>
     <string name="search_edit_text">Wyszukaj Event</string>
     <string name="nearest_events">Wyświetl Eventy w pobliżu</string>
 
@@ -14,7 +14,6 @@
     <string name="drawer_profile">Profil</string>
     <string name="drawer_my_events">Moje Eventy</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="event_name_of_event">Nazwa Eventu</string>
