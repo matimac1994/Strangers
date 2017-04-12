@@ -5,6 +5,7 @@ public class StrangerUser {
     private String nick;
     private int age;
     private boolean female;
+    private int photoResId;
 
     public void setId(long id) {
         this.id = id;
@@ -36,5 +37,13 @@ public class StrangerUser {
 
     public boolean isFemale() {
         return female;
+    }
+
+    public int getPhotoResId() {
+        return photoResId;
+    }
+
+    public void setPhotoResId(int photoResId) {
+        this.photoResId = photoResId;
     }
 }
