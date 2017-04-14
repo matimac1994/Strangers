@@ -144,7 +144,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:drawableStart="@drawable/ic_event_black_24dp"
-            android:text="@string/my_events" />
+            android:text="@string/my_profile_my_events" />
 
         <Button
             android:id="@+id/my_location_button"
@@ -153,7 +153,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:drawableStart="@drawable/ic_my_location_black_24dp"
-            android:text="@string/my_location" />
+            android:text="@string/my_profile_my_location" />
 
         <Button
             android:id="@+id/my_friends_button"
@@ -162,7 +162,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:drawableStart="@drawable/ic_group_black_24dp"
-            android:text="@string/my_friends" />
+            android:text="@string/my_profile_my_friends" />
 
     </LinearLayout>
 

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -16,41 +15,41 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="3dp">
-
-
-        <TextView
-            android:id="@+id/show_event_name_of_event_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="nazwa"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/show_event_when_where_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="kiedy i gdzie"
-            android:textSize="12sp"/>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:orientation="vertical"
+            android:paddingBottom="3dp">
+
+
+            <TextView
+                android:id="@+id/show_event_name_of_event_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="nazwa"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/show_event_when_where_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="kiedy i gdzie"
+                android:textSize="12sp"/>
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="3"
-                android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
-                android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical">
 
                     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
                         xmlns:map="http://schemas.android.com/apk/res-auto"
@@ -64,170 +63,132 @@
                         map:liteMode="true"
                         map:mapType="normal"/>
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:layout_gravity="center"
-                    android:text="@string/event_button_join" />
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:text="@string/event_button_join" />
 
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/show_event_user_info"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/show_event_profile_picture"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:contentDescription="@string/profile_picture_description"
+                        android:src="@drawable/mati102" />
+
+                    <TextView
+                        android:id="@+id/show_event_username"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:text="@string/username" />
+
+                    <TextView
+                        android:id="@+id/show_event_gender"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="2dp"
+                        android:gravity="center"
+                        android:text="@string/gender" />
+
+                    <TextView
+                        android:id="@+id/show_event_age"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="2dp"
+                        android:gravity="center"
+                        android:text="" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/show_event_details_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/my_profile_event_desc_label" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/show_event_already_joined_layout"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="@string/event_already_joined"
+                    android:textSize="20sp" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/show_event_attenders_recycler_view"
+                    android:scrollbars="none"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/show_event_user_info"
-                android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/show_event_profile_picture"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:contentDescription="@string/profile_picture_description"
-                    android:src="@drawable/mati102" />
-
-                <TextView
-                    android:id="@+id/show_event_username"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center"
-                    android:text="@string/username" />
-
-                <TextView
-                    android:id="@+id/show_event_gender"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="2dp"
-                    android:gravity="center"
-                    android:text="@string/gender" />
-
-                <TextView
-                    android:id="@+id/show_event_age"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="2dp"
-                    android:gravity="center"
-                    android:text="" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/show_event_details_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/event_desc_label" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/show_event_already_joined_layout"
-            android:orientation="vertical"
-            android:layout_marginTop="8dp">
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="@string/event_already_joined"
-                android:textSize="20sp" />
-
-  <!--          <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:id="@+id/show_event_already_joined_items">
-
-
+                android:layout_height="200dp"
+                android:id="@+id/show_event_chat_layout"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:id="@+id/show_event_post"
                     android:orientation="vertical"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginEnd="4dp"
-                    android:id="@+id/show_event_already_joined_item2" >
-
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:src="@drawable/temp_logo_picture" />
+                    android:gravity="top">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textStyle="bold|normal"
                         android:text="@string/username" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="italic"
+                        android:text="Siema wybieram się "/>
 
                 </LinearLayout>
 
 
-            </LinearLayout>-->
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/show_event_attenders_recycler_view"
-                android:scrollbars="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="110dp"
-            android:id="@+id/show_event_chat_layout"
-            android:layout_below="@+id/show_event_already_joined_layout"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="8dp"
-            android:layout_alignParentBottom="true">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/show_event_post"
-                android:orientation="vertical"
-                android:gravity="bottom"
-                >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold|normal"
-                    android:text="@string/username"
-                    />
-
-                <TextView
+                <EditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textStyle="italic"
-                    android:text="Siema wybieram się "/>
+                    android:layout_height="40dp"
+                    android:id="@+id/show_event_chat_text"
+                    android:hint="Napisz coś"
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
+        </LinearLayout>
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:id="@+id/show_event_chat_text"
-                android:hint="Napisz coś"
-                android:textSize="15sp"
-                android:layout_alignParentBottom="true" />
-
-
-
-
-        </RelativeLayout>
-
-
-    </LinearLayout>
-</ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
 </android.support.constraint.ConstraintLayout>

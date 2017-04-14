@@ -3,7 +3,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -18,7 +18,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
             <TextView
                 android:id="@+id/my_events_title"
                 android:layout_width="match_parent"
@@ -29,32 +28,29 @@
                 android:paddingBottom="4dp"
                 android:paddingStart="4dp"
                 android:paddingEnd="4dp"
-                android:text="Title"
+                android:text="@string/my_events_title"
                 android:textColor="#000"
-                android:textSize="22dp"
+                android:textSize="22sp"
                 android:elevation="2dp"/>
-
 
             <TextView
                 android:id="@+id/my_events_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/my_events_title"
                 android:layout_marginBottom="8dp"
                 android:gravity="center"
                 android:paddingTop="4dp"
-                android:text="When, Where"
-                android:textSize="16dp" />
+                android:text="@string/my_events_description"
+                android:textSize="16sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:layout_centerHorizontal="true"
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/btnOne"
+                    android:id="@+id/my_events_renew_button"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_autorenew_black_24dp"
@@ -65,12 +61,13 @@
                     android:layout_marginStart="4dp"
                     android:layout_marginEnd="4dp"
                     android:layout_marginBottom="4dp"
-                    android:text="Wznów"
+                    android:text="@string/my_events_renew_button"
                     android:textColor="#000"
-                    android:background="#90CAF9"/>
+                    android:background="#90CAF9"
+                    style="?android:buttonBarButtonStyle"/>
 
                 <Button
-                    android:id="@+id/btnTwo"
+                    android:id="@+id/my_events_delete_button"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_delete_black_24dp"
@@ -81,16 +78,16 @@
                     android:layout_marginStart="4dp"
                     android:layout_marginEnd="4dp"
                     android:layout_marginBottom="4dp"
-                    android:text="Usuń"
+                    android:text="@string/my_events_delete_button"
                     android:textColor="#000"
                     android:background="#F44336"
+                    style="?android:buttonBarButtonStyle"
                     />
             </LinearLayout>
 
 
         </LinearLayout>
+
     </android.support.v7.widget.CardView>
-
-
 
 </LinearLayout>
