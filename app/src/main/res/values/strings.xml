@@ -38,8 +38,14 @@
 
     <string name="profile_picture_description">Zdjęcie profilowe</string>
 
-    <string name="my_events">Eventy</string>
-    <string name="my_location">Lokalizacja</string>
-    <string name="my_friends">Przyjaciele</string>
-    <string name="event_desc_label">opis wydarzenia</string>
+    <string name="my_profile_my_events">Eventy</string>
+    <string name="my_profile_my_location">Lokalizacja</string>
+    <string name="my_profile_my_friends">Przyjaciele</string>
+    <string name="my_profile_event_desc_label">opis wydarzenia</string>
+
+    <string name="my_events_title">Title</string>
+    <string name="my_events_description">When, Where</string>
+    <string name="my_events_delete_button">Usuń</string>
+    <string name="my_events_renew_button">Wznów</string>
+
 </resources>

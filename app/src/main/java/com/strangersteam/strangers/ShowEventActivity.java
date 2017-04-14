@@ -153,8 +153,9 @@ public class ShowEventActivity extends AppCompatActivity implements
         ownerSexTV.setText(event.getOwner().isFemale()?"kobieta":"mezczyzna");//to taki skrócony zapis ifa warunek?jesli_prawda:jesli_falsz
 
         //lista attendersow
-        RecyclerView.Adapter adapter = new AttendersListAdapter(event.getAttenders());
+        RecyclerView.Adapter adapter = new AttendersListAdapter(ShowEventActivity.this, event.getAttenders());
         attendersRecyclerView.swapAdapter(adapter,false);
+        attendersRecyclerView.setNestedScrollingEnabled(false);
 
 
     }

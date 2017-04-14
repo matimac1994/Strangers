@@ -28,7 +28,7 @@ public class MyEventsFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private MyEventsListAdapter myEventsListAdapter;
-    private StrangersEvent event;
+    private StrangersEvent event, event2, event3;
     private List<StrangersEvent> strangersEventList = new ArrayList<>();
 
 
@@ -56,6 +56,20 @@ public class MyEventsFragment extends Fragment {
         event.setWhere("Pijalnia");
         event.setDetails("Wieczorem na piwko ?? :>> mam wolny wieczór pomyślałem że warto byłoby poznac nowych ludzi, zapraszam! :D");
         event.setDate(new GregorianCalendar(2017, 3,11,20,30));
+
+        event2 = new StrangersEvent();
+        event2.setPosition(new LatLng(50.064375, 19.939535));
+        event2.setTitle("piwko w pijalni");
+        event2.setWhere("Pijalnia");
+        event2.setDetails("Wieczorem na piwko ?? :>> mam wolny wieczór pomyślałem że warto byłoby poznac nowych ludzi, zapraszam! :D");
+        event2.setDate(new GregorianCalendar(2017, 3,11,20,30));
+
+        event3 = new StrangersEvent();
+        event3.setPosition(new LatLng(50.064375, 19.939535));
+        event3.setTitle("piwko w pijalni");
+        event3.setWhere("Pijalnia");
+        event3.setDetails("Wieczorem na piwko ?? :>> mam wolny wieczór pomyślałem że warto byłoby poznac nowych ludzi, zapraszam! :D");
+        event3.setDate(new GregorianCalendar(2017, 3,11,20,30));
 
         //zalozyciel eventa
         StrangerUser eventOwner = new StrangerUser();
@@ -86,6 +100,11 @@ public class MyEventsFragment extends Fragment {
         event.setMessages(messages);
 
         strangersEventList.add(event);
+        strangersEventList.add(event2);
+        strangersEventList.add(event3);
+        strangersEventList.add(event3);
+        strangersEventList.add(event3);
+        strangersEventList.add(event3);
 
         RecyclerView.Adapter adapter = new MyEventsListAdapter(strangersEventList);
         recyclerView.setAdapter(adapter);
