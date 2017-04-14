@@ -3,10 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".MyProfileFragment">
 
     <RelativeLayout
-        android:id="@+id/user_data_and_photo"
+        android:id="@+id/my_profile_user_data_and_photo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -15,30 +16,30 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintTop_toBottomOf="@+id/three_buttons">
+        app:layout_constraintTop_toBottomOf="@+id/my_profile_three_buttons">
 
         <LinearLayout
-            android:id="@+id/user_data"
+            android:id="@+id/my_profile_user_data"
             android:layout_width="220dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/username_data"
+                android:id="@+id/my_profile_username_data"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/username_label"
+                    android:id="@+id/my_profile_username_label"
                     android:layout_width="110dp"
                     android:layout_height="wrap_content"
                     android:text="@string/username" />
 
                 <TextView
-                    android:id="@+id/username"
+                    android:id="@+id/my_profile_username"
                     android:layout_width="110dp"
                     android:layout_height="wrap_content"
                     android:text="@string/username" />
@@ -46,20 +47,20 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/surname_data"
+                android:id="@+id/my_profile_surname_data"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:orientation="horizontal" >
 
                 <TextView
-                    android:id="@+id/surname_label"
+                    android:id="@+id/my_profile_surname_label"
                     android:layout_width="110dp"
                     android:layout_height="wrap_content"
                     android:text="@string/surname_label" />
 
                 <TextView
-                    android:id="@+id/surname"
+                    android:id="@+id/my_profile_surname"
                     android:layout_width="110dp"
                     android:layout_height="wrap_content"
                     android:text="@string/surname" />
@@ -67,20 +68,20 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/age_data"
+                android:id="@+id/my_profile_age_data"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:orientation="horizontal" >
 
                 <TextView
-                    android:id="@+id/age_label"
+                    android:id="@+id/my_profile_age_label"
                     android:layout_width="110dp"
                     android:layout_height="wrap_content"
                     android:text="@string/age_label" />
 
                 <TextView
-                    android:id="@+id/age"
+                    android:id="@+id/my_profile_age"
                     android:layout_width="110dp"
                     android:layout_height="wrap_content"
                     android:text="@string/age" />
@@ -95,13 +96,13 @@
                 android:orientation="horizontal" >
 
                 <TextView
-                        android:id="@+id/gender_label"
+                        android:id="@+id/my_profile_gender_label"
                         android:layout_width="110dp"
                         android:layout_height="wrap_content"
                         android:text="@string/gender_label" />
 
                 <TextView
-                    android:id="@+id/gender"
+                    android:id="@+id/my_profile_gender"
                     android:layout_width="110dp"
                     android:layout_height="wrap_content"
                     android:text="@string/gender" />
@@ -109,21 +110,21 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/profile_picture"
+            android:id="@+id/my_profile_picture"
             android:layout_width="150dp"
             android:layout_height="150dp"
             app:srcCompat="@drawable/temp_logo_picture"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:contentDescription="@string/profile_picture_description"
-            android:layout_toEndOf="@+id/user_data"
+            android:layout_toEndOf="@+id/my_profile_user_data"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             />
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/three_buttons"
+        android:id="@+id/my_profile_three_buttons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -138,7 +139,7 @@
 
 
         <Button
-            android:id="@+id/my_events_button"
+            android:id="@+id/my_profile_my_events_button"
             style="@android:style/Widget.Holo.Light.Button.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -147,7 +148,7 @@
             android:text="@string/my_profile_my_events" />
 
         <Button
-            android:id="@+id/my_location_button"
+            android:id="@+id/my_profile_my_location_button"
             style="@android:style/Widget.Holo.Light.Button.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -156,7 +157,7 @@
             android:text="@string/my_profile_my_location" />
 
         <Button
-            android:id="@+id/my_friends_button"
+            android:id="@+id/my_profile_my_friends_button"
             style="@android:style/Widget.Holo.Light.Button.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -165,7 +166,5 @@
             android:text="@string/my_profile_my_friends" />
 
     </LinearLayout>
-
-
 
 </android.support.constraint.ConstraintLayout>
