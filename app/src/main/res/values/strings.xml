@@ -48,4 +48,11 @@
     <string name="my_events_delete_button">Usuń</string>
     <string name="my_events_renew_button">Wznów</string>
 
+    <string name="login_button">Zaloguj</string>
+    <string name="sign_in_button">Zarejestruj</string>
+    <string name="email_edit_text">E-mail</string>
+    <string name="nick_edit_text">Nick</string>
+    <string name="password_edit_text">Hasło</string>
+    <string name="password2_edit_text">Powtórz Hasło</string>
+
 </resources>
