@@ -26,6 +26,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+
         //todo Do wyświetlania obrazka do profilu użyć Picasso!
 
         View view = inflater.inflate(R.layout.fragment_my_profile, container, false);
