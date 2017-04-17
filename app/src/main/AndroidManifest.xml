@@ -50,7 +50,6 @@
             android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
 
-        <activity android:name=".LoginActivity"></activity>
 
     </application>
 
