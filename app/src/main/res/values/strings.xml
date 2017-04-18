@@ -54,5 +54,8 @@
     <string name="nick_edit_text">Nick</string>
     <string name="password_edit_text">Hasło</string>
     <string name="password2_edit_text">Powtórz Hasło</string>
+    <string name="login_invalid_data">Niepoprawne dane logowania</string>
+    <string name="unknown_error">Nieznany błąd</string>
+    <string name="auth_token">X-Auth-Token</string>
 
 </resources>
