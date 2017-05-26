@@ -69,22 +69,21 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <Button
-                    android:id="@+id/button2"
+                    android:id="@+id/login_login_button"
                     android:theme="@style/AppTheme.ButtonLogin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="16dp"
-                    android:text="@string/login_button"
-                    android:onClick="onClickLogin"/>
+                    android:text="@string/login_button" />
 
                 <Button
+                    android:id="@+id/login_sign_in_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/sign_in_button"
-                    android:theme="@style/AppTheme.ButtonSignIn"
-                    android:onClick="onClickSignIn"/>
+                    android:theme="@style/AppTheme.ButtonSignIn" />
 
             </LinearLayout>
 

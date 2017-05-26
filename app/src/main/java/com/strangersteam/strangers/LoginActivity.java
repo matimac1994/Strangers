@@ -1,25 +1,22 @@
 package com.strangersteam.strangers;
 
-
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.strangersteam.strangers.serverConn.RequestQueueSingleton;
 import com.strangersteam.strangers.serverConn.ServerConfig;
-import com.strangersteam.strangers.serverConn.dto.LoginRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,19 +24,40 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText loginET;
-    private EditText passET;
+    private static final String TAG = "LoginActivity";
+
+    @Bind (R.id.login_login_edit_text) EditText _loginET;
+    @Bind (R.id.login_password_edit_text) EditText _passET;
+    @Bind (R.id.login_login_button) Button _loginButton;
+    @Bind (R.id.login_sign_in_button) Button _signInButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
-        this.loginET = (EditText) findViewById(R.id.login_login_edit_text);
-        this.passET = (EditText) findViewById(R.id.login_password_edit_text);
+        _loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickLogin(view);
+            }
+        });
+
+        _signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickSignIn(view);
+            }
+        });
+
     }
 
 
@@ -52,13 +70,19 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onClickLogin(View view){
 
-        String loginString = loginET.getText().toString();
-        String passwordString = passET.getText().toString();
+        String loginString = _loginET.getText().toString();
+        String passwordString = _passET.getText().toString();
 
-        //todo  walidacja bedzie tutaj potrzebna - np czy wpisane dane
+        if(!validate())
+            onLoginFailed();
+        _loginButton.setEnabled(false);
 
         loginRequest(loginString,passwordString);
 
+    }
+
+    private void onLoginFailed() {
+        Toast.makeText(this,R.string.login_failed, Toast.LENGTH_LONG);
     }
 
     private void loginRequest(String loginString, String passwordString) {
@@ -81,9 +105,10 @@ public class LoginActivity extends AppCompatActivity {
                             SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(getResources().getString(R.string.auth_token),MODE_PRIVATE);
                             sharedPreferences.edit().putString(getResources().getString(R.string.auth_token),response.getString("token")).apply();
                             //przykład wyciągnięcia token z shared preferencese: sharedPreferences.getString(getResources().getString(R.string.auth_token),null);
+                            //_loginButton.setEnabled(true);
                         } catch (JSONException e) {
                             Log.e("JSONException", e.getMessage());
-                            passET.setError(getString(R.string.unknown_error));
+                            _passET.setError(getString(R.string.unknown_error));
                             return;
                         }
 
@@ -99,15 +124,39 @@ public class LoginActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
 
                         if(error.networkResponse != null && error.networkResponse.statusCode == 403){
-                            passET.setError(getString(R.string.login_invalid_data));
+                            _passET.setError(getString(R.string.login_invalid_data));
                         }else{
-                            passET.setError(getString(R.string.unknown_error));
+                            _passET.setError(getString(R.string.unknown_error));
                         }
 
                     }
                 });
 
         RequestQueueSingleton.getInstance(this.getApplicationContext()).addToRequestQueue(jsonObjectRequest);
+    }
+
+    private boolean validate(){
+
+        boolean valid = true;
+
+        String email = _loginET.getText().toString();
+        String password = _passET.getText().toString();
+
+        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            _loginET.setError(getString(R.string.not_valid_mail));
+            valid = false;
+        } else {
+            _loginET.setError(null);
+        }
+
+        if (password.isEmpty() || password.length() < 2) {
+            _passET.setError(getString(R.string.not_valid_password));
+            valid = false;
+        } else {
+            _passET.setError(null);
+        }
+
+        return valid;
     }
 
 }
