@@ -9,7 +9,7 @@ import java.util.GregorianCalendar;
 public class StrangersEventMarker {
     private Long id;
     private EventType type;
-    private LatLng position;
+    private LatLngHolder position;
     private String title;
     private String details;
     private GregorianCalendar date;
@@ -30,11 +30,11 @@ public class StrangersEventMarker {
         this.type = type;
     }
 
-    public LatLng getPosition() {
+    public LatLngHolder getPosition() {
         return position;
     }
 
-    public void setPosition(LatLng position) {
+    public void setPosition(LatLngHolder position) {
         this.position = position;
     }
 

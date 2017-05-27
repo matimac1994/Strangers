@@ -13,7 +13,15 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -24,21 +32,35 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.VisibleRegion;
+import com.google.gson.Gson;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import com.strangersteam.strangers.model.EventType;
 import com.strangersteam.strangers.model.StrangersEventMarker;
 
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.strangersteam.strangers.serverConn.RequestQueueSingleton;
+import com.strangersteam.strangers.serverConn.ServerConfig;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class GMapFragment extends Fragment implements
         OnMapReadyCallback,
@@ -50,61 +72,18 @@ public class GMapFragment extends Fragment implements
         GoogleMap.OnMapLongClickListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener{
+        LocationListener, GoogleMap.OnCameraIdleListener {
 
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private Location mLocation;
 
+    private List<Marker> markersOnMap;
     private Marker mMarker;
     private Marker mLastSelectedMarker;
 
     private FloatingActionMenu menu;
-
-
-    @Override
-    public void onMapClick(LatLng latLng) {
-
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-
-        mLocation = location;
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,13));
-
-        //stop location updates
-        if (mGoogleApiClient != null) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-        }
-
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(1000);
-        mLocationRequest.setFastestInterval(1000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        if (ContextCompat.checkSelfPermission(getContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-        }
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
 
     private class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
@@ -119,6 +98,12 @@ public class GMapFragment extends Fragment implements
         }
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        buildGoogleApiClient();
+        markersOnMap = new ArrayList<>();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -129,7 +114,7 @@ public class GMapFragment extends Fragment implements
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        buildGoogleApiClient();
+
         menu = (FloatingActionMenu) view.findViewById(R.id.add_event_menu);
 
         final FloatingActionButton addEventHereBtn = new FloatingActionButton(getActivity());
@@ -165,34 +150,25 @@ public class GMapFragment extends Fragment implements
 
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
-        //Initialize Google Play Services
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(getContext(),
-                    Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED) {
-                buildGoogleApiClient();
-                mMap.setMyLocationEnabled(true);
-            }
-        }
-        else {
-            buildGoogleApiClient();
-            mMap.setMyLocationEnabled(true);
-        }
-        mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-
+        mMap.setMyLocationEnabled(true);
         mMap.setOnMapClickListener(this);
         mMap.setOnMapLongClickListener(this);
-
-
-        addMarkersToMap();
-
         mMap.setOnMarkerClickListener(this);
         mMap.setOnInfoWindowClickListener(this);
         mMap.setOnMarkerDragListener(this);
         mMap.setOnInfoWindowLongClickListener(this);
-        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLocation.getLatitude(), mLocation.getLongitude()),13));
+        mMap.setOnCameraIdleListener(this);
 
+        if (ContextCompat.checkSelfPermission(getContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            //wydaje mi się że trzeba to tutaj wywołać, bo to 'wymusi' psrawdzenie gpsa
+            //ale to tylko moje zdanie XD
+            mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        }
+
+        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLocation.getLatitude(), mLocation.getLongitude()),13));
+        downloadMarkersAndAddToMap();
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -204,37 +180,115 @@ public class GMapFragment extends Fragment implements
         mGoogleApiClient.connect();
     }
 
-    private void addMarkersToMap(){
+    @Override
+    public void onMapClick(LatLng latLng) {
 
-        List<StrangersEventMarker> mockEvents = new ArrayList<>();
+    }
 
-        StrangersEventMarker strangersEventMarker1 = new StrangersEventMarker();
-        strangersEventMarker1.setPosition(new LatLng(50.071665, 19.942853));//pk
-        strangersEventMarker1.setTitle("Spotkanie zespołu Strangers");
-        strangersEventMarker1.setDetails("Stwórz z nami społeczność!");
-        strangersEventMarker1.setDate(new GregorianCalendar(2017, 3,11,7,30));
-        strangersEventMarker1.setType(EventType.NOW);
-        mockEvents.add(strangersEventMarker1);
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(15000);
+        mLocationRequest.setFastestInterval(10000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        if (ContextCompat.checkSelfPermission(getContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        }
 
-        StrangersEventMarker strangersEventMarker2 = new StrangersEventMarker();
-        strangersEventMarker2.setPosition(new LatLng(50.067685, 19.946097));//galeria
-        strangersEventMarker2.setTitle("SZOPING");
-        strangersEventMarker2.setDetails("zapraszam do galerii na małe zakupy albo kawe i ciastko :D");
-        strangersEventMarker2.setDate(new GregorianCalendar(2017, 3,11,7,30));
-        strangersEventMarker2.setType(EventType.NOW);
-        mockEvents.add(strangersEventMarker2);
+    }
 
+    @Override
+    public void onLocationChanged(Location location) {
 
-        StrangersEventMarker strangersEventMarker3 = new StrangersEventMarker();
-        strangersEventMarker3.setPosition(new LatLng(50.064375, 19.939535));//rynek
-        strangersEventMarker3.setTitle("piwko w pijalni");
-        strangersEventMarker3.setDetails("Wieczorem na piwko ?? :>>");
-        strangersEventMarker3.setDate(new GregorianCalendar(2017, 3,11,20,30));
-        strangersEventMarker3.setType(EventType.FUTURE);
-        mockEvents.add(strangersEventMarker3);
+        mLocation = location;
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,13));
 
+        //stop location updates
+        if (mGoogleApiClient != null) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        }
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onCameraIdle() {
+        mMap.getUiSettings().setScrollGesturesEnabled(false);
+        Toast.makeText(getActivity(),"Pobieram se dane, nie ruszaj ", Toast.LENGTH_SHORT).show();
+        downloadMarkersAndAddToMap();
+    }
+
+    private void downloadMarkersAndAddToMap() {
+        LatLngBounds mapBound = mMap.getProjection().getVisibleRegion().latLngBounds;
+        downloadMarkersRequest(mapBound);
+    }
+
+    private void downloadMarkersRequest(LatLngBounds mapBound) {
+
+        String markersUrl = ServerConfig.markersOnMap(mapBound);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, markersUrl, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            ObjectMapper mapper = new ObjectMapper();
+                            CollectionType listType = mapper.getTypeFactory().constructCollectionType(ArrayList.class, StrangersEventMarker.class);
+                            List<StrangersEventMarker> downloadedMarkers= null;
+                            String jsonString = response.toString();
+
+                            downloadedMarkers = mapper.readValue(jsonString,listType);
+                            refreshMarkersOnMap(downloadedMarkers);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity(),"Parsing markers error", Toast.LENGTH_LONG).show();
+                        } finally {
+                            mMap.getUiSettings().setScrollGesturesEnabled(true);
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //todo co teraz??
+                        mMap.getUiSettings().setScrollGesturesEnabled(true);
+                        System.out.println(error.getMessage());
+                        Toast.makeText(getActivity(), "onErrorResponse: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        RequestQueueSingleton.getInstance(getActivity().getApplicationContext()).addToRequestQueue(jsonArrayRequest);
+    }
+
+    private void refreshMarkersOnMap(List<StrangersEventMarker> downloadedMarkers) {
+        removeOldMarkers();
+        addMarkersToMap(downloadedMarkers);
+    }
+
+    private void removeOldMarkers() {
+        for(Marker marker : markersOnMap){
+            //czemu to nie działa lol
+            marker.remove();
+        }
+    }
+
+    private void addMarkersToMap(List<StrangersEventMarker> mockEvents){
 
         for(StrangersEventMarker event: mockEvents){
+            System.out.println(event.getTitle());
             mMarker = mMap.addMarker(generateMarkerOpt(event));
             mMarker.setTag(event.getId());
         }
@@ -243,7 +297,7 @@ public class GMapFragment extends Fragment implements
 
     private MarkerOptions generateMarkerOpt(StrangersEventMarker event){
         MarkerOptions mopt = new MarkerOptions();
-        mopt.position(event.getPosition());
+        mopt.position(new LatLng(event.getPosition().getLatitude(),event.getPosition().getLongitude()));
         mopt.title(event.getTitle());
         mopt.draggable(false);
 
@@ -260,8 +314,6 @@ public class GMapFragment extends Fragment implements
         return mopt;
     }
 
-
-
     @Override
     public boolean onMarkerClick(final Marker marker) {
 
@@ -272,7 +324,6 @@ public class GMapFragment extends Fragment implements
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-//przekażemy tam tylko id eventa, reszte będzie trzeba pobrać w tamtej aktywnosci
         Intent intent = new Intent(getContext(), ShowEventActivity.class);
         intent.putExtra("EVENT_ID", (Long)marker.getTag());
         startActivity(intent);
