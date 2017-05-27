@@ -86,7 +86,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="150dp"
                         android:contentDescription="@string/profile_picture_description"
-                        android:src="@drawable/mati102" />
+                        android:src="@drawable/temp_logo_picture" />
 
                     <TextView
                         android:id="@+id/show_event_username"

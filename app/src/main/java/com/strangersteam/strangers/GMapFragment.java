@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,7 +18,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.google.android.gms.common.ConnectionResult;
@@ -35,10 +33,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.VisibleRegion;
-import com.google.gson.Gson;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 import com.strangersteam.strangers.model.EventType;
 import com.strangersteam.strangers.model.StrangersEventMarker;
 
@@ -49,18 +43,13 @@ import com.strangersteam.strangers.serverConn.RequestQueueSingleton;
 import com.strangersteam.strangers.serverConn.ServerConfig;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public class GMapFragment extends Fragment implements
         OnMapReadyCallback,
@@ -80,10 +69,11 @@ public class GMapFragment extends Fragment implements
     private Location mLocation;
 
     private List<Marker> markersOnMap;
-    private Marker mMarker;
     private Marker mLastSelectedMarker;
 
     private FloatingActionMenu menu;
+
+    private boolean isCameraMovingtoMarker;
 
     private class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
@@ -103,6 +93,7 @@ public class GMapFragment extends Fragment implements
         super.onCreate(savedInstanceState);
         buildGoogleApiClient();
         markersOnMap = new ArrayList<>();
+        isCameraMovingtoMarker = false;
     }
 
     @Override
@@ -225,6 +216,11 @@ public class GMapFragment extends Fragment implements
 
     @Override
     public void onCameraIdle() {
+        if(isCameraMovingtoMarker){
+            isCameraMovingtoMarker = !isCameraMovingtoMarker;
+            return;
+        }
+
         mMap.getUiSettings().setScrollGesturesEnabled(false);
         Toast.makeText(getActivity(),"Pobieram se dane, nie ruszaj ", Toast.LENGTH_SHORT).show();
         downloadMarkersAndAddToMap();
@@ -237,7 +233,7 @@ public class GMapFragment extends Fragment implements
 
     private void downloadMarkersRequest(LatLngBounds mapBound) {
 
-        String markersUrl = ServerConfig.markersOnMap(mapBound);
+        String markersUrl = ServerConfig.markersOnMapByBounds(mapBound);
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, markersUrl, null,
                 new Response.Listener<JSONArray>() {
@@ -280,7 +276,6 @@ public class GMapFragment extends Fragment implements
 
     private void removeOldMarkers() {
         for(Marker marker : markersOnMap){
-            //czemu to nie działa lol
             marker.remove();
         }
     }
@@ -289,8 +284,9 @@ public class GMapFragment extends Fragment implements
 
         for(StrangersEventMarker event: mockEvents){
             System.out.println(event.getTitle());
-            mMarker = mMap.addMarker(generateMarkerOpt(event));
-            mMarker.setTag(event.getId());
+            Marker marker = mMap.addMarker(generateMarkerOpt(event));
+            marker.setTag(event.getId());
+            markersOnMap.add(marker);
         }
 
     }
@@ -319,11 +315,13 @@ public class GMapFragment extends Fragment implements
 
         mLastSelectedMarker = marker;
         mLastSelectedMarker.showInfoWindow();
+        isCameraMovingtoMarker = true;
         return false;
     }
 
     @Override
     public void onInfoWindowClick(Marker marker) {
+        System.out.println("CLIK");
         Intent intent = new Intent(getContext(), ShowEventActivity.class);
         intent.putExtra("EVENT_ID", (Long)marker.getTag());
         startActivity(intent);
@@ -353,7 +351,7 @@ public class GMapFragment extends Fragment implements
     public void onMapLongClick(LatLng point) {
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(point);
-        mMap.addMarker(markerOptions);
-        this.mMarker.showInfoWindow();
+        Marker marker = mMap.addMarker(markerOptions);
+        marker.showInfoWindow();
     }
 }

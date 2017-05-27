@@ -10,6 +10,14 @@ public class LatLngHolder {
     private double latitude;
     private double longitude;
 
+    public LatLngHolder() {
+    }
+
+    public LatLngHolder(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     public double getLatitude() {
         return latitude;
     }
