@@ -34,13 +34,9 @@ public class RegistrationActivity extends AppCompatActivity {
 
 
     public void onClickSignIn(View view){
-
-        if(!validate())
-            return;
-
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+        if(validate()){
+            goToMap();
+        }
     }
 
     private boolean validate(){
@@ -69,9 +65,13 @@ public class RegistrationActivity extends AppCompatActivity {
             _pass2ET.setError(getString(R.string.different_password2));
         }
 
-
-
         return valid;
+    }
+
+    private void goToMap() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
 
     @Override
