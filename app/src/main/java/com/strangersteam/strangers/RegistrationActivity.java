@@ -10,7 +10,7 @@ import android.widget.EditText;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class SignInActivity extends AppCompatActivity {
+public class RegistrationActivity extends AppCompatActivity {
 
     @Bind (R.id.sign_email_edit_text) EditText _loginET;
     @Bind (R.id.sign_nick_edit_text) EditText nickET;
@@ -21,7 +21,7 @@ public class SignInActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_in);
+        setContentView(R.layout.activity_registration);
         ButterKnife.bind(this);
 
         _signInButton.setOnClickListener(new View.OnClickListener() {
@@ -34,13 +34,9 @@ public class SignInActivity extends AppCompatActivity {
 
 
     public void onClickSignIn(View view){
-
-        if(!validate())
-            return;
-
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+        if(validate()){
+            goToMap();
+        }
     }
 
     private boolean validate(){
@@ -69,9 +65,13 @@ public class SignInActivity extends AppCompatActivity {
             _pass2ET.setError(getString(R.string.different_password2));
         }
 
-
-
         return valid;
+    }
+
+    private void goToMap() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
 
     @Override

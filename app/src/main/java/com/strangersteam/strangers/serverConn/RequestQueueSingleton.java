@@ -2,6 +2,7 @@ package com.strangersteam.strangers.serverConn;
 
 import android.content.Context;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -9,10 +10,10 @@ import com.android.volley.toolbox.Volley;
 public class RequestQueueSingleton {
     private static RequestQueueSingleton mInstance;
     private RequestQueue mRequestQueue;
-    private static Context mCtx;
+    private static Context applicationContext;
 
     public RequestQueueSingleton(Context context) {
-        mCtx = context;
+        applicationContext = context;
         mRequestQueue = getRequestQueue();
 
     }
@@ -31,7 +32,8 @@ public class RequestQueueSingleton {
 
     public RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
-            mRequestQueue = Volley.newRequestQueue(mCtx.getApplicationContext());
+            mRequestQueue = Volley.newRequestQueue(applicationContext.getApplicationContext());
+
         }
         return mRequestQueue;
     }

@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -22,6 +23,12 @@ import com.strangersteam.strangers.model.EventMessage;
 import com.strangersteam.strangers.model.LatLngHolder;
 import com.strangersteam.strangers.model.StrangerUser;
 import com.strangersteam.strangers.model.StrangersEvent;
+import com.strangersteam.strangers.model.StrangersEventListItem;
+import com.strangersteam.strangers.model.StrangersEventMarker;
+import com.strangersteam.strangers.serverConn.AuthJsonArrayRequest;
+import com.strangersteam.strangers.serverConn.RequestQueueSingleton;
+import com.strangersteam.strangers.serverConn.SecurityProvider;
+import com.strangersteam.strangers.serverConn.ServerConfig;
 import com.strangersteam.strangers.model.StrangersEventListItem;
 import com.strangersteam.strangers.model.StrangersEventMarker;
 import com.strangersteam.strangers.serverConn.RequestQueueSingleton;
@@ -77,7 +84,8 @@ public class MyEventsFragment extends Fragment {
 
         String myEventsUrl = ServerConfig.MY_EVENTS;
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+        JsonArrayRequest jsonArrayRequest = new AuthJsonArrayRequest(
+                getActivity().getApplicationContext(),
                 Request.Method.GET,
                 myEventsUrl,
                 null,
@@ -100,11 +108,10 @@ public class MyEventsFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        Toast.makeText(getActivity(),error.getMessage(),Toast.LENGTH_SHORT).show();
                     }
                 }
         );
-
         RequestQueueSingleton.getInstance(getActivity()).addToRequestQueue(jsonArrayRequest);
     }
 }

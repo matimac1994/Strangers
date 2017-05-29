@@ -38,6 +38,7 @@ import com.strangersteam.strangers.model.StrangersEventMarker;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.strangersteam.strangers.serverConn.AuthJsonArrayRequest;
 import com.strangersteam.strangers.serverConn.RequestQueueSingleton;
 import com.strangersteam.strangers.serverConn.ServerConfig;
 
@@ -229,7 +230,11 @@ public class GMapFragment extends Fragment implements
 
         String markersUrl = ServerConfig.markersOnMapByBounds(mapBound);
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, markersUrl, null,
+        JsonArrayRequest jsonArrayRequest = new AuthJsonArrayRequest(
+                getActivity().getApplicationContext(),
+                Request.Method.GET,
+                markersUrl,
+                null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
