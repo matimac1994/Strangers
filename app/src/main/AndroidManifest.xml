@@ -47,7 +47,7 @@
 
         </activity>
         <activity
-            android:name=".SignInActivity"
+            android:name=".RegistrationActivity"
             android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="adjustResize"/>

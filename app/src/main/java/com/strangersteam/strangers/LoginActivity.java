@@ -1,13 +1,10 @@
 package com.strangersteam.strangers;
 
-import android.app.Application;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -64,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void onClickSignIn(View view) {
-        Intent intent = new Intent(this, SignInActivity.class);
+        Intent intent = new Intent(this, RegistrationActivity.class);
         startActivity(intent);
         finish();
         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
