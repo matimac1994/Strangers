@@ -9,14 +9,32 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
 import com.google.android.gms.maps.model.LatLng;
 import com.strangersteam.strangers.adapters.MyEventsListAdapter;
 import com.strangersteam.strangers.model.EventMessage;
+import com.strangersteam.strangers.model.LatLngHolder;
 import com.strangersteam.strangers.model.StrangerUser;
 import com.strangersteam.strangers.model.StrangersEvent;
+import com.strangersteam.strangers.model.StrangersEventListItem;
+import com.strangersteam.strangers.model.StrangersEventMarker;
+import com.strangersteam.strangers.serverConn.AuthJsonArrayRequest;
+import com.strangersteam.strangers.serverConn.RequestQueueSingleton;
+import com.strangersteam.strangers.serverConn.SecurityProvider;
+import com.strangersteam.strangers.serverConn.ServerConfig;
 
+import org.json.JSONArray;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -27,90 +45,69 @@ import java.util.List;
 public class MyEventsFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private MyEventsListAdapter myEventsListAdapter;
-    private StrangersEvent event, event2, event3;
-    private List<StrangersEvent> strangersEventList = new ArrayList<>();
-
 
     public MyEventsFragment() {
-        // Required empty public constructor
-    }
 
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View rootView = inflater.inflate(R.layout.fragment_my_events, container, false);
-        //Get the reference to recyclerView
         recyclerView = (RecyclerView) rootView.findViewById(R.id.my_events_recycler_view);
-        //Set layout manager
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        Long eventId = Long.valueOf(0);
-        //teraz będzie trzeba puknąć na serwer po informacje o evencie o id eventId;
-        //potem dostaniemy taki obiekt (teraz musimy go czyms wypelnic :D ):
-        event = new StrangersEvent();
-        event.setPosition(new LatLng(50.064375, 19.939535));
-        event.setTitle("piwko w pijalni");
-        event.setWhere("Pijalnia");
-        event.setDetails("Wieczorem na piwko ?? :>> mam wolny wieczór pomyślałem że warto byłoby poznac nowych ludzi, zapraszam! :D");
-        event.setDate(new GregorianCalendar(2017, 3,11,20,30));
-
-        event2 = new StrangersEvent();
-        event2.setPosition(new LatLng(50.064375, 19.939535));
-        event2.setTitle("piwko w pijalni");
-        event2.setWhere("Pijalnia");
-        event2.setDetails("Wieczorem na piwko ?? :>> mam wolny wieczór pomyślałem że warto byłoby poznac nowych ludzi, zapraszam! :D");
-        event2.setDate(new GregorianCalendar(2017, 3,11,20,30));
-
-        event3 = new StrangersEvent();
-        event3.setPosition(new LatLng(50.064375, 19.939535));
-        event3.setTitle("piwko w pijalni");
-        event3.setWhere("Pijalnia");
-        event3.setDetails("Wieczorem na piwko ?? :>> mam wolny wieczór pomyślałem że warto byłoby poznac nowych ludzi, zapraszam! :D");
-        event3.setDate(new GregorianCalendar(2017, 3,11,20,30));
-
-        //zalozyciel eventa
-        StrangerUser eventOwner = new StrangerUser();
-        eventOwner.setId(3);
-        eventOwner.setNick("Mateusz69");
-        eventOwner.setAge(52);
-        eventOwner.setFemale(false);
-        event.setOwner(eventOwner);
-
-        //fejkowi uzytkownicy, beda pobrani razem z eventem z serwera
-        List<StrangerUser> attenders = new ArrayList<>();
-        StrangerUser attender1 = new StrangerUser();
-        attender1.setId(1);
-        attender1.setNick("Dominik");
-        attenders.add(attender1);
-        StrangerUser attender2 = new StrangerUser();
-        attender2.setId(2);
-        attender2.setNick("Kaziu102");
-        attenders.add(attender2);
-        event.setAttenders(attenders);
-
-        //fejkowe wiadomosci, tez beda pobrane z serwera razem z eventem
-        List<EventMessage> messages = new ArrayList<>();
-        EventMessage message = new EventMessage();
-        message.setUser(attender1);
-        message.setContent("PEWNIE ŻE WPADNĘ! później klabbing??");
-        messages.add(message);
-        event.setMessages(messages);
-
-        strangersEventList.add(event);
-        strangersEventList.add(event2);
-        strangersEventList.add(event3);
-        strangersEventList.add(event3);
-        strangersEventList.add(event3);
-        strangersEventList.add(event3);
-
-        RecyclerView.Adapter adapter = new MyEventsListAdapter(strangersEventList);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-
+        initList(Collections.EMPTY_LIST);
         return rootView;
     }
 
+    private void initList(List<StrangersEventListItem> strangersEventList) {
+        RecyclerView.Adapter adapter = new MyEventsListAdapter(strangersEventList);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        myEventsRequest();
+
+    }
+
+    private void myEventsRequest() {
+
+        String myEventsUrl = ServerConfig.MY_EVENTS;
+
+        JsonArrayRequest jsonArrayRequest = new AuthJsonArrayRequest(
+                getActivity().getApplicationContext(),
+                Request.Method.GET,
+                myEventsUrl,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try{
+                            ObjectMapper mapper = new ObjectMapper();
+                            CollectionType listType = mapper.getTypeFactory().constructCollectionType(ArrayList.class, StrangersEventListItem.class);
+                            List<StrangersEventListItem> events= null;
+                            String jsonString = response.toString();
+
+                            events = mapper.readValue(jsonString,listType);
+                            initList(events);
+                        }catch (IOException e){
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getActivity(),error.getMessage(),Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+        RequestQueueSingleton.getInstance(getActivity()).addToRequestQueue(jsonArrayRequest);
+    }
 }
