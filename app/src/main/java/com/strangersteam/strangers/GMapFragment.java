@@ -1,14 +1,17 @@
 package com.strangersteam.strangers;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.support.annotation.NonNull;
+import android.location.LocationManager;
+import android.location.LocationListener;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +23,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -59,21 +58,88 @@ public class GMapFragment extends Fragment implements
         GoogleMap.OnInfoWindowLongClickListener,
         GoogleMap.OnMapClickListener,
         GoogleMap.OnMapLongClickListener,
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        LocationListener, GoogleMap.OnCameraIdleListener {
+        GoogleMap.OnCameraIdleListener {
 
     private GoogleMap mMap;
-    private GoogleApiClient mGoogleApiClient;
-    private LocationRequest mLocationRequest;
     private Location mLocation;
 
     private List<Marker> markersOnMap;
     private Marker mLastSelectedMarker;
 
-    private FloatingActionMenu menu;
+    private boolean isCameraMoveIntoMarker;
 
-    private boolean isCameraMovingtoMarker;
+    private FloatingActionMenu _floatingActionMenu;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        markersOnMap = new ArrayList<>();
+        isCameraMoveIntoMarker = false;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_map, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        _floatingActionMenu = (FloatingActionMenu) view.findViewById(R.id.add_event_menu);
+        configFloatingActionMenu();
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_map_view);
+        mapFragment.getMapAsync(this);
+    }
+
+    private void configFloatingActionMenu() {
+        final FloatingActionButton addEventHereBtn = new FloatingActionButton(getActivity());
+        addEventHereBtn.setButtonSize(FloatingActionButton.SIZE_MINI);
+        addEventHereBtn.setLabelText("Dodej event tu i teraz!");
+        addEventHereBtn.setImageResource(R.drawable.ic_my_location_white_24dp);
+        addEventHereBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), AddEventActivity.class);
+                startActivity(intent);
+            }
+        });
+        _floatingActionMenu.addMenuButton(addEventHereBtn);
+        final FloatingActionButton addEventSomewhereBtn = new FloatingActionButton(getActivity());
+        addEventSomewhereBtn.setButtonSize(FloatingActionButton.SIZE_MINI);
+        addEventSomewhereBtn.setLabelText("Wybierz gdzie chcesz utworzyć event!");
+        addEventSomewhereBtn.setImageResource(R.drawable.ic_add_location_white_24dp);
+        addEventSomewhereBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), AddEventMarkerActivity.class);
+                startActivity(intent);
+            }
+        });
+        _floatingActionMenu.addMenuButton(addEventSomewhereBtn);
+
+        _floatingActionMenu.setClosedOnTouchOutside(true);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mMap.setOnMapClickListener(this);
+        mMap.setOnMapLongClickListener(this);
+        mMap.setOnMarkerClickListener(this);
+        mMap.setOnInfoWindowClickListener(this);
+        mMap.setOnMarkerDragListener(this);
+        mMap.setOnInfoWindowLongClickListener(this);
+        mMap.setOnCameraIdleListener(this);
+
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
+        getCurrentLocation();
+        downloadMarkersAndAddToMap();
+    }
 
     private class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
@@ -89,135 +155,63 @@ public class GMapFragment extends Fragment implements
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        buildGoogleApiClient();
-        markersOnMap = new ArrayList<>();
-        isCameraMovingtoMarker = false;
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_map, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-
-        menu = (FloatingActionMenu) view.findViewById(R.id.add_event_menu);
-
-        final FloatingActionButton addEventHereBtn = new FloatingActionButton(getActivity());
-        addEventHereBtn.setButtonSize(FloatingActionButton.SIZE_MINI);
-        addEventHereBtn.setLabelText("Dodej event tu i teraz!");
-        addEventHereBtn.setImageResource(R.drawable.ic_my_location_white_24dp);
-        menu.addMenuButton(addEventHereBtn);
-        final FloatingActionButton addEventSomewhereBtn = new FloatingActionButton(getActivity());
-        addEventSomewhereBtn.setButtonSize(FloatingActionButton.SIZE_MINI);
-        addEventSomewhereBtn.setLabelText("Wybierz gdize chcesz utworzyć event!");
-        addEventSomewhereBtn.setImageResource(R.drawable.ic_add_location_white_24dp);
-        menu.addMenuButton(addEventSomewhereBtn);
-
-        menu.setClosedOnTouchOutside(true);
-
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_map_view);
-        mapFragment.getMapAsync(this);
-    }
-
-    public void onStart(){
-        mGoogleApiClient.connect();
-        super.onStart();
-    }
-
-    public void onStop(){
-        mGoogleApiClient.disconnect();
-        super.onStop();
-    }
-
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-
-        mMap = googleMap;
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        mMap.setMyLocationEnabled(true);
-        mMap.setOnMapClickListener(this);
-        mMap.setOnMapLongClickListener(this);
-        mMap.setOnMarkerClickListener(this);
-        mMap.setOnInfoWindowClickListener(this);
-        mMap.setOnMarkerDragListener(this);
-        mMap.setOnInfoWindowLongClickListener(this);
-        mMap.setOnCameraIdleListener(this);
-
-        if (ContextCompat.checkSelfPermission(getContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            //wydaje mi się że trzeba to tutaj wywołać, bo to 'wymusi' psrawdzenie gpsa
-            //ale to tylko moje zdanie XD
-            mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        }
-
-        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLocation.getLatitude(), mLocation.getLongitude()),13));
-        downloadMarkersAndAddToMap();
-    }
-
-    protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(getContext())
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-        mGoogleApiClient.connect();
-    }
-
-    @Override
     public void onMapClick(LatLng latLng) {
 
     }
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(15000);
-        mLocationRequest.setFastestInterval(10000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        if (ContextCompat.checkSelfPermission(getContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+    private void getCurrentLocation() {
+        final LocationManager mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+
+        final LocationListener locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                if(location != null){
+                    mLocation = location;
+                    mLocationManager.removeUpdates(this);
+                }
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+            }
+        };
+
+        mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+
+        mLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+        if(mLocation != null){
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLocation.getLatitude(), mLocation.getLongitude()),13));
+
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(new LatLng(mLocation.getLatitude(), mLocation.getLongitude()))
+                    .zoom(13)
+                    .build();
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        }
+        else{
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-33.867, 151.206), 13));
         }
 
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-
-        mLocation = location;
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,13));
-
-        //stop location updates
-        if (mGoogleApiClient != null) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
         }
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
 
     @Override
     public void onCameraIdle() {
-        if(isCameraMovingtoMarker){
-            isCameraMovingtoMarker = !isCameraMovingtoMarker;
+        if(isCameraMoveIntoMarker){
+            isCameraMoveIntoMarker = !isCameraMoveIntoMarker;
             return;
         }
 
@@ -242,7 +236,7 @@ public class GMapFragment extends Fragment implements
                         try {
                             ObjectMapper mapper = new ObjectMapper();
                             CollectionType listType = mapper.getTypeFactory().constructCollectionType(ArrayList.class, StrangersEventMarker.class);
-                            List<StrangersEventMarker> downloadedMarkers= null;
+                            List<StrangersEventMarker> downloadedMarkers = null;
                             String jsonString = response.toString();
 
                             downloadedMarkers = mapper.readValue(jsonString,listType);
@@ -315,7 +309,7 @@ public class GMapFragment extends Fragment implements
 
         mLastSelectedMarker = marker;
         mLastSelectedMarker.showInfoWindow();
-        isCameraMovingtoMarker = true;
+        isCameraMoveIntoMarker = true;
         return false;
     }
 
@@ -354,4 +348,5 @@ public class GMapFragment extends Fragment implements
         Marker marker = mMap.addMarker(markerOptions);
         marker.showInfoWindow();
     }
+
 }
