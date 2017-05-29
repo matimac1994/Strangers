@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:fab="http://schemas.android.com/tools"
     android:focusableInTouchMode="true">
 
     <Button xmlns:android="http://schemas.android.com/apk/res/android"
@@ -14,10 +15,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/map_search_edit_text"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/map_map_view"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="8dp" />
+        app:layout_constraintBottom_toTopOf="@+id/map_map_view"/>
 
 
     <EditText
@@ -31,11 +29,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/map_map_view"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginBottom="0dp"
-        app:layout_constraintRight_toLeftOf="@+id/map_search_button"
-        android:layout_marginEnd="8dp" />
+        app:layout_constraintRight_toLeftOf="@+id/map_search_button" />
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/map_map_view"
@@ -46,5 +40,29 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
+
+
+
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/add_event_menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintRight_toRightOf="@id/map_map_view"
+        app:layout_constraintBottom_toBottomOf="@id/map_map_view"
+        app:layout_constraintLeft_toLeftOf="@id/map_map_view"
+        app:layout_constraintTop_toTopOf="@id/map_map_view"
+        app:layout_anchorGravity="bottom|right|end"
+        android:src="@drawable/ic_add_white_24dp"
+        android:layout_margin="@dimen/fab_margin"
+        android:clickable="true"
+        app:backgroundTint="@color/colorFlotingButton"
+        app:layout_constraintVertical_bias="0.95"
+        app:layout_constraintHorizontal_bias="0.95"
+        fab:menu_labels_ellipsize="end"
+        fab:menu_labels_singleLine="true"
+        fab:menu_backgroundColor="#ccffffff">
+
+    </com.github.clans.fab.FloatingActionMenu>
+
 
 </android.support.constraint.ConstraintLayout>

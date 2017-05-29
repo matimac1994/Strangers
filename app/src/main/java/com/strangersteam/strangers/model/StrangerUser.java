@@ -5,7 +5,7 @@ public class StrangerUser {
     private String nick;
     private int age;
     private boolean female;
-    private int photoResId;
+    private String photoUrl;
 
     public void setId(long id) {
         this.id = id;
@@ -39,11 +39,11 @@ public class StrangerUser {
         return female;
     }
 
-    public int getPhotoResId() {
-        return photoResId;
+    public String getPhotoUrl() {
+        return photoUrl;
     }
 
-    public void setPhotoResId(int photoResId) {
-        this.photoResId = photoResId;
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }

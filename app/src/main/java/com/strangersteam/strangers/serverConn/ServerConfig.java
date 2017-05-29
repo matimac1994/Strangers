@@ -9,6 +9,12 @@ public final class ServerConfig {
     private static final String GET_EVENT = SERVER_IP + "event";
 
     public static final String MY_USER = SERVER_IP + "user";
+    private static final String SERVER_IP = "http://164.132.57.18:9997/";
+    //private static final String SERVER_IP = "http://10.0.3.2:9997/";
+    private static final String GET_MARKERS = SERVER_IP + "markers";
+    private static final String GET_EVENT = SERVER_IP + "event";
+
+    public static final String MY_USER = SERVER_IP + "user";
     public static final String LOGIN = SERVER_IP + "user/session/login";
     public static final String MY_EVENTS = SERVER_IP + "user/myEvents";
 

@@ -93,13 +93,13 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <Button
+                    android:id="@+id/sign_sign_in_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="16dp"
                     android:text="@string/sign_in_button"
-                    android:theme="@style/AppTheme.ButtonSignIn"
-                    android:onClick="onClickSignIn"/>
+                    android:theme="@style/AppTheme.ButtonSignIn" />
 
             </LinearLayout>
 

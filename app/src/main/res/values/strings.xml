@@ -58,4 +58,9 @@
     <string name="unknown_error">Nieznany błąd</string>
     <string name="auth_token">X-Auth-Token</string>
 
+    <string name="login_failed">Nieudana próba logowania</string>
+    <string name="not_valid_mail">Podaj poprawny adres E-mail</string>
+    <string name="not_valid_password">Hasło musi zawierać co najmniej 4 znaki</string>
+    <string name="different_password2">Powtórzone hasło jest błędne</string>
+
 </resources>

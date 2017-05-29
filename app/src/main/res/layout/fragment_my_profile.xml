@@ -47,27 +47,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/my_profile_surname_data"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:orientation="horizontal" >
-
-                <TextView
-                    android:id="@+id/my_profile_surname_label"
-                    android:layout_width="110dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/surname_label" />
-
-                <TextView
-                    android:id="@+id/my_profile_surname"
-                    android:layout_width="110dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/surname" />
-
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/my_profile_age_data"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

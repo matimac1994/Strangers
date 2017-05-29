@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import com.strangersteam.strangers.R;
 import com.strangersteam.strangers.model.StrangersEvent;
+import com.strangersteam.strangers.model.StrangersEventListItem;
+import com.strangersteam.strangers.model.StrangersEventMarker;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,7 +19,7 @@ import java.util.Locale;
 
 public class MyEventsListAdapter extends RecyclerView.Adapter<MyEventsListAdapter.ViewHolder> {
 
-    private List<StrangersEvent> strangersEventList;
+    private List<StrangersEventListItem> strangersEventList;
 
     protected static class ViewHolder extends RecyclerView.ViewHolder{
         private TextView titleTextView;
@@ -30,7 +32,7 @@ public class MyEventsListAdapter extends RecyclerView.Adapter<MyEventsListAdapte
         }
     }
 
-    public MyEventsListAdapter(List<StrangersEvent> strangersEventList){
+    public MyEventsListAdapter(List<StrangersEventListItem> strangersEventList){
         this.strangersEventList = strangersEventList;
     }
 
@@ -45,7 +47,7 @@ public class MyEventsListAdapter extends RecyclerView.Adapter<MyEventsListAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        StrangersEvent event = strangersEventList.get(position);
+        StrangersEventListItem event = strangersEventList.get(position);
         viewHolder.titleTextView.setText(event.getTitle());
         viewHolder.descriptionTextView.setText(new SimpleDateFormat("HH:mm EEEE, dd-MMM-yyyy", new Locale("pl","PL")).format(new Date(event.getDate().getTimeInMillis())));
         viewHolder.descriptionTextView.append(", " + event.getWhere());

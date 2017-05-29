@@ -27,6 +27,22 @@ import com.strangersteam.strangers.serverConn.ServerConfig;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.squareup.picasso.Picasso;
+import com.strangersteam.strangers.model.StrangerUser;
+import com.strangersteam.strangers.serverConn.RequestQueueSingleton;
+import com.strangersteam.strangers.serverConn.ServerConfig;
+
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 
 /**

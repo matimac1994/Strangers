@@ -14,8 +14,6 @@ import com.strangersteam.strangers.model.StrangerUser;
 
 import java.util.List;
 
-import static com.strangersteam.strangers.R.id.imageView;
-
 public class AttendersListAdapter extends RecyclerView.Adapter<AttendersListAdapter.ViewHolder> {
 
     private Context mContext;
@@ -55,15 +53,22 @@ public class AttendersListAdapter extends RecyclerView.Adapter<AttendersListAdap
     public void onBindViewHolder(ViewHolder holder, int position) {
         StrangerUser user = attendersList.get(position);
         holder.nickTextView.setText(user.getNick());
-        //holder.imageView.setImageResource(user.getPhotoResId());
 
         //Kompresja (chyba) żeby RecyclerView się nie zacinało
-        Picasso.with(mContext).load(user.getPhotoResId())
-                .fit()
-                .centerInside()
-                .error(R.drawable.temp_logo_picture)
-                .placeholder(R.drawable.temp_logo_picture)
-                .into(holder.imageView);
+        if(user.getPhotoUrl() == null || user.getPhotoUrl().isEmpty()){
+            Picasso.with(mContext).load(R.drawable.temp_logo_picture)
+                    .fit()
+                    .centerInside()
+                    .placeholder(R.drawable.temp_logo_picture)
+                    .into(holder.imageView);
+        }else{
+            Picasso.with(mContext).load(user.getPhotoUrl())
+                    .fit()
+                    .centerInside()
+                    .placeholder(R.drawable.temp_logo_picture)
+                    .into(holder.imageView);
+        }
+
     }
 
     @Override
