@@ -50,8 +50,7 @@
 
     <string name="login_button">Zaloguj</string>
     <string name="sign_in_button">Zarejestruj</string>
-    <string name="email_edit_text">E-mail</string>
-    <string name="nick_edit_text">Nick</string>
+    <string name="login_edit_text">Login/Nick</string>
     <string name="password_edit_text">Hasło</string>
     <string name="password2_edit_text">Powtórz Hasło</string>
     <string name="login_invalid_data">Niepoprawne dane logowania</string>
@@ -59,7 +58,7 @@
     <string name="auth_token">X-Auth-Token</string>
 
     <string name="login_failed">Nieudana próba logowania</string>
-    <string name="not_valid_mail">Podaj poprawny adres E-mail</string>
+    <string name="not_valid_login">Podaj poprawny login</string>
     <string name="not_valid_password">Hasło musi zawierać co najmniej 4 znaki</string>
     <string name="different_password2">Powtórzone hasło jest błędne</string>
 
@@ -71,5 +70,10 @@
     <string name="add_event_where_edit_text">Podaj miejsce eventu</string>
     <string name="add_event_describe_edit_text">Podaj opis eventu</string>
     <string name="done">Gotowe</string>
+
+    <string name="add_event_marker_title_marker">Dodej Event Tutaj</string>
+
+    <string name="map_fragment_here_button">Dodaj Event tu i teraz</string>
+    <string name="map_fragment_somewhere_button">Wybierz gdzie chcesz dodać Event</string>
 
 </resources>

@@ -138,11 +138,11 @@ public class LoginActivity extends AppCompatActivity {
 
         boolean valid = true;
 
-        String email = _loginET.getText().toString();
+        String login = _loginET.getText().toString();
         String password = _passET.getText().toString();
 
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _loginET.setError(getString(R.string.not_valid_mail));
+        if (login.isEmpty()) {
+            _loginET.setError(getString(R.string.not_valid_login));
             valid = false;
         } else {
             _loginET.setError(null);
