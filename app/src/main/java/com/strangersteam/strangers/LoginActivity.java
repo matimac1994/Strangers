@@ -33,8 +33,8 @@ public class LoginActivity extends AppCompatActivity {
 
     @Bind (R.id.login_login_edit_text) EditText _loginET;
     @Bind (R.id.login_password_edit_text) EditText _passET;
-    @Bind (R.id.login_login_button) Button _loginButton;
-    @Bind (R.id.login_sign_in_button) Button _signInButton;
+    @Bind (R.id.login_login_button) Button loginButton;
+    @Bind (R.id.login_register_button) Button registerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +43,19 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
-        _loginButton.setOnClickListener(new View.OnClickListener() {
+        if(AuthTokenProvider.isTokenExist(getApplicationContext())){
+            Toast.makeText(this,"Debug Jesteś już zalogowany",Toast.LENGTH_SHORT).show();
+            goToMap();
+        }
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onClickLogin(view);
             }
         });
 
-        _signInButton.setOnClickListener(new View.OnClickListener() {
+        registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onClickSignIn(view);
@@ -74,10 +79,34 @@ public class LoginActivity extends AppCompatActivity {
 
         if(!validate())
             onLoginFailed();
-        _loginButton.setEnabled(false);
+        loginButton.setEnabled(false);
 
         loginRequest(loginString,passwordString);
 
+    }
+
+    private boolean validate(){
+
+        boolean valid = true;
+
+        String email = _loginET.getText().toString();
+        String password = _passET.getText().toString();
+
+        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            _loginET.setError(getString(R.string.not_valid_mail));
+            valid = false;
+        } else {
+            _loginET.setError(null);
+        }
+
+        if (password.isEmpty() || password.length() < 2) {
+            _passET.setError(getString(R.string.not_valid_password));
+            valid = false;
+        } else {
+            _passET.setError(null);
+        }
+
+        return valid;
     }
 
     private void onLoginFailed() {
@@ -102,20 +131,16 @@ public class LoginActivity extends AppCompatActivity {
                             //będzie też można łatwo sprawdzić czy użytkownik jest zalogowany - sprawdzamy czy w szaref prefs jest wartość z takiem token
                             //przy wylogowaniu albo jak dostaniemy gdzies 403 ze skonczyla sie sesja to bedziemy usuwan z szared prefs tokena
                             String token = response.getString("token");
-                            SecurityProvider.saveToken(getApplicationContext(),token);
+                            AuthTokenProvider.saveToken(getApplicationContext(),token);
                             //przykład wyciągnięcia token z shared preferencese: sharedPreferences.getString(getResources().getString(R.string.auth_token),null);
-                            //_loginButton.setEnabled(true);
+                            //loginButton.setEnabled(true);
                         } catch (JSONException e) {
                             Log.e("JSONException", e.getMessage());
                             _passET.setError(getString(R.string.unknown_error));
                             return;
                         }
 
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                        finish();
-                        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                        goToMap();
                     }
                 },
                 new Response.ErrorListener() {
@@ -134,19 +159,13 @@ public class LoginActivity extends AppCompatActivity {
         RequestQueueSingleton.getInstance(this.getApplicationContext()).addToRequestQueue(jsonObjectRequest);
     }
 
-    private boolean validate(){
-
-        boolean valid = true;
-
-        String login = _loginET.getText().toString();
-        String password = _passET.getText().toString();
-
-        if (login.isEmpty()) {
-            _loginET.setError(getString(R.string.not_valid_login));
-            valid = false;
-        } else {
-            _loginET.setError(null);
-        }
+    private void goToMap() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+    }
 
         if (password.isEmpty() || password.length() < 2) {
             _passET.setError(getString(R.string.not_valid_password));

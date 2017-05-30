@@ -168,6 +168,19 @@ public class GMapFragment extends Fragment implements
     public void onMapClick(LatLng latLng) {
 
     }
+    public void goToLocationAndSave(Location location){
+        if(location != null){
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),13));
+
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(new LatLng(location.getLatitude(), location.getLongitude()))
+                    .zoom(13)
+                    .build();
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+            mLocation = location;
+        }
+    }
 
     private void getCurrentLocation() {
         final LocationManager mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
@@ -176,8 +189,9 @@ public class GMapFragment extends Fragment implements
             @Override
             public void onLocationChanged(Location location) {
                 if(location != null){
-                    mLocation = location;
+                    goToLocationAndSave(location);
                     mLocationManager.removeUpdates(this);
+                    Toast.makeText(getActivity(),"D: " + location.getProvider(),Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -192,25 +206,21 @@ public class GMapFragment extends Fragment implements
             @Override
             public void onProviderDisabled(String provider) {
             }
+
         };
 
-        mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+        mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10, 1, locationListener);
 
-        mLocation = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        Location location = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
-        if(mLocation != null){
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLocation.getLatitude(), mLocation.getLongitude()),13));
-
-            CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(mLocation.getLatitude(), mLocation.getLongitude()))
-                    .zoom(13)
-                    .build();
-            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        if(location != null){
+            goToLocationAndSave(location);
         }
         else{
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-33.867, 151.206), 13));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitudeDefault, longitudeDefault), 13));
         }
 
+        //WTF XD
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
