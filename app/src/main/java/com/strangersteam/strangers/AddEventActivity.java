@@ -1,5 +1,6 @@
 package com.strangersteam.strangers;
 
+import android.app.DownloadManager;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.DialogFragment;
@@ -7,12 +8,19 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -20,11 +28,19 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.strangersteam.strangers.serverConn.AuthJsonObjectRequest;
+import com.strangersteam.strangers.serverConn.RequestQueueSingleton;
+import com.strangersteam.strangers.serverConn.ServerConfig;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class AddEventActivity extends AppCompatActivity implements
         OnMapReadyCallback,
@@ -41,7 +57,11 @@ public class AddEventActivity extends AppCompatActivity implements
     private int durationHour;
     private int durationMinute;
 
+    private EditText titleET;
+    private EditText placeET;
+    private EditText descriptionET;
     private TextView timeSelectedTV;
+    private Button addEventButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +78,19 @@ public class AddEventActivity extends AppCompatActivity implements
 
         SupportMapFragment mapFragment = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.add_event_map_view);
         mapFragment.getMapAsync(this);
-    }
 
+        addEventButton = (Button) findViewById(R.id.add_event_add_event_button);
+        addEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickAddEvent();
+            }
+        });
+
+        titleET = (EditText) findViewById(R.id.add_event_title);
+        placeET = (EditText) findViewById(R.id.add_event_where);
+        descriptionET = (EditText) findViewById(R.id.add_event_describe);
+    }
 
     private void initializeToolbar(){
         final Toolbar toolbar = (Toolbar) findViewById(R.id.add_event_toolbar);
@@ -108,10 +139,10 @@ public class AddEventActivity extends AppCompatActivity implements
         });
     }
 
-
-
     private void setUpTimeSelectedTV(){
-        calendar.set(Calendar.YEAR, Calendar.MONTH, Calendar.DAY_OF_MONTH, hour, minute);
+        calendar = new GregorianCalendar();
+        calendar.set(Calendar.HOUR, hour);
+        calendar.set(Calendar.MINUTE, minute);
         timeSelectedTV.setText(new SimpleDateFormat("HH:mm", new Locale("pl", "PL")).format(calendar.getTimeInMillis()));
     }
 
@@ -124,9 +155,6 @@ public class AddEventActivity extends AppCompatActivity implements
     protected void onStop() {
         super.onStop();
     }
-
-
-
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -187,5 +215,81 @@ public class AddEventActivity extends AppCompatActivity implements
         initializeNumberPickers();
     }
 
+    private void onClickAddEvent() {
+        addEventButton.setEnabled(false);
+        if(!validate()){
+            //todo jakies errory powyswietlac?
+        }else{
+            addEventRequest();
+        }
+    }
+
+    private boolean validate() {
+        //// TODO: 30.05.2017
+        return true;
+    }
+
+    private void addEventRequest() {
+
+        Map<String, String> params = addEventParams();
+
+        JsonObjectRequest jsonObjectRequest = createAddEventRequest(params);
+
+        RequestQueueSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
+    }
+
+    private Map<String, String> addEventParams() {
+        HashMap<String,String> params = new HashMap<String, String>();
+        params.put("latitude",Double.toString(markerLatLng.latitude));
+        params.put("longitude",Double.toString(markerLatLng.longitude));
+        params.put("dateStart", Long.toString(calendar.getTimeInMillis()));
+        params.put("durationHours", Integer.toString(durationHour));
+        params.put("title", titleET.getText().toString());
+        params.put("place", placeET.getText().toString());
+        params.put("description", descriptionET.getText().toString());
+        return params;
+    }
+
+    private JsonObjectRequest createAddEventRequest(Map<String, String> params) {
+        return new AuthJsonObjectRequest(
+                getApplicationContext(),
+                Request.Method.POST,
+                ServerConfig.ADD_EVENT,
+                new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            addEventButton.setEnabled(true);
+                            Long eventId = response.getLong("eventId");
+                            goToEventActivity(eventId);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(),"Wystąpił nieoczekiwany błąd. Został on zgłoszony.",Toast.LENGTH_LONG).show();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        addEventButton.setEnabled(true);
+                        onAddEventError(error);
+                    }
+                }
+        );
+    }
+
+    private void goToEventActivity(Long eventId) throws JSONException {
+
+        Intent intent = new Intent(getApplicationContext(),ShowEventActivity.class);
+        intent.putExtra(ShowEventActivity.EVENT_ID,eventId);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        this.startActivity(intent);
+    }
+
+    private void onAddEventError(VolleyError error) {
+        Log.e(AddEventActivity.class.getName(),"errooor: " + error.getMessage());
+        Toast.makeText(getApplicationContext(),"errooor: " + error.getMessage(),Toast.LENGTH_LONG).show();
+    }
 
 }
