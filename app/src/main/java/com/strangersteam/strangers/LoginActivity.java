@@ -73,22 +73,18 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onClickLogin(View view){
-
+        if(!validate()){
+            onLoginFailed();
+        }
         String loginString = _loginET.getText().toString();
         String passwordString = _passET.getText().toString();
-
-        if(!validate())
-            onLoginFailed();
         loginButton.setEnabled(false);
-
         loginRequest(loginString,passwordString);
 
     }
 
     private boolean validate(){
-
         boolean valid = true;
-
         String email = _loginET.getText().toString();
         String password = _passET.getText().toString();
 
@@ -110,7 +106,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void onLoginFailed() {
-        Toast.makeText(this,R.string.login_failed, Toast.LENGTH_LONG);
+        loginButton.setEnabled(true);
+        Toast.makeText(this,R.string.login_failed, Toast.LENGTH_LONG).show();
+
     }
 
     private void loginRequest(String loginString, String passwordString) {
@@ -122,25 +120,15 @@ public class LoginActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-
                         try {
-                            //jako odpowiedz na logowanie zakończone sukcesem dosjatemy json z jednym polem "token"
-                            //ten token to tajny token unikalny dla każego użytkownia
-                            //za każdym razem kiedy będziemy wykonywać zapytanie wygamające autoryzacji
-                            //będzie trzeba przesłać ten  token w nagłówku zapytania, dlatego zapisuje go w sharedPreferences bo łatwo ladnie i wygodnie
-                            //będzie też można łatwo sprawdzić czy użytkownik jest zalogowany - sprawdzamy czy w szaref prefs jest wartość z takiem token
-                            //przy wylogowaniu albo jak dostaniemy gdzies 403 ze skonczyla sie sesja to bedziemy usuwan z szared prefs tokena
                             String token = response.getString("token");
                             AuthTokenProvider.saveToken(getApplicationContext(),token);
-                            //przykład wyciągnięcia token z shared preferencese: sharedPreferences.getString(getResources().getString(R.string.auth_token),null);
-                            //loginButton.setEnabled(true);
+                            goToMap();
                         } catch (JSONException e) {
                             Log.e("JSONException", e.getMessage());
                             _passET.setError(getString(R.string.unknown_error));
                             return;
                         }
-
-                        goToMap();
                     }
                 },
                 new Response.ErrorListener() {

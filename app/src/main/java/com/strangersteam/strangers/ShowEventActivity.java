@@ -43,6 +43,7 @@ import java.util.Locale;
 public class ShowEventActivity extends AppCompatActivity implements
         OnMapReadyCallback{
 
+    public static final String EVENT_ID = "EVENT_ID";
     GoogleMap mMap;
     Marker mMarker;
 
@@ -88,7 +89,7 @@ public class ShowEventActivity extends AppCompatActivity implements
     @Override
     protected void onStart() {
         super.onStart();
-        Long eventId = this.getIntent().getLongExtra("EVENT_ID",0);
+        Long eventId = this.getIntent().getLongExtra(EVENT_ID,0);
         eventRequest(eventId);
     }
 
