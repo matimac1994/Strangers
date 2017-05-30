@@ -5,7 +5,7 @@ import java.util.Calendar;
 /**
  * Created by kroli on 27.05.2017.
  */
-public class StrangersEventListItem {
+public class StrangersEventListItem{
 
     private long id;
     private String title;

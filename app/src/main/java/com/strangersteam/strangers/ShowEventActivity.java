@@ -16,10 +16,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -32,8 +28,6 @@ import com.strangersteam.strangers.adapters.AttendersListAdapter;
 import com.strangersteam.strangers.model.StrangerUser;
 import com.strangersteam.strangers.model.StrangersEvent;
 import com.strangersteam.strangers.serverConn.AuthJsonObjectRequest;
-import com.strangersteam.strangers.serverConn.RequestQueueSingleton;
-import com.strangersteam.strangers.serverConn.ServerConfig;
 import com.strangersteam.strangers.serverConn.RequestQueueSingleton;
 import com.strangersteam.strangers.serverConn.ServerConfig;
 
@@ -53,6 +47,7 @@ public class ShowEventActivity extends AppCompatActivity implements
     Marker mMarker;
 
     StrangersEvent mEvent;
+
     TextView titleTV;
     TextView whenTV;
     TextView whereTV;
@@ -60,6 +55,7 @@ public class ShowEventActivity extends AppCompatActivity implements
     TextView ownerNickTV;
     TextView ownerAgeTV;
     TextView ownerSexTV;
+
     RecyclerView attendersRecyclerView;
 
 
@@ -163,5 +159,8 @@ public class ShowEventActivity extends AppCompatActivity implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.getUiSettings().setAllGesturesEnabled(false);
+        mMap.getUiSettings().setMapToolbarEnabled(false);
+        mMap.getUiSettings().setZoomControlsEnabled(false);
     }
 }

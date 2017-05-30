@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.strangersteam.strangers.AddEventActivity"
-    android:background="@color/colorPrimary"
     android:orientation="vertical"
     android:layout_gravity="top"
     android:gravity="top"
@@ -13,7 +12,7 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/add_event_toolbar"
-        android:layout_width="368dp"
+        android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="@color/colorPrimary"
         android:title="@string/add_event_title_toolbar"
@@ -32,9 +31,128 @@
             android:orientation="vertical"
             android:layout_gravity="top"
             android:gravity="top"
-            android:paddingStart="24dp"
-            android:paddingEnd="24dp"
-            android:paddingTop="48dp">
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="8dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_gravity="center_vertical"
+                >
+
+                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:map="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/add_event_map_view"
+                    class="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:layout_gravity="center"
+                    map:liteMode="true"
+                    map:mapType="normal"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="3">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_weight="2">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:text="Czas rozpoczęcia:"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/add_event_time_selected"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="48sp"
+                            android:text=""
+                            android:onClick="showTimePickerDialog"
+                            android:clickable="true"
+                            android:layout_gravity="center"
+                            android:gravity="center"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_weight="1">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:text="Czas trwania:"
+                            android:layout_gravity="center"
+                            android:textStyle="bold"/>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_gravity="center">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Godziny:"
+                                    android:textSize="12sp"
+                                    android:layout_gravity="center"/>
+
+                                <NumberPicker
+                                    android:id="@+id/add_event_number_picker_hour"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="4dp"
+                                    />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Minuty:"
+                                    android:textSize="12sp"
+                                    android:layout_gravity="center"/>
+
+                                <NumberPicker
+                                    android:id="@+id/add_event_number_picker_minute"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="4dp"
+                                    />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -71,6 +189,15 @@
                     android:inputType="text"
                     android:hint="@string/add_event_describe_edit_text" />
             </android.support.design.widget.TextInputLayout>
+
+            <Button
+                android:id="@+id/sign_sign_in_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="@string/done"
+                android:theme="@style/AppTheme.ButtonLogin" />
 
         </LinearLayout>
 

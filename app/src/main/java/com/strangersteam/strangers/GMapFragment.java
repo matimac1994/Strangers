@@ -101,7 +101,9 @@ public class GMapFragment extends Fragment implements
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), AddEventActivity.class);
+                intent.putExtra("MARKER_POSITION", new LatLng(mLocation.getLatitude(), mLocation.getLongitude()));
                 startActivity(intent);
+
             }
         });
         _floatingActionMenu.addMenuButton(addEventHereBtn);
