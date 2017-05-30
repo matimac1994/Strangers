@@ -12,21 +12,28 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * Created by kroli on 29.05.2017.
  */
-
-public class SecurityProvider {
+public class AuthTokenProvider {
 
     public static final String TOKEN_HEADER_NAME = "X-Auth-Token";
 
     public static void saveToken(Context applicationContext, String token) {
-        SharedPreferences sharedPreferences = applicationContext.getSharedPreferences(TOKEN_HEADER_NAME,MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPrefs(applicationContext);
         sharedPreferences.edit().putString(TOKEN_HEADER_NAME,token).apply();
     }
 
     public static String getToken(Context applicationContext) {
-        SharedPreferences sharedPreferences = applicationContext.getSharedPreferences(TOKEN_HEADER_NAME,MODE_PRIVATE);
-        String token =sharedPreferences.getString(TOKEN_HEADER_NAME,"");
+        SharedPreferences sharedPreferences = getSharedPrefs(applicationContext);
+        String token = sharedPreferences.getString(TOKEN_HEADER_NAME,"");
         System.out.println(token);
         return token;
+    }
+
+    private static SharedPreferences getSharedPrefs(Context applicationContext) {
+        return applicationContext.getSharedPreferences(TOKEN_HEADER_NAME,MODE_PRIVATE);
+    }
+
+    public static boolean isTokenExist(Context applicationContext) {
+        return !(getToken(applicationContext).trim().isEmpty());
     }
 }
 

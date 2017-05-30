@@ -17,20 +17,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
-import com.google.android.gms.maps.model.LatLng;
 import com.strangersteam.strangers.adapters.MyEventsListAdapter;
-import com.strangersteam.strangers.model.EventMessage;
-import com.strangersteam.strangers.model.LatLngHolder;
-import com.strangersteam.strangers.model.StrangerUser;
-import com.strangersteam.strangers.model.StrangersEvent;
 import com.strangersteam.strangers.model.StrangersEventListItem;
-import com.strangersteam.strangers.model.StrangersEventMarker;
 import com.strangersteam.strangers.serverConn.AuthJsonArrayRequest;
-import com.strangersteam.strangers.serverConn.RequestQueueSingleton;
-import com.strangersteam.strangers.serverConn.SecurityProvider;
-import com.strangersteam.strangers.serverConn.ServerConfig;
-import com.strangersteam.strangers.model.StrangersEventListItem;
-import com.strangersteam.strangers.model.StrangersEventMarker;
 import com.strangersteam.strangers.serverConn.RequestQueueSingleton;
 import com.strangersteam.strangers.serverConn.ServerConfig;
 
@@ -39,7 +28,6 @@ import org.json.JSONArray;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 
