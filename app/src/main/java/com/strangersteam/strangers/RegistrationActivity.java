@@ -12,8 +12,7 @@ import butterknife.ButterKnife;
 
 public class RegistrationActivity extends AppCompatActivity {
 
-    @Bind (R.id.sign_email_edit_text) EditText _loginET;
-    @Bind (R.id.sign_nick_edit_text) EditText nickET;
+    @Bind (R.id.sign_nick_edit_text) EditText _loginET;
     @Bind (R.id.sign_password_edit_text) EditText _passET;
     @Bind (R.id.sign_password2_edit_text) EditText _pass2ET;
     @Bind (R.id.sign_sign_in_button) Button _signInButton;
@@ -43,12 +42,12 @@ public class RegistrationActivity extends AppCompatActivity {
 
         boolean valid = true;
 
-        String email = _loginET.getText().toString();
+        String login = _loginET.getText().toString();
         String password = _passET.getText().toString();
         String password2 = _pass2ET.getText().toString();
 
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _loginET.setError(getString(R.string.not_valid_mail));
+        if (login.isEmpty()) {
+            _loginET.setError(getString(R.string.not_valid_login));
             valid = false;
         } else {
             _loginET.setError(null);

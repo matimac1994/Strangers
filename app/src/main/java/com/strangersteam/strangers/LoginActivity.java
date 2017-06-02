@@ -63,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+
     public void onClickSignIn(View view) {
         Intent intent = new Intent(this, RegistrationActivity.class);
         startActivity(intent);
@@ -145,6 +146,30 @@ public class LoginActivity extends AppCompatActivity {
         RequestQueueSingleton.getInstance(this.getApplicationContext()).addToRequestQueue(jsonObjectRequest);
     }
 
+    private boolean validate(){
+
+        boolean valid = true;
+
+        String login = _loginET.getText().toString();
+        String password = _passET.getText().toString();
+
+        if (login.isEmpty()) {
+            _loginET.setError(getString(R.string.not_valid_login));
+            valid = false;
+        } else {
+            _loginET.setError(null);
+        }
+
+        if (password.isEmpty() || password.length() < 2) {
+            _passET.setError(getString(R.string.not_valid_password));
+            valid = false;
+        } else {
+            _passET.setError(null);
+        }
+
+        return valid;
+    }
+
     private void goToMap() {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -152,7 +177,5 @@ public class LoginActivity extends AppCompatActivity {
         finish();
         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
-
-
 
 }

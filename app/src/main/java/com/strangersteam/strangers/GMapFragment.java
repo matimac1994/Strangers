@@ -56,10 +56,8 @@ public class GMapFragment extends Fragment implements
         OnMapReadyCallback,
         GoogleMap.OnMarkerClickListener,
         GoogleMap.OnInfoWindowClickListener,
-        GoogleMap.OnMarkerDragListener,
         GoogleMap.OnInfoWindowLongClickListener,
         GoogleMap.OnMapClickListener,
-        GoogleMap.OnMapLongClickListener,
         GoogleMap.OnCameraIdleListener {
 
     private GoogleMap mMap;
@@ -98,7 +96,7 @@ public class GMapFragment extends Fragment implements
     private void configFloatingActionMenu() {
         final FloatingActionButton addEventHereBtn = new FloatingActionButton(getActivity());
         addEventHereBtn.setButtonSize(FloatingActionButton.SIZE_MINI);
-        addEventHereBtn.setLabelText("Dodej event tu i teraz!");
+        addEventHereBtn.setLabelText(getString(R.string.map_fragment_here_button));
         addEventHereBtn.setImageResource(R.drawable.ic_my_location_white_24dp);
         addEventHereBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,12 +115,18 @@ public class GMapFragment extends Fragment implements
         _floatingActionMenu.addMenuButton(addEventHereBtn);
         final FloatingActionButton addEventSomewhereBtn = new FloatingActionButton(getActivity());
         addEventSomewhereBtn.setButtonSize(FloatingActionButton.SIZE_MINI);
-        addEventSomewhereBtn.setLabelText("Wybierz gdzie chcesz utworzyć event!");
+        addEventSomewhereBtn.setLabelText(getString(R.string.map_fragment_somewhere_button));
         addEventSomewhereBtn.setImageResource(R.drawable.ic_add_location_white_24dp);
         addEventSomewhereBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), AddEventMarkerActivity.class);
+                if(mLocation != null){
+                    intent.putExtra("CAMERA_POSITION", new LatLng(mLocation.getLatitude(), mLocation.getLongitude()));
+                }
+                else {
+                    intent.putExtra("CAMERA_POSITION", new LatLng(mLocation.getLatitude(), mLocation.getLongitude()));
+                }
                 startActivity(intent);
             }
         });
@@ -136,10 +140,8 @@ public class GMapFragment extends Fragment implements
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.setOnMapClickListener(this);
-        mMap.setOnMapLongClickListener(this);
         mMap.setOnMarkerClickListener(this);
         mMap.setOnInfoWindowClickListener(this);
-        mMap.setOnMarkerDragListener(this);
         mMap.setOnInfoWindowLongClickListener(this);
         mMap.setOnCameraIdleListener(this);
 
@@ -346,32 +348,12 @@ public class GMapFragment extends Fragment implements
         startActivity(intent);
     }
 
-    @Override
-    public void onMarkerDragStart(Marker marker) {
-
-    }
-
-    @Override
-    public void onMarkerDrag(Marker marker) {
-
-    }
-
-    @Override
-    public void onMarkerDragEnd(Marker marker) {
-
-    }
 
     @Override
     public void onInfoWindowLongClick(Marker marker) {
 
+
     }
 
-    @Override
-    public void onMapLongClick(LatLng point) {
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(point);
-        Marker marker = mMap.addMarker(markerOptions);
-        marker.showInfoWindow();
-    }
 
 }
