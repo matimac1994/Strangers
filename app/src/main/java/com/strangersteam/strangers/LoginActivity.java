@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onClickLogin(View view){
         if(!validate()){
-            onLoginFailed();
+            loginButton.setEnabled(true);
         }
         String loginString = _loginET.getText().toString();
         String passwordString = _passET.getText().toString();
@@ -105,12 +105,6 @@ public class LoginActivity extends AppCompatActivity {
         return valid;
     }
 
-    private void onLoginFailed() {
-        loginButton.setEnabled(true);
-        Toast.makeText(this,R.string.login_failed, Toast.LENGTH_LONG).show();
-
-    }
-
     private void loginRequest(String loginString, String passwordString) {
         Map<String, String> params = new HashMap<String, String>();
         params.put("login",loginString);
@@ -135,6 +129,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
+                        loginButton.setEnabled(true);
                         if(error.networkResponse != null && error.networkResponse.statusCode == 403){
                             _passET.setError(getString(R.string.login_invalid_data));
                         }else{

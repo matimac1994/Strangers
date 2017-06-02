@@ -1,7 +1,5 @@
 package com.strangersteam.strangers.model;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -13,7 +11,7 @@ public class StrangersEvent {
     private String details;
     private GregorianCalendar date;
     private List<StrangerUser> attenders;
-    private List<EventMessage> messages;
+    private List<StrangerEventMessage> messages;
     private String where;
     private StrangerUser owner;
 
@@ -73,11 +71,11 @@ public class StrangersEvent {
         this.attenders = attenders;
     }
 
-    public List<EventMessage> getMessages() {
+    public List<StrangerEventMessage> getMessages() {
         return messages;
     }
 
-    public void setMessages(List<EventMessage> messages) {
+    public void setMessages(List<StrangerEventMessage> messages) {
         this.messages = messages;
     }
 
