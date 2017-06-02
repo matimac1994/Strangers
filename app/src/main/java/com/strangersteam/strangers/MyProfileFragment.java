@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -129,11 +131,8 @@ public class MyProfileFragment extends Fragment{
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        if(error.networkResponse.statusCode == 403){
-                            //wylogowac, i tak trzeba wszedzie,
-                            // moze da sie zrobic jakis interceptor zeby wszystkie błłędy 403 obsłużyć poszukam
-                        };
-                        //todo eror
+                        Toast.makeText(getActivity(),"error response: " + error.getMessage(),Toast.LENGTH_LONG).show();
+                        Log.e(getClass().getName(), error.getMessage()!=null?error.getMessage():"null");
                     }
                 }
         );
