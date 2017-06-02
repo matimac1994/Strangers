@@ -46,4 +46,5 @@ public class StrangerUser {
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
     }
+
 }
