@@ -175,7 +175,7 @@ public class AddEventActivity extends AppCompatActivity implements
         });
         if(markerLatLng != null){
             mMarker = mMap.addMarker(new MarkerOptions().position(markerLatLng));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mMarker.getPosition(), 15));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mMarker.getPosition(), 12));
         }
     }
 
@@ -261,6 +261,7 @@ public class AddEventActivity extends AppCompatActivity implements
                         try {
                             addEventButton.setEnabled(true);
                             Long eventId = response.getLong("eventId");
+                            System.out.println(eventId);
                             goToEventActivity(eventId);
                         } catch (JSONException e) {
                             e.printStackTrace();

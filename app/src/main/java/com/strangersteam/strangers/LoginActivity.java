@@ -14,7 +14,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.strangersteam.strangers.serverConn.RequestQueueSingleton;
-import com.strangersteam.strangers.serverConn.SecurityProvider;
+import com.strangersteam.strangers.serverConn.AuthTokenProvider;
 import com.strangersteam.strangers.serverConn.ServerConfig;
 
 import org.json.JSONException;
@@ -41,7 +41,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         if(AuthTokenProvider.isTokenExist(getApplicationContext())){
             Toast.makeText(this,"Debug Jesteś już zalogowany",Toast.LENGTH_SHORT).show();
@@ -85,11 +84,12 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean validate(){
         boolean valid = true;
-        String email = _loginET.getText().toString();
+
+        String login = _loginET.getText().toString();
         String password = _passET.getText().toString();
 
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _loginET.setError(getString(R.string.not_valid_mail));
+        if (login.isEmpty()) {
+            _loginET.setError(getString(R.string.not_valid_login));
             valid = false;
         } else {
             _loginET.setError(null);
@@ -153,16 +153,6 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-    }
-
-        if (password.isEmpty() || password.length() < 2) {
-            _passET.setError(getString(R.string.not_valid_password));
-            valid = false;
-        } else {
-            _passET.setError(null);
-        }
-
-        return valid;
     }
 
 }
