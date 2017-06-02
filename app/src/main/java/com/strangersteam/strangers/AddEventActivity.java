@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -265,7 +266,7 @@ public class AddEventActivity extends AppCompatActivity implements
                             goToEventActivity(eventId);
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(getApplicationContext(),"Wystąpił nieoczekiwany błąd. Został on zgłoszony.",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(),"Wystąpił nieoczekiwany błąd. Został on zgłoszony.", Toast.LENGTH_LONG).show();
                         }
                     }
                 },
