@@ -19,10 +19,10 @@ public class ForbiddenErrorListener {
         return new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if(error.networkResponse.statusCode == 403){
-                    LogoutHandler.logout(applicationContext);
-                    Toast.makeText(applicationContext,"Sesja wygasła", Toast.LENGTH_SHORT).show();
-                }else{
+                if(error.networkResponse == null){
+                    Toast.makeText(applicationContext,error.getMessage(),Toast.LENGTH_LONG).show();
+                    //todo nie ma neta chyba wtedy
+                }else if(error.networkResponse.statusCode == 403){
                     errorListener.onErrorResponse(error);
                 }
             }

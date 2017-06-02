@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.NumberPicker;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,7 +27,7 @@ import java.util.Locale;
 
 public class AddEventActivity extends AppCompatActivity implements
         OnMapReadyCallback,
-        TimePickerFragment.OnCompleteListener{
+        AddEventTimePickerFragment.OnCompleteListener{
 
     private GoogleMap mMap;
     private Marker mMarker;
@@ -153,7 +152,7 @@ public class AddEventActivity extends AppCompatActivity implements
     }
 
     public void showTimePickerDialog(View v) {
-        DialogFragment newFragment = new TimePickerFragment();
+        DialogFragment newFragment = new AddEventTimePickerFragment();
         newFragment.show(getSupportFragmentManager(), "timePicker");
     }
 

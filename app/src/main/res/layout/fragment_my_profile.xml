@@ -1,149 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MyProfileFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MyProfileFragment"
+    android:orientation="vertical"
+    android:layout_gravity="top"
+    android:gravity="top">
 
-    <RelativeLayout
-        android:id="@+id/my_profile_user_data_and_photo"
-        android:layout_width="0dp"
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintTop_toBottomOf="@+id/my_profile_three_buttons">
+        android:layout_gravity="top">
 
         <LinearLayout
-            android:id="@+id/my_profile_user_data"
-            android:layout_width="220dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_gravity="top"
+            android:gravity="center"
+>
 
             <LinearLayout
-                android:id="@+id/my_profile_username_data"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:background="@color/colorPrimaryLight">
 
-                <TextView
-                    android:id="@+id/my_profile_username_label"
-                    android:layout_width="110dp"
+                <ImageView
+                    android:id="@+id/my_profile_picture"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/username" />
+                    android:src="@drawable/profile_picture"
+                    android:layout_margin="8dp"/>
 
                 <TextView
                     android:id="@+id/my_profile_username"
-                    android:layout_width="110dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/username" />
+                    android:text="@string/username"
+                    android:textSize="35sp"/>
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/my_profile_age_data"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:gravity="center">
 
-                <TextView
-                    android:id="@+id/my_profile_age_label"
-                    android:layout_width="110dp"
+                <LinearLayout
+                    android:id="@+id/my_profile_age_data"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/age_label" />
+                    android:layout_marginTop="4dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_weight="2">
 
-                <TextView
-                    android:id="@+id/my_profile_age"
-                    android:layout_width="110dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/age" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/gender_data"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:orientation="horizontal" >
-
-                <TextView
-                        android:id="@+id/my_profile_gender_label"
-                        android:layout_width="110dp"
+                    <TextView
+                        android:id="@+id/my_profile_age_label"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/gender_label" />
+                        android:text="@string/age_label"
+                        android:gravity="start"
+                        android:textSize="12sp"/>
 
-                <TextView
-                    android:id="@+id/my_profile_gender"
-                    android:layout_width="110dp"
+                    <TextView
+                        android:id="@+id/my_profile_age"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/age"
+                        android:textSize="30sp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/gender_data"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/gender" />
+                    android:layout_marginTop="4dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_weight="2">
+
+                    <TextView
+                        android:id="@+id/my_profile_gender_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/gender_label"
+                        android:gravity="start"
+                        android:textSize="12sp"/>
+
+                    <TextView
+                        android:id="@+id/my_profile_gender"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/gender"
+                        android:textSize="30sp"/>
+                </LinearLayout>
+
+
             </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_gravity="bottom">
+
+                <Button
+                    android:id="@+id/my_profile_edit_profile_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/AppTheme.ButtonSignIn"
+                    android:text="@string/edit_profile_label"
+                    android:layout_marginTop="24dp"
+                    android:drawableStart="@drawable/ic_edit_white_24dp" />
+
+            </LinearLayout>
+
         </LinearLayout>
-
-        <ImageView
-            android:id="@+id/my_profile_picture"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            app:srcCompat="@drawable/temp_logo_picture"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:contentDescription="@string/profile_picture_description"
-            android:layout_toEndOf="@+id/my_profile_user_data"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            />
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/my_profile_three_buttons"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="431dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"
-        app:layout_constraintVertical_bias="0.0">
-
-
-        <Button
-            android:id="@+id/my_profile_my_events_button"
-            style="@android:style/Widget.Holo.Light.Button.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:drawableStart="@drawable/ic_event_black_24dp"
-            android:text="@string/my_profile_my_events" />
-
-        <Button
-            android:id="@+id/my_profile_my_location_button"
-            style="@android:style/Widget.Holo.Light.Button.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:drawableStart="@drawable/ic_my_location_black_24dp"
-            android:text="@string/my_profile_my_location" />
-
-        <Button
-            android:id="@+id/my_profile_my_friends_button"
-            style="@android:style/Widget.Holo.Light.Button.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:drawableStart="@drawable/ic_group_black_24dp"
-            android:text="@string/my_profile_my_friends" />
-
-    </LinearLayout>
-
-</android.support.constraint.ConstraintLayout>
+    </android.support.v4.widget.NestedScrollView>
+</LinearLayout>
