@@ -83,12 +83,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean validate(){
+
         boolean valid = true;
-        String email = _loginET.getText().toString();
+
+        String login = _loginET.getText().toString();
         String password = _passET.getText().toString();
 
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _loginET.setError(getString(R.string.not_valid_mail));
+        if (login.isEmpty()) {
+            _loginET.setError(getString(R.string.not_valid_login));
             valid = false;
         } else {
             _loginET.setError(null);
@@ -144,30 +146,6 @@ public class LoginActivity extends AppCompatActivity {
                 });
 
         RequestQueueSingleton.getInstance(this.getApplicationContext()).addToRequestQueue(jsonObjectRequest);
-    }
-
-    private boolean validate(){
-
-        boolean valid = true;
-
-        String login = _loginET.getText().toString();
-        String password = _passET.getText().toString();
-
-        if (login.isEmpty()) {
-            _loginET.setError(getString(R.string.not_valid_login));
-            valid = false;
-        } else {
-            _loginET.setError(null);
-        }
-
-        if (password.isEmpty() || password.length() < 2) {
-            _passET.setError(getString(R.string.not_valid_password));
-            valid = false;
-        } else {
-            _passET.setError(null);
-        }
-
-        return valid;
     }
 
     private void goToMap() {

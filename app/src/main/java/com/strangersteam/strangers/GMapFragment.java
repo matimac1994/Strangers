@@ -8,11 +8,13 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationListener;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +26,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -57,10 +62,10 @@ public class GMapFragment extends Fragment implements
         GoogleMap.OnMarkerClickListener,
         GoogleMap.OnInfoWindowClickListener,
         GoogleMap.OnInfoWindowLongClickListener,
-        GoogleMap.OnMapClickListener,
-        GoogleMap.OnCameraIdleListener {
+        GoogleMap.OnCameraIdleListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleMap mMap;
+    private GoogleApiClient mGoogleApiClient;
     private Location mLocation;
 
     private List<Marker> markersOnMap;
@@ -77,6 +82,14 @@ public class GMapFragment extends Fragment implements
         super.onCreate(savedInstanceState);
         markersOnMap = new ArrayList<>();
         isCameraMoveIntoMarker = false;
+
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
     }
 
     @Override
@@ -102,9 +115,9 @@ public class GMapFragment extends Fragment implements
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), AddEventActivity.class);
-                if(mLocation!=null){
+                if (mLocation != null) {
                     intent.putExtra("MARKER_POSITION", new LatLng(mLocation.getLatitude(), mLocation.getLongitude()));
-                }else{
+                } else {
                     intent.putExtra("MARKER_POSITION", new LatLng(latitudeDefault, longitudeDefault));
                 }
 
@@ -121,11 +134,10 @@ public class GMapFragment extends Fragment implements
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), AddEventMarkerActivity.class);
-                if(mLocation != null){
+                if (mLocation != null) {
                     intent.putExtra("CAMERA_POSITION", new LatLng(mLocation.getLatitude(), mLocation.getLongitude()));
-                }
-                else {
-                    intent.putExtra("CAMERA_POSITION", new LatLng(mLocation.getLatitude(), mLocation.getLongitude()));
+                } else {
+                    intent.putExtra("CAMERA_POSITION", new LatLng(latitudeDefault, longitudeDefault));
                 }
                 startActivity(intent);
             }
@@ -135,11 +147,20 @@ public class GMapFragment extends Fragment implements
         _floatingActionMenu.setClosedOnTouchOutside(true);
     }
 
+    public void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
+
+    public void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        mMap.setOnMapClickListener(this);
         mMap.setOnMarkerClickListener(this);
         mMap.setOnInfoWindowClickListener(this);
         mMap.setOnInfoWindowLongClickListener(this);
@@ -150,84 +171,40 @@ public class GMapFragment extends Fragment implements
             return;
         }
         mMap.setMyLocationEnabled(true);
-        getCurrentLocation();
         downloadMarkersAndAddToMap();
-    }
-
-    private class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
-
-        @Override
-        public View getInfoWindow(Marker marker) {
-            return null;
-        }
-
-        @Override
-        public View getInfoContents(Marker marker) {
-            return null;
-        }
+        mMap.getUiSettings().setScrollGesturesEnabled(true);
     }
 
     @Override
-    public void onMapClick(LatLng latLng) {
-
-    }
-    public void goToLocationAndSave(Location location){
-        if(location != null){
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()),13));
-
-            CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(location.getLatitude(), location.getLongitude()))
-                    .zoom(13)
-                    .build();
-            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-            mLocation = location;
-        }
-    }
-
-    private void getCurrentLocation() {
-        final LocationManager mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-
-        final LocationListener locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                if(location != null){
-                    goToLocationAndSave(location);
-                    mLocationManager.removeUpdates(this);
-                    Toast.makeText(getActivity(),"D: " + location.getProvider(),Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-            }
-
-        };
-
-        mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10, 1, locationListener);
-
-        Location location = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-        if(location != null){
-            goToLocationAndSave(location);
-        }
-        else{
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitudeDefault, longitudeDefault), 13));
-        }
-
-        //WTF XD
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+    public void onConnected(@Nullable Bundle bundle) {
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            goToLocation(latitudeDefault, longitudeDefault);//nie wiem ale tak se tutaj wkleje hehehehe
             return;
         }
+
+        mLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+
+        if(mLocation != null){
+            goToLocation(mLocation.getLatitude(), mLocation.getLongitude());
+        }else{
+            goToLocation(latitudeDefault, longitudeDefault);
+        }
+    }
+
+    private void goToLocation(double latitude, double longitude) {
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude),13));
+
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(new LatLng(latitude, longitude))
+                .zoom(13)
+                .build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
 
     }
 
@@ -304,7 +281,6 @@ public class GMapFragment extends Fragment implements
     private void addMarkersToMap(List<StrangersEventMarker> mockEvents){
 
         for(StrangersEventMarker event: mockEvents){
-            System.out.println(event.getTitle());
             Marker marker = mMap.addMarker(generateMarkerOpt(event));
             marker.setTag(event.getId());
             markersOnMap.add(marker);
@@ -342,7 +318,6 @@ public class GMapFragment extends Fragment implements
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        System.out.println("CLIK");
         Intent intent = new Intent(getContext(), ShowEventActivity.class);
         intent.putExtra("EVENT_ID", (Long)marker.getTag());
         startActivity(intent);
@@ -355,5 +330,8 @@ public class GMapFragment extends Fragment implements
 
     }
 
-
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Toast.makeText(getActivity(),connectionResult.getErrorMessage(),Toast.LENGTH_SHORT).show();
+    }
 }
