@@ -48,12 +48,15 @@ import java.io.IOException;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyProfileFragment extends Fragment implements View.OnClickListener{
+public class MyProfileFragment extends Fragment{
 
+    Button editProfileBtn;
     ImageView ownerPhotoIV;
     TextView ownerNickTV;
     TextView ownerAgeTV;
     TextView ownerSexTV;
+
+    StrangerUser user;
 
     public MyProfileFragment() {
         // Required empty public constructor
@@ -66,18 +69,31 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener{
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_my_profile, container, false);
 
-        Button buttonMyEvents = (Button)view.findViewById(R.id.my_profile_my_events_button);
-        buttonMyEvents.setOnClickListener(this);
-
+        editProfileBtn = (Button) view.findViewById(R.id.my_profile_edit_profile_button) ;
         ownerPhotoIV = (ImageView) view.findViewById(R.id.my_profile_picture);
         ownerNickTV = (TextView) view.findViewById(R.id.my_profile_username);
         ownerAgeTV = (TextView) view.findViewById(R.id.my_profile_age);
         ownerSexTV = (TextView) view.findViewById(R.id.my_profile_gender);
+
+        editProfileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), EditProfileActivity.class);
+                if(user != null){
+                    intent.putExtra("USER_NICK", user.getNick());
+                    intent.putExtra("USER_PHOTO", user.getPhotoUrl());
+                    //intent.putExtra("USER_BIRTHDAY", user.getBirthday());
+                    intent.putExtra("USER_SEX", user.isFemale());
+                }
+
+                startActivity(intent);
+            }
+        });
 
         return view;
     }
@@ -102,7 +118,7 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener{
                     public void onResponse(JSONObject response) {
                         try{
                             ObjectMapper objectMapper = new ObjectMapper();
-                            StrangerUser user = objectMapper.readValue(response.toString(),StrangerUser.class);
+                            user = objectMapper.readValue(response.toString(),StrangerUser.class);
                             fillUserData(user);
                         }catch (IOException e){
                             e.printStackTrace();
@@ -129,30 +145,19 @@ public class MyProfileFragment extends Fragment implements View.OnClickListener{
         if(user.getPhotoUrl() == null || user.getPhotoUrl().isEmpty()){
             Picasso.with(getActivity()).load(R.drawable.temp_logo_picture)
                     .fit()
-                    .centerInside()
+                    .centerCrop()
                     .placeholder(R.drawable.temp_logo_picture)
                     .into(ownerPhotoIV);
         }else{
             Picasso.with(getActivity()).load(user.getPhotoUrl())
                     .fit()
-                    .centerInside()
+                    .centerCrop()
                     .placeholder(R.drawable.temp_logo_picture)
                     .into(ownerPhotoIV);
         }
 
         ownerNickTV.setText(user.getNick());
         ownerAgeTV.setText(String.valueOf(user.getAge()));
-        ownerSexTV.setText(user.isFemale()?"kobieta":"mezczyzna");
-    }
-
-    @Override
-    public void onClick(View view){
-        switch (view.getId()){
-            case R.id.my_profile_my_events_button:
-                Intent intent = new Intent(getContext(), LoginActivity.class);
-                startActivity(intent);
-                break;
-        }
-
+        ownerSexTV.setText(user.isFemale()?getString(R.string.female):getString(R.string.male));
     }
 }

@@ -144,7 +144,7 @@ public class ShowEventActivity extends AppCompatActivity implements
         }
         ownerNickTV.setText(event.getOwner().getNick());
         ownerAgeTV.setText(String.valueOf(event.getOwner().getAge()));//jak nie dalem toString to brało int jako id stringa z resourcesow zamist "22" xD
-        ownerSexTV.setText(event.getOwner().isFemale()?"kobieta":"mezczyzna");//to taki skrócony zapis ifa warunek?jesli_prawda:jesli_falsz
+        ownerSexTV.setText(event.getOwner().isFemale()?getString(R.string.female):getString(R.string.male));//to taki skrócony zapis ifa warunek?jesli_prawda:jesli_falsz
 
         RecyclerView.Adapter adapter = new AttendersListAdapter(ShowEventActivity.this, event.getAttenders());
         attendersRecyclerView.swapAdapter(adapter,false);

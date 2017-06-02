@@ -16,7 +16,7 @@ import java.util.Calendar;
 
 
 
-public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener{
+public class AddEventTimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener{
 
     public static interface OnCompleteListener{
         void onComplete(int hour, int minute);

@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -44,7 +43,7 @@ import java.util.Map;
 
 public class AddEventActivity extends AppCompatActivity implements
         OnMapReadyCallback,
-        TimePickerFragment.OnCompleteListener{
+        AddEventTimePickerFragment.OnCompleteListener{
 
     private GoogleMap mMap;
     private Marker mMarker;
@@ -181,7 +180,7 @@ public class AddEventActivity extends AppCompatActivity implements
     }
 
     public void showTimePickerDialog(View v) {
-        DialogFragment newFragment = new TimePickerFragment();
+        DialogFragment newFragment = new AddEventTimePickerFragment();
         newFragment.show(getSupportFragmentManager(), "timePicker");
     }
 

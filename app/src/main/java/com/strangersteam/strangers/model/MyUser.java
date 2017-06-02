@@ -1,9 +1,11 @@
 package com.strangersteam.strangers.model;
 
-public class StrangerUser {
+import java.util.Calendar;
+
+public class MyUser {
     private long id;
     private String nick;
-    private int age;
+    private Calendar birthday;
     private boolean female;
     private String photoUrl;
 
@@ -23,14 +25,6 @@ public class StrangerUser {
         return nick;
     }
 
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
     public void setFemale(boolean female) {
         this.female = female;
     }
@@ -47,4 +41,11 @@ public class StrangerUser {
         this.photoUrl = photoUrl;
     }
 
+    public Calendar getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Calendar birthday) {
+        this.birthday = birthday;
+    }
 }
