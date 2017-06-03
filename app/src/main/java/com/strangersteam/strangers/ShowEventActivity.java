@@ -129,17 +129,6 @@ public class ShowEventActivity extends AppCompatActivity implements
         mMap.getUiSettings().setZoomControlsEnabled(false);
     }
 
-    public void onClickChat(View view) {
-        Intent intent = new Intent(this, EventChatActivity.class);
-        intent.putExtra(EventChatActivity.EVENT_ID, mEvent.getId());
-        startActivity(intent);
-    }
-
-    public void onClickProfilePhoto(View view) {
-        Intent intent = new Intent(this, UserEventsActivity.class);
-        startActivity(intent);
-    }
-
     private void getEventRequest(Long eventId) {
         String eventUrl = ServerConfig.eventById(eventId);
         JsonObjectRequest jsonObjectRequest = new AuthJsonObjectRequest(
@@ -311,11 +300,6 @@ public class ShowEventActivity extends AppCompatActivity implements
                 endEventRequest();
             }
         };
-    public void onClickChat(View view) {
-        Intent intent = new Intent(this, EventChatActivity.class);
-        intent.putExtra(EventChatActivity.EVENT_ID, mEvent.getId());
-        startActivity(intent);
-        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
 
     private void joinEventRequest(final Long eventId) {
@@ -335,18 +319,12 @@ public class ShowEventActivity extends AppCompatActivity implements
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), "error: " + error.getMessage(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
         );
 
         RequestQueueSingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
-    public void onClickProfilePhoto(View view) {
-        Intent intent = new Intent(this, UserEventsActivity.class);
-        intent.putExtra("USER_NICK", mEvent.getOwner().getNick());
-        intent.putExtra(EventChatActivity.EVENT_ID, mEvent.getId());
-        startActivity(intent);
-        finish();
     }
 
     private void cancelEventRequest(final Long eventId) {
@@ -377,6 +355,21 @@ public class ShowEventActivity extends AppCompatActivity implements
     private void endEventRequest() {
 
         Toast.makeText(this,"Not implemented jeszcze heh", Toast.LENGTH_SHORT).show();
+    }
+
+    public void onClickProfilePhoto(View view) {
+        Intent intent = new Intent(this, UserEventsActivity.class);
+        intent.putExtra("USER_NICK", mEvent.getOwner().getNick());
+        intent.putExtra(EventChatActivity.EVENT_ID, mEvent.getId());
+        startActivity(intent);
+        finish();
+    }
+
+    public void onClickChat(View view) {
+        Intent intent = new Intent(this, EventChatActivity.class);
+        intent.putExtra(EventChatActivity.EVENT_ID, mEvent.getId());
+        startActivity(intent);
+        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
 
 }
