@@ -3,8 +3,8 @@ package com.strangersteam.strangers.serverConn;
 import com.google.android.gms.maps.model.LatLngBounds;
 
 public final class ServerConfig {
-    private static final String SERVER_IP = "http://164.132.57.18:9997/";
-    //private static final String SERVER_IP = "http://10.0.3.2:9997/";
+    //private static final String SERVER_IP = "http://164.132.57.18:9997/";
+    private static final String SERVER_IP = "http://10.0.3.2:9997/";
     private static final String GET_MARKERS = SERVER_IP + "events";
     private static final String GET_EVENT = SERVER_IP + "event";
     public static final String MY_USER = SERVER_IP + "user";

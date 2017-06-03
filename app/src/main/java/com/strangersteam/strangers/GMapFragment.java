@@ -1,20 +1,15 @@
 package com.strangersteam.strangers;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationManager;
-import android.location.LocationListener;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +39,11 @@ import com.strangersteam.strangers.model.StrangersEventMarker;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.strangersteam.strangers.notifications.FewEventsMsgContent;
+import com.strangersteam.strangers.notifications.OneMsgNotificationContent;
+import com.strangersteam.strangers.notifications.NotificationService;
+import com.strangersteam.strangers.notifications.NotificationType;
+import com.strangersteam.strangers.notifications.StrangerNotification;
 import com.strangersteam.strangers.serverConn.AuthJsonArrayRequest;
 import com.strangersteam.strangers.serverConn.RequestQueueSingleton;
 import com.strangersteam.strangers.serverConn.ServerConfig;
@@ -327,6 +327,17 @@ public class GMapFragment extends Fragment implements
     @Override
     public void onInfoWindowLongClick(Marker marker) {
 
+        NotificationService notificationService = new NotificationService();
+        StrangerNotification strangerNotification = new StrangerNotification();
+        strangerNotification.setNotificationType(NotificationType.FEW_MY_EVENTS_MSG);
+
+        FewEventsMsgContent content = new FewEventsMsgContent();
+        content.setTitle("Nowe wiadomości");
+        String[] temp = {"Wyjscie na piwo","łyżwy"};
+        content.setEvents(temp);
+
+        strangerNotification.setNotificationContent(content);
+        notificationService.notify(getContext(), strangerNotification);
 
     }
 

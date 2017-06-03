@@ -65,7 +65,7 @@ public class AddEventMarkerActivity extends AppCompatActivity implements
         mMap.setOnInfoWindowLongClickListener(this);
 
         if(cameraLatLng != null){
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cameraLatLng, 10));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cameraLatLng, 14));
         }
     }
 

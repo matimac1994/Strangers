@@ -1,6 +1,7 @@
 package com.strangersteam.strangers;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -11,11 +12,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.strangersteam.strangers.notifications.FewMyEventsMsgNotificationBuildStrategy;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-
+    public static final String FRAGMENT_ID_EXTRA = "FRAGMENT_ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +26,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -35,8 +37,28 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fragment_map, new GMapFragment()).commit();
+        Fragment fragment = chooseStartFragment();
+        fragmentManager.beginTransaction().replace(R.id.fragment_map, fragment).commit();
 
+    }
+
+    private Fragment chooseStartFragment() {
+        Fragment fragment;
+        int fragmentIdExtra = getIntent().getIntExtra(FRAGMENT_ID_EXTRA,-1);
+        if(fragmentIdExtra != -1){
+            if(fragmentIdExtra == FewMyEventsMsgNotificationBuildStrategy.FEW_MY_EVENTS_NOTIFICATION_ID){
+                fragment = new MyEventsFragment();
+            }
+            //odkomentujemy to jak zrobimy ten fragment
+            /*else if(fragmentIdExtra == FewEventsMsgNotificationBuildStrategy.FEW_EVENTS_NOTIFICATION_ID){
+                fragment = new AttendingEventsFragment();
+            }*/
+            else
+                fragment =new GMapFragment();
+        }else{
+            fragment = new GMapFragment();
+        }
+        return fragment;
     }
 
     @Override
@@ -74,9 +96,9 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        //czy trzeba te fragmenty za kazdym razem tworzyc? moze szybkosc zwrosnąc gdyby je zapisać po utworzeniu?
         FragmentManager fragmentManager = getSupportFragmentManager();
         int id = item.getItemId();
-
         if (id == R.id.nav_home) {
             fragmentManager.beginTransaction().replace(R.id.fragment_map, new GMapFragment()).commit();
         } else if (id == R.id.nav_profile){
@@ -87,7 +109,9 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
+
 
 }
