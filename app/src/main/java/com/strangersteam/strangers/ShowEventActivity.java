@@ -18,6 +18,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,9 +29,12 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 import com.strangersteam.strangers.adapters.AttendersListAdapter;
+import com.strangersteam.strangers.model.EventType;
 import com.strangersteam.strangers.model.StrangerUser;
 import com.strangersteam.strangers.model.StrangersEvent;
+import com.strangersteam.strangers.model.UserEventRelation;
 import com.strangersteam.strangers.serverConn.AuthJsonObjectRequest;
+import com.strangersteam.strangers.serverConn.AuthStringRequest;
 import com.strangersteam.strangers.serverConn.RequestQueueSingleton;
 import com.strangersteam.strangers.serverConn.ServerConfig;
 
@@ -96,6 +100,8 @@ public class ShowEventActivity extends AppCompatActivity implements
         emptyRecyclerView = (TextView) findViewById(R.id.show_event_empty_tv_recycler_view);
         chatTitle = (TextView) findViewById(R.id.show_event_chat_title);
         switchToChat = (Button) findViewById(R.id.show_event_switch_to_chat);
+        switchToChat.setVisibility(View.GONE);
+        switchToChat.setClickable(false);
 
     }
 
@@ -113,6 +119,25 @@ public class ShowEventActivity extends AppCompatActivity implements
         super.onStart();
         Long eventId = this.getIntent().getLongExtra(EVENT_ID,0);
         getEventRequest(eventId);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        mMap.getUiSettings().setAllGesturesEnabled(false);
+        mMap.getUiSettings().setMapToolbarEnabled(false);
+        mMap.getUiSettings().setZoomControlsEnabled(false);
+    }
+
+    public void onClickChat(View view) {
+        Intent intent = new Intent(this, EventChatActivity.class);
+        intent.putExtra(EventChatActivity.EVENT_ID, mEvent.getId());
+        startActivity(intent);
+    }
+
+    public void onClickProfilePhoto(View view) {
+        Intent intent = new Intent(this, UserEventsActivity.class);
+        startActivity(intent);
     }
 
     private void getEventRequest(Long eventId) {
@@ -144,14 +169,23 @@ public class ShowEventActivity extends AppCompatActivity implements
     }
 
     private void fillEventData(StrangersEvent event) {
+        fillBaseInfo(event);
+        fillOwner(event);
+        fillRecyclerViewFromServer(event);
+        fillChat(event);
+        fillMiniMap(event);
+        fillActionButton(event);
+        this.mEvent = event;
+    }
+
+    private void fillBaseInfo(StrangersEvent event) {
         titleTV.setText(event.getTitle());
         whenTV.setText(new SimpleDateFormat("HH:mm EEEE, dd-MMM-yyyy", new Locale("pl","PL")).format(new Date(event.getDate().getTimeInMillis())));//pewnie da sie jakos ladniej xDD
         whenTV.append(", " + event.getWhere());
         whereTV.setText(event.getDetails());
+    }
 
-        eventActionButton.setOnClickListener(joinEventClickListener());
-
-
+    private void fillOwner(StrangersEvent event) {
         StrangerUser user = event.getOwner();
         if(user.getPhotoUrl() == null || user.getPhotoUrl().isEmpty()){
             Picasso.with(this).load(R.drawable.temp_logo_picture)
@@ -166,23 +200,9 @@ public class ShowEventActivity extends AppCompatActivity implements
                     .placeholder(R.drawable.temp_logo_picture)
                     .into(ownerPhotoIV);
         }
-        ownerNickTV.setText(event.getOwner().getNick());
-        ownerAgeTV.setText(String.valueOf(event.getOwner().getAge()));//jak nie dalem toString to brało int jako id stringa z resourcesow zamist "22" xD
-        ownerSexTV.setText(event.getOwner().isFemale()?getString(R.string.female):getString(R.string.male));//to taki skrócony zapis ifa warunek?jesli_prawda:jesli_falsz
-
-        fillRecyclerViewFromServer(event);
-
-        if(event.getMessages().size() != 1)
-            chatTitle.setText(getString(R.string.show_event_chat_title) + "(" + event.getMessages().size() + " " + getString(R.string.messages) + ")");
-        else
-            chatTitle.setText(getString(R.string.show_event_chat_title) + "(" + event.getMessages().size() + " " + getString(R.string.message) + ")");
-
-
-        mMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(event.getPosition().getLatitude(), event.getPosition().getLongitude()))
-                .title(event.getTitle()));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mMarker.getPosition(), 15));
-
-        this.mEvent = event;
+        ownerNickTV.setText(user.getNick());
+        ownerAgeTV.setText(String.valueOf(user.getAge()));//jak nie dalem toString to brało int jako id stringa z resourcesow zamist "22" xD
+        ownerSexTV.setText(user.isFemale()?getString(R.string.female):getString(R.string.male));
     }
 
     private void fillRecyclerViewFromServer(StrangersEvent event){
@@ -199,48 +219,153 @@ public class ShowEventActivity extends AppCompatActivity implements
         }
     }
 
-    private View.OnClickListener joinEventClickListener() {
+    private void fillChat(StrangersEvent event) {
+        if(event.getUsEvRelation()==UserEventRelation.STRANGER){
+            chatTitle.setText("");
+            switchToChat.setVisibility(View.GONE);
+            switchToChat.setClickable(false);
+        }else{
+            if(event.getMessages().size() != 1){
+                chatTitle.setText(getString(R.string.show_event_chat_title) + "(" + event.getMessages().size() + " " + getString(R.string.messages) + ")");
+            }else{
+                chatTitle.setText(getString(R.string.show_event_chat_title) + "(" + event.getMessages().size() + " " + getString(R.string.message) + ")");
+            }
+
+            switchToChat.setVisibility(View.VISIBLE);
+            switchToChat.setClickable(true);
+        }
+
+
+    }
+
+    private void fillMiniMap(StrangersEvent event) {
+        mMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(event.getPosition().getLatitude(), event.getPosition().getLongitude()))
+                .title(event.getTitle()));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mMarker.getPosition(), 15));
+    }
+
+    private void fillActionButton(StrangersEvent event) {
+        if(event.getType() != EventType.HISTORIC){
+            eventActionButton.setText(getActionButtonText(event.getUsEvRelation()));
+            eventActionButton.setOnClickListener(chooseActionButtonListener(event.getUsEvRelation(),event.getId()));
+        }
+    }
+
+    private View.OnClickListener chooseActionButtonListener(UserEventRelation usEvRelation, Long eventId) {
+        switch (usEvRelation){
+            case OWNER:
+                return endEventClickListener(eventId);
+            case ATTENDER:
+                return cancelEventClickListener(eventId);
+            case STRANGER:
+                return joinEventClickListener(eventId);
+            default:
+                return new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // nic ma nie robić XDD   zwracam takie zamiast nulla żeby nie sypało błędami
+                    }
+                };
+        }
+    }
+
+    private String getActionButtonText(UserEventRelation usEvRelation) {
+        switch (usEvRelation){
+            case OWNER:
+                return getString(R.string.show_event_action_button_end_event);
+            case ATTENDER:
+                return getString(R.string.show_event_action_button_quit_event);
+            case STRANGER:
+                return getString(R.string.show_event_action_button_join_event);
+            default:
+                return "nic";
+        }
+    }
+
+
+
+    private View.OnClickListener joinEventClickListener(final Long eventId) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                joinEventRequest();
+                joinEventRequest(eventId);
             }
         };
     }
 
-    private void joinEventRequest() {
-        //// TODO: 03.06.2017
-    }
 
-    private View.OnClickListener cancelEventClickListener() {
+
+    private View.OnClickListener cancelEventClickListener(final Long eventId) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cancelEventRequest();
+                cancelEventRequest(eventId);
             }
         };
     }
 
-    private void cancelEventRequest() {
-        //// TODO: 03.06.2017
+    private View.OnClickListener endEventClickListener(final Long eventId) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                endEventRequest();
+            }
+        };
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.getUiSettings().setAllGesturesEnabled(false);
-        mMap.getUiSettings().setMapToolbarEnabled(false);
-        mMap.getUiSettings().setZoomControlsEnabled(false);
+    private void joinEventRequest(final Long eventId) {
+        String joinEventUrl = ServerConfig.joinEvent(eventId);
+
+        StringRequest stringRequest = new AuthStringRequest(
+                getApplicationContext(),
+                Request.Method.POST,
+                joinEventUrl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(getApplicationContext(), R.string.show_event_joined_to_event, Toast.LENGTH_SHORT).show();
+                        getEventRequest(eventId);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "error: " + error.getMessage(),Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        RequestQueueSingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
     }
 
-    public void onClickChat(View view) {
-        Intent intent = new Intent(this, EventChatActivity.class);
-        intent.putExtra(EventChatActivity.EVENT_ID, mEvent.getId());
-        startActivity(intent);
+    private void cancelEventRequest(final Long eventId) {
+        String joinEventUrl = ServerConfig.cancelEvent(eventId);
+
+        StringRequest stringRequest = new AuthStringRequest(
+                getApplicationContext(),
+                Request.Method.POST,
+                joinEventUrl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(getApplicationContext(), R.string.show_event_canceled_event, Toast.LENGTH_SHORT).show();
+                        getEventRequest(eventId);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "error: " + error.getMessage(),Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        RequestQueueSingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
     }
 
-    public void onClickProfilePhoto(View view) {
-        Intent intent = new Intent(this, UserEventsActivity.class);
-        startActivity(intent);
+    private void endEventRequest() {
+
+        Toast.makeText(this,"Not implemented jeszcze heh", Toast.LENGTH_SHORT).show();
     }
+
 }

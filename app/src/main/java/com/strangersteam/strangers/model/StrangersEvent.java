@@ -14,6 +14,7 @@ public class StrangersEvent {
     private List<StrangerEventMessage> messages;
     private String where;
     private StrangerUser owner;
+    private UserEventRelation usEvRelation;
 
     public Long getId() {
         return id;
@@ -93,5 +94,13 @@ public class StrangersEvent {
 
     public StrangerUser getOwner() {
         return owner;
+    }
+
+    public UserEventRelation getUsEvRelation() {
+        return usEvRelation;
+    }
+
+    public void setUsEvRelation(UserEventRelation usEvRelation) {
+        this.usEvRelation = usEvRelation;
     }
 }

@@ -12,8 +12,9 @@ public final class ServerConfig {
     public static final String MY_EVENTS = SERVER_IP + "user/myEvents";
     public static final String MY_ATTEND_EVENTS = SERVER_IP + "user/events";
     public static final String ADD_EVENT = SERVER_IP + "user/addEvent";
-    public static final String SEND_MESSAGE = SERVER_IP + "event";
-
+    public static final String SEND_MESSAGE = SERVER_IP + "event/{eventId}/attend";
+    public static final String ATTEND_EVENT = SERVER_IP + "event/{eventId}/attend";
+    public static final String QUIT_EVENT = SERVER_IP + "event/{eventId}/cancel";
 
     public static String markersOnMapByBounds(LatLngBounds mapBound) {
         StringBuilder urlStringBuilder = new StringBuilder();
@@ -38,10 +39,14 @@ public final class ServerConfig {
     }
 
     public static String sendMessage(Long eventId) {
-        StringBuilder urlStringBuilder = new StringBuilder();
-        urlStringBuilder.append(ServerConfig.GET_EVENT);
-        urlStringBuilder.append("/");
-        urlStringBuilder.append(eventId);
-        return urlStringBuilder.toString();
+        return SEND_MESSAGE.replace("{eventId}", eventId.toString());
+    }
+
+    public static String joinEvent(Long eventId) {
+        return ATTEND_EVENT.replace("{eventId}", eventId.toString());
+    }
+
+    public static String cancelEvent(Long eventId) {
+        return QUIT_EVENT.replace("{eventId}", eventId.toString());
     }
 }

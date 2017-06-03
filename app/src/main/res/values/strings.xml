@@ -103,5 +103,10 @@
     <string name="notify_new_messages">Nowe wiadomości</string>
     <string name="messages">wiadomości</string>
     <string name="message">wiadomość</string>
+    <string name="show_event_action_button_end_event">Zakończ</string>
+    <string name="show_event_action_button_join_event">Dołącz</string>
+    <string name="show_event_action_button_quit_event">Zrezygnuj</string>
+    <string name="show_event_joined_to_event">Dołączono do wydarzenia</string>
+    <string name="show_event_canceled_event">Nie bierzesz już udziału</string>
 
 </resources>
