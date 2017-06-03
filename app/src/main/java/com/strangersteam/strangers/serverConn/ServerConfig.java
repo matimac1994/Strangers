@@ -29,7 +29,7 @@ public final class ServerConfig {
     public static String eventById(Long eventId) {
         StringBuilder urlStringBuilder = new StringBuilder();
         urlStringBuilder.append(ServerConfig.GET_EVENT);
-        urlStringBuilder.append("?id=");
+        urlStringBuilder.append("/");
         urlStringBuilder.append(eventId);
         return urlStringBuilder.toString();
     }

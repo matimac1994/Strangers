@@ -89,8 +89,17 @@ public class EventChatActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Long eventId = this.getIntent().getLongExtra(EVENT_ID,0);
-        eventRequest(eventId);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Long eventId = this.getIntent().getLongExtra(EVENT_ID,-1);
+        if(eventId == -1){
+            Toast.makeText(this,"Brak eventu do wyswietlenia, błąd", Toast.LENGTH_SHORT).show();
+        }else{
+            eventRequest(eventId);
+        }
     }
 
     private void eventRequest(Long eventId) {

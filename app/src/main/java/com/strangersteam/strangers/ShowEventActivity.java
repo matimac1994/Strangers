@@ -204,7 +204,7 @@ public class ShowEventActivity extends AppCompatActivity implements
 
     public void onClickChat(View view) {
         Intent intent = new Intent(this, EventChatActivity.class);
-        intent.putExtra("EVENT_ID", EVENT_ID);
+        intent.putExtra(EventChatActivity.EVENT_ID, mEvent.getId());
         startActivity(intent);
     }
 
