@@ -12,9 +12,13 @@
             android:icon="@drawable/ic_person_black_24dp"
             android:title="Profil" />
         <item
-            android:id="@+id/nav_friends"
+            android:id="@+id/nav_my_events"
             android:icon="@drawable/ic_event_black_24dp"
             android:title="Moje Eventy" />
+        <item
+            android:id="@+id/nav_my_attend_events"
+            android:icon="@drawable/ic_event_black_24dp"
+            android:title="eventy na ktore? XD" />
     </group>
 
 </menu>

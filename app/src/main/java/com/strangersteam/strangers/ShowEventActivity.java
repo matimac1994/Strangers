@@ -6,7 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,6 +59,8 @@ public class ShowEventActivity extends AppCompatActivity implements
     TextView ownerAgeTV;
     TextView ownerSexTV;
 
+    Button eventActionButton;
+
     RecyclerView attendersRecyclerView;
 
 
@@ -84,16 +88,17 @@ public class ShowEventActivity extends AppCompatActivity implements
         ownerNickTV = (TextView) findViewById(R.id.show_event_username);
         ownerAgeTV = (TextView) findViewById(R.id.show_event_age);
         ownerSexTV = (TextView) findViewById(R.id.show_event_gender);
+        eventActionButton = (Button) findViewById(R.id.show_event_action_button);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         Long eventId = this.getIntent().getLongExtra(EVENT_ID,0);
-        eventRequest(eventId);
+        getEventRequest(eventId);
     }
 
-    private void eventRequest(Long eventId) {
+    private void getEventRequest(Long eventId) {
         String eventUrl = ServerConfig.eventById(eventId);
         JsonObjectRequest jsonObjectRequest = new AuthJsonObjectRequest(
                 getApplicationContext(),
@@ -127,6 +132,8 @@ public class ShowEventActivity extends AppCompatActivity implements
         whenTV.append(", " + event.getWhere());
         whereTV.setText(event.getDetails());
 
+        eventActionButton.setOnClickListener(joinEventClickListener());
+
 
         StrangerUser user = event.getOwner();
         if(user.getPhotoUrl() == null || user.getPhotoUrl().isEmpty()){
@@ -157,6 +164,32 @@ public class ShowEventActivity extends AppCompatActivity implements
         this.mEvent =event;
     }
 
+    private View.OnClickListener joinEventClickListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                joinEventRequest();
+            }
+        };
+    }
+
+    private void joinEventRequest() {
+        //// TODO: 03.06.2017
+    }
+
+    private View.OnClickListener cancelEventClickListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancelEventRequest();
+            }
+        };
+    }
+
+    private void cancelEventRequest() {
+        //// TODO: 03.06.2017
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -164,4 +197,6 @@ public class ShowEventActivity extends AppCompatActivity implements
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.getUiSettings().setZoomControlsEnabled(false);
     }
+
+
 }

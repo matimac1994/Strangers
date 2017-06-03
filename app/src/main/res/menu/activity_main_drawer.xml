@@ -14,6 +14,10 @@
             android:id="@+id/nav_my_events"
             android:icon="@drawable/ic_event_black_24dp"
             android:title="@string/drawer_my_events" />
+        <item
+            android:id="@+id/nav_my_attend_events"
+            android:icon="@drawable/ic_event_black_24dp"
+            android:title="eventy na ktore? XD" />
     </group>
 
 </menu>

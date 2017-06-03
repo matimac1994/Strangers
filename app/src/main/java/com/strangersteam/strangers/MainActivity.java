@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.strangersteam.strangers.notifications.FewEventMsgNotificationBuildStrategy;
 import com.strangersteam.strangers.notifications.FewMyEventsMsgNotificationBuildStrategy;
 
 
@@ -48,11 +49,9 @@ public class MainActivity extends AppCompatActivity
         if(fragmentIdExtra != -1){
             if(fragmentIdExtra == FewMyEventsMsgNotificationBuildStrategy.FEW_MY_EVENTS_NOTIFICATION_ID){
                 fragment = new MyEventsFragment();
+            }else if(fragmentIdExtra == FewEventMsgNotificationBuildStrategy.FEW_ATTENDING_EVENTS_NOTIFICATION_ID){
+                fragment = new MyAttendEventsFragment();
             }
-            //odkomentujemy to jak zrobimy ten fragment
-            /*else if(fragmentIdExtra == FewEventsMsgNotificationBuildStrategy.FEW_EVENTS_NOTIFICATION_ID){
-                fragment = new AttendingEventsFragment();
-            }*/
             else
                 fragment =new GMapFragment();
         }else{
@@ -105,6 +104,8 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.fragment_map, new MyProfileFragment()).commit();
         } else if (id == R.id.nav_my_events){
             fragmentManager.beginTransaction().replace(R.id.fragment_map, new MyEventsFragment()).commit();
+        } else if (id == R.id.nav_my_attend_events){
+            fragmentManager.beginTransaction().replace(R.id.fragment_map, new MyAttendEventsFragment()).commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
