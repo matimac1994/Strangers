@@ -18,10 +18,17 @@ import java.util.Map;
 public class AuthJsonArrayRequest extends JsonArrayRequest {
 
     private Context applicationContext;
+    private  Map<String,String> params;
 
-    public AuthJsonArrayRequest(Context applicationContext, int method, String url, JSONArray jsonRequest, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
-        super(method, url, jsonRequest, listener, ForbiddenErrorListener.create(errorListener,applicationContext));
+    public AuthJsonArrayRequest(Context applicationContext, int method, String url, Map<String,String> params, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
+        super(method, url, null, listener, ForbiddenErrorListener.create(errorListener,applicationContext));
         this.applicationContext = applicationContext;
+        this.params = params;
+    }
+
+    @Override
+    protected Map<String, String> getParams() throws AuthFailureError {
+        return params;
     }
 
     @Override

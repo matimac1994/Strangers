@@ -1,12 +1,15 @@
 package com.strangersteam.strangers;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,6 +59,9 @@ public class ShowEventActivity extends AppCompatActivity implements
     TextView ownerNickTV;
     TextView ownerAgeTV;
     TextView ownerSexTV;
+    TextView emptyRecyclerView;
+    TextView chatTitle;
+    Button switchToChat;
 
     RecyclerView attendersRecyclerView;
 
@@ -66,16 +72,16 @@ public class ShowEventActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_show_event);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
+        initViews();
+
         SupportMapFragment mapFragment = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.show_event_map_view);
         mapFragment.getMapAsync(this);
 
+    }
 
-        attendersRecyclerView = (RecyclerView) findViewById(R.id.show_event_attenders_recycler_view);
-        attendersRecyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this, OrientationHelper.HORIZONTAL,false);
-        attendersRecyclerView.setLayoutManager(mLayoutManager);
-        RecyclerView.Adapter attendersListAdapter = new AttendersListAdapter(Collections.EMPTY_LIST);
-        attendersRecyclerView.setAdapter(attendersListAdapter);
+    private void initViews(){
+
+        setUpAttendersRecyclerView();
 
         titleTV = (TextView) findViewById(R.id.show_event_name_of_event_tv);
         whenTV = (TextView) findViewById(R.id.show_event_when_where_tv);
@@ -84,6 +90,19 @@ public class ShowEventActivity extends AppCompatActivity implements
         ownerNickTV = (TextView) findViewById(R.id.show_event_username);
         ownerAgeTV = (TextView) findViewById(R.id.show_event_age);
         ownerSexTV = (TextView) findViewById(R.id.show_event_gender);
+        emptyRecyclerView = (TextView) findViewById(R.id.show_event_empty_tv_recycler_view);
+        chatTitle = (TextView) findViewById(R.id.show_event_chat_title);
+        switchToChat = (Button) findViewById(R.id.show_event_switch_to_chat);
+
+    }
+
+    private void setUpAttendersRecyclerView(){
+        attendersRecyclerView = (RecyclerView) findViewById(R.id.show_event_attenders_recycler_view);
+        attendersRecyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this, OrientationHelper.HORIZONTAL,false);
+        attendersRecyclerView.setLayoutManager(mLayoutManager);
+        RecyclerView.Adapter attendersListAdapter = new AttendersListAdapter(Collections.EMPTY_LIST);
+        attendersRecyclerView.setAdapter(attendersListAdapter);
     }
 
     @Override
@@ -146,15 +165,33 @@ public class ShowEventActivity extends AppCompatActivity implements
         ownerAgeTV.setText(String.valueOf(event.getOwner().getAge()));//jak nie dalem toString to brało int jako id stringa z resourcesow zamist "22" xD
         ownerSexTV.setText(event.getOwner().isFemale()?getString(R.string.female):getString(R.string.male));//to taki skrócony zapis ifa warunek?jesli_prawda:jesli_falsz
 
-        RecyclerView.Adapter adapter = new AttendersListAdapter(ShowEventActivity.this, event.getAttenders());
-        attendersRecyclerView.swapAdapter(adapter,false);
-        attendersRecyclerView.setNestedScrollingEnabled(false);
+        fillRecyclerViewFromServer(event);
+
+        if(event.getMessages().size() != 1)
+            chatTitle.setText(getString(R.string.show_event_chat_title) + "(" + event.getMessages().size() + " " + getString(R.string.messages) + ")");
+        else
+            chatTitle.setText(getString(R.string.show_event_chat_title) + "(" + event.getMessages().size() + " " + getString(R.string.message) + ")");
+
 
         mMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(event.getPosition().getLatitude(), event.getPosition().getLongitude()))
                 .title(event.getTitle()));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mMarker.getPosition(), 15));
 
-        this.mEvent =event;
+        this.mEvent = event;
+    }
+
+    private void fillRecyclerViewFromServer(StrangersEvent event){
+        RecyclerView.Adapter adapter = new AttendersListAdapter(ShowEventActivity.this, event.getAttenders());
+        attendersRecyclerView.swapAdapter(adapter,false);
+        attendersRecyclerView.setNestedScrollingEnabled(false);
+        if(event.getAttenders().isEmpty()){
+            attendersRecyclerView.setVisibility(View.GONE);
+            emptyRecyclerView.setVisibility(View.VISIBLE);
+        }
+        else{
+            attendersRecyclerView.setVisibility(View.VISIBLE);
+            emptyRecyclerView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -163,5 +200,16 @@ public class ShowEventActivity extends AppCompatActivity implements
         mMap.getUiSettings().setAllGesturesEnabled(false);
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.getUiSettings().setZoomControlsEnabled(false);
+    }
+
+    public void onClickChat(View view) {
+        Intent intent = new Intent(this, EventChatActivity.class);
+        intent.putExtra(EventChatActivity.EVENT_ID, mEvent.getId());
+        startActivity(intent);
+    }
+
+    public void onClickProfilePhoto(View view) {
+        Intent intent = new Intent(this, UserEventsActivity.class);
+        startActivity(intent);
     }
 }

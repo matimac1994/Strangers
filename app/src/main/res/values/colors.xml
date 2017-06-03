@@ -5,4 +5,10 @@
     <color name="colorPrimaryLight">#7CB342</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorFlotingButton">#E62909</color>
+
+
+    <color name="chat_timestamp_color">#004D40</color>
+    <color name="chat_button_color">#311B92</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
 </resources>
