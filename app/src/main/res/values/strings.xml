@@ -85,4 +85,17 @@
     <string name="male">Mężczyzna</string>
     <string name="female">Kobieta</string>
 
+    <string name="show_event_empty_recycler_view">Brak uczestników</string>
+    <string name="show_event_chat_title">Chat</string>
+    <string name="show_event_switch_to_chat_btn">Przejdź do czatu</string>
+    <string name="messages">wiadomości</string>
+
+    <string name="chat_event_chat_hint_text">Napisz coś</string>
+    <string name="chat_event_chat_button">Wyślij</string>
+    <string name="chat_event_toolbar_title">Chat</string>
+    <string name="chat_event_empty_list_view">Brak wiadomości</string>
+    <string name="message">wiadomość</string>
+    <string name="user_profile_toolbar_title">Profil</string>
+    <string name="user_events_toolbar_title">Eventy</string>
+
 </resources>

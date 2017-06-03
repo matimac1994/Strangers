@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.strangersteam.strangers.EventChatActivityActivity"
+    android:orientation="vertical"
+    android:layout_gravity="top"
+    android:gravity="top"
+    app:theme="@style/AppTheme.NoActionBar">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/chat_event_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/colorPrimary"
+        android:title="@string/add_event_title_toolbar"
+        app:titleTextColor="#fff"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:layout_collapseMode="pin" />
+
+
+
+    <LinearLayout
+        android:id="@+id/chat_event_chat_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:layout_marginTop="8dp"
+        android:gravity="top"
+        android:orientation="vertical">
+
+        <ListView
+            android:id="@+id/chat_event_chat_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:scrollingCache="true"
+            android:smoothScrollbar="true"
+            android:layout_gravity="start"/>
+
+        <TextView
+            android:id="@+id/chat_event_empty_tv_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/chat_event_empty_list_view"
+            android:textSize="15sp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/chat_event_post"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="bottom"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+
+        <EditText
+            android:id="@+id/chat_event_chat_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_weight="3"
+            android:hint="@string/chat_event_chat_hint_text" />
+
+        <Button
+            android:id="@+id/chat_event_chat_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_weight="1"
+            android:text="@string/chat_event_chat_button"
+            android:theme="@style/AppTheme.ButtonLogin" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>
