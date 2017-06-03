@@ -242,6 +242,9 @@ public class ShowEventActivity extends AppCompatActivity implements
 
     public void onClickProfilePhoto(View view) {
         Intent intent = new Intent(this, UserEventsActivity.class);
+        intent.putExtra("USER_NICK", mEvent.getOwner().getNick());
+        intent.putExtra(EventChatActivity.EVENT_ID, mEvent.getId());
         startActivity(intent);
+        finish();
     }
 }
