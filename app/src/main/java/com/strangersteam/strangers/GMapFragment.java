@@ -329,7 +329,7 @@ public class GMapFragment extends Fragment implements
 
         NotificationService notificationService = new NotificationService();
         StrangerNotification strangerNotification = new StrangerNotification();
-        strangerNotification.setNotificationType(NotificationType.FEW_MY_EVENTS_MSG);
+        strangerNotification.setNotificationType(NotificationType.FEW_EVENTS_MSG);
 
         FewEventsMsgContent content = new FewEventsMsgContent();
         content.setTitle("Nowe wiadomości");

@@ -8,7 +8,7 @@ import com.strangersteam.strangers.MainActivity;
  * Created by kroli on 02.06.2017.
  */
 
-class FewEventMsgNotificationBuildStrategy implements NotificationBuildStrategy<FewEventsMsgContent> {
+public class FewEventMsgNotificationBuildStrategy implements NotificationBuildStrategy<FewEventsMsgContent> {
     public static final int FEW_ATTENDING_EVENTS_NOTIFICATION_ID = 3;
 
     @Override
