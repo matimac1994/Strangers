@@ -16,19 +16,26 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
 import com.strangersteam.strangers.adapters.ChatListAdapter;
 import com.strangersteam.strangers.model.StrangerEventMessage;
 import com.strangersteam.strangers.model.StrangersEvent;
+import com.strangersteam.strangers.model.StrangersEventListItem;
+import com.strangersteam.strangers.serverConn.AuthJsonArrayRequest;
 import com.strangersteam.strangers.serverConn.AuthJsonObjectRequest;
 import com.strangersteam.strangers.serverConn.RequestQueueSingleton;
 import com.strangersteam.strangers.serverConn.ServerConfig;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class EventChatActivity extends AppCompatActivity {
 
@@ -40,6 +47,8 @@ public class EventChatActivity extends AppCompatActivity {
     private EditText messageET;
     private Button sendMessageBTN;
     private TextView emptyListView;
+
+    private Long eventId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +85,12 @@ public class EventChatActivity extends AppCompatActivity {
     }
 
     private void sendMessage() {
-        // TODO: 03.06.2017 Wysyłanie wiadomości na serwer 
+        String msgContent = messageET.getText().toString();
+        if(msgContent.trim().isEmpty() || eventId == null || eventId < 1){
+            return;
+        }else{
+            sendMsgRequest(eventId,msgContent);
+        }
     }
 
     private void setUpChatListView() {
@@ -98,6 +112,7 @@ public class EventChatActivity extends AppCompatActivity {
         if(eventId == -1){
             Toast.makeText(this,"Brak eventu do wyswietlenia, błąd", Toast.LENGTH_SHORT).show();
         }else{
+            this.eventId= eventId;
             eventRequest(eventId);
         }
     }
@@ -130,18 +145,56 @@ public class EventChatActivity extends AppCompatActivity {
         RequestQueueSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
     }
 
+    private void sendMsgRequest(Long eventId, String content){
+        String eventUrl = ServerConfig.sendMessage(eventId);
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("content", content);
+
+        JsonArrayRequest jsonArrayRequest = new AuthJsonArrayRequest(
+                getApplicationContext(),
+                Request.Method.POST,
+                eventUrl,
+                params,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try{
+                            ObjectMapper mapper = new ObjectMapper();
+                            CollectionType listType = mapper.getTypeFactory().constructCollectionType(ArrayList.class, StrangerEventMessage.class);
+                            List<StrangerEventMessage> events= null;
+                            String jsonString = response.toString();
+
+                            events = mapper.readValue(jsonString,listType);
+                            fillChatListViewFromServer(events);
+                        }catch (IOException e){
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplication(),error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        RequestQueueSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrayRequest);
+
+    }
+
     private void fillEventData(StrangersEvent event) {
         getSupportActionBar().setTitle(getString(R.string.chat_event_toolbar_title) + " " + event.getTitle());
-        fillChatListViewFromServer(event);
+        fillChatListViewFromServer(event.getMessages());
     }
 
 
-    private void fillChatListViewFromServer(StrangersEvent event){
-        ChatListAdapter listAdapter = new ChatListAdapter(this, event.getMessages());
+    private void fillChatListViewFromServer(List<StrangerEventMessage> eventMessages){
+        ChatListAdapter listAdapter = new ChatListAdapter(this, eventMessages);
         mChatListView.setAdapter(listAdapter);
         setupAutoScroll();
 
-        if(event.getMessages().isEmpty()){
+        if(eventMessages.isEmpty()){
             mChatListView.setVisibility(View.GONE);
             emptyListView.setVisibility(View.VISIBLE);
         }
