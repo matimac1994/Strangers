@@ -142,13 +142,4 @@ public class UserEventsActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-//
-//    public void onEventCardView(View view) {
-//        Intent intent = new Intent(this, ShowEventActivity.class);
-//        Integer taggedPosition = (Integer) view.getTag();
-//        intent.putExtra(ShowEventActivity.EVENT_ID, get);
-//        startActivity(intent);
-//        this.finish();
-//        // TODO: 03.06.2017 Przechodzenie do wybranego eventu zamknięcie pozostałych tak żeby nie można było się zapętlić XD
-//    }
 }
