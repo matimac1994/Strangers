@@ -206,6 +206,7 @@ public class ShowEventActivity extends AppCompatActivity implements
         Intent intent = new Intent(this, EventChatActivity.class);
         intent.putExtra(EventChatActivity.EVENT_ID, mEvent.getId());
         startActivity(intent);
+        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
 
     public void onClickProfilePhoto(View view) {
