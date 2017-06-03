@@ -51,7 +51,7 @@ public class MyEventsListAdapter extends RecyclerView.Adapter<MyEventsListAdapte
         StrangersEventListItem event = strangersEventList.get(position);
         viewHolder.titleTextView.setText(event.getTitle() + " "  + event.getUnreadMsg());
         viewHolder.descriptionTextView.setText(new SimpleDateFormat("HH:mm EEEE, dd-MMM-yyyy", new Locale("pl","PL")).format(new Date(event.getDate().getTimeInMillis())));
-        viewHolder.descriptionTextView.append(", " + event.getWhere());
+        viewHolder.descriptionTextView.append("\n" + event.getWhere());
     }
 
     @Override

@@ -94,7 +94,7 @@
     <string name="chat_event_empty_list_view">Brak wiadomości</string>
 
     <string name="user_profile_toolbar_title">Profil</string>
-    <string name="user_events_toolbar_title">Eventy</string>
+    <string name="user_events_toolbar_title">Eventy użytkownika</string>
 
     <string name="edit">Edytuj</string>
     <string name="save">Zapisz</string>
