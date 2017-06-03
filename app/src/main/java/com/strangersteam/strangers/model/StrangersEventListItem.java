@@ -11,6 +11,7 @@ public class StrangersEventListItem{
     private String title;
     private String where;
     private Calendar date;
+    private int unreadMsg;
 
     public long getId() {
         return id;
@@ -42,5 +43,13 @@ public class StrangersEventListItem{
 
     public void setDate(Calendar date) {
         this.date = date;
+    }
+
+    public int getUnreadMsg() {
+        return unreadMsg;
+    }
+
+    public void setUnreadMsg(int unreadMsg) {
+        this.unreadMsg = unreadMsg;
     }
 }

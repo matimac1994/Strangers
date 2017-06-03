@@ -1,20 +1,15 @@
 package com.strangersteam.strangers;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationManager;
-import android.location.LocationListener;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +39,11 @@ import com.strangersteam.strangers.model.StrangersEventMarker;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.strangersteam.strangers.notifications.FewEventsMsgContent;
+import com.strangersteam.strangers.notifications.OneMsgNotificationContent;
+import com.strangersteam.strangers.notifications.NotificationService;
+import com.strangersteam.strangers.notifications.NotificationType;
+import com.strangersteam.strangers.notifications.StrangerNotification;
 import com.strangersteam.strangers.serverConn.AuthJsonArrayRequest;
 import com.strangersteam.strangers.serverConn.RequestQueueSingleton;
 import com.strangersteam.strangers.serverConn.ServerConfig;
@@ -115,9 +115,9 @@ public class GMapFragment extends Fragment implements
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), AddEventActivity.class);
-                if(mLocation!=null){
+                if (mLocation != null) {
                     intent.putExtra("MARKER_POSITION", new LatLng(mLocation.getLatitude(), mLocation.getLongitude()));
-                }else{
+                } else {
                     intent.putExtra("MARKER_POSITION", new LatLng(latitudeDefault, longitudeDefault));
                 }
 
@@ -281,7 +281,6 @@ public class GMapFragment extends Fragment implements
     private void addMarkersToMap(List<StrangersEventMarker> mockEvents){
 
         for(StrangersEventMarker event: mockEvents){
-            System.out.println(event.getTitle());
             Marker marker = mMap.addMarker(generateMarkerOpt(event));
             marker.setTag(event.getId());
             markersOnMap.add(marker);
@@ -319,7 +318,6 @@ public class GMapFragment extends Fragment implements
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        System.out.println("CLIK");
         Intent intent = new Intent(getContext(), ShowEventActivity.class);
         intent.putExtra("EVENT_ID", (Long)marker.getTag());
         startActivity(intent);
@@ -329,6 +327,17 @@ public class GMapFragment extends Fragment implements
     @Override
     public void onInfoWindowLongClick(Marker marker) {
 
+        NotificationService notificationService = new NotificationService();
+        StrangerNotification strangerNotification = new StrangerNotification();
+        strangerNotification.setNotificationType(NotificationType.FEW_EVENTS_MSG);
+
+        FewEventsMsgContent content = new FewEventsMsgContent();
+        content.setTitle("Nowe wiadomości");
+        String[] temp = {"Wyjscie na piwo","łyżwy"};
+        content.setEvents(temp);
+
+        strangerNotification.setNotificationContent(content);
+        notificationService.notify(getContext(), strangerNotification);
 
     }
 

@@ -83,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean validate(){
+
         boolean valid = true;
 
         String login = _loginET.getText().toString();

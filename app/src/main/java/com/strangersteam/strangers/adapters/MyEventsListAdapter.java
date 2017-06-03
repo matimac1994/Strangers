@@ -1,5 +1,6 @@
 package com.strangersteam.strangers.adapters;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -48,7 +49,7 @@ public class MyEventsListAdapter extends RecyclerView.Adapter<MyEventsListAdapte
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         StrangersEventListItem event = strangersEventList.get(position);
-        viewHolder.titleTextView.setText(event.getTitle());
+        viewHolder.titleTextView.setText(event.getTitle() + " "  + event.getUnreadMsg());
         viewHolder.descriptionTextView.setText(new SimpleDateFormat("HH:mm EEEE, dd-MMM-yyyy", new Locale("pl","PL")).format(new Date(event.getDate().getTimeInMillis())));
         viewHolder.descriptionTextView.append(", " + event.getWhere());
     }

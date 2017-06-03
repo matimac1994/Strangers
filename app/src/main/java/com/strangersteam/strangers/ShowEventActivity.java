@@ -63,6 +63,8 @@ public class ShowEventActivity extends AppCompatActivity implements
     TextView chatTitle;
     Button switchToChat;
 
+    Button eventActionButton;
+
     RecyclerView attendersRecyclerView;
 
 
@@ -90,6 +92,7 @@ public class ShowEventActivity extends AppCompatActivity implements
         ownerNickTV = (TextView) findViewById(R.id.show_event_username);
         ownerAgeTV = (TextView) findViewById(R.id.show_event_age);
         ownerSexTV = (TextView) findViewById(R.id.show_event_gender);
+        eventActionButton = (Button) findViewById(R.id.show_event_action_button);
         emptyRecyclerView = (TextView) findViewById(R.id.show_event_empty_tv_recycler_view);
         chatTitle = (TextView) findViewById(R.id.show_event_chat_title);
         switchToChat = (Button) findViewById(R.id.show_event_switch_to_chat);
@@ -109,10 +112,10 @@ public class ShowEventActivity extends AppCompatActivity implements
     protected void onStart() {
         super.onStart();
         Long eventId = this.getIntent().getLongExtra(EVENT_ID,0);
-        eventRequest(eventId);
+        getEventRequest(eventId);
     }
 
-    private void eventRequest(Long eventId) {
+    private void getEventRequest(Long eventId) {
         String eventUrl = ServerConfig.eventById(eventId);
         JsonObjectRequest jsonObjectRequest = new AuthJsonObjectRequest(
                 getApplicationContext(),
@@ -145,6 +148,8 @@ public class ShowEventActivity extends AppCompatActivity implements
         whenTV.setText(new SimpleDateFormat("HH:mm EEEE, dd-MMM-yyyy", new Locale("pl","PL")).format(new Date(event.getDate().getTimeInMillis())));//pewnie da sie jakos ladniej xDD
         whenTV.append(", " + event.getWhere());
         whereTV.setText(event.getDetails());
+
+        eventActionButton.setOnClickListener(joinEventClickListener());
 
 
         StrangerUser user = event.getOwner();
@@ -192,6 +197,32 @@ public class ShowEventActivity extends AppCompatActivity implements
             attendersRecyclerView.setVisibility(View.VISIBLE);
             emptyRecyclerView.setVisibility(View.GONE);
         }
+    }
+
+    private View.OnClickListener joinEventClickListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                joinEventRequest();
+            }
+        };
+    }
+
+    private void joinEventRequest() {
+        //// TODO: 03.06.2017
+    }
+
+    private View.OnClickListener cancelEventClickListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancelEventRequest();
+            }
+        };
+    }
+
+    private void cancelEventRequest() {
+        //// TODO: 03.06.2017
     }
 
     @Override

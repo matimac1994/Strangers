@@ -65,6 +65,7 @@
                         map:mapType="normal" />
 
                     <Button
+                        android:id="@+id/show_event_action_button"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_gravity="center"
