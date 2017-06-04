@@ -15,6 +15,7 @@ import com.strangersteam.strangers.model.StrangerEventMessage;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ChatListAdapter extends ArrayAdapter<StrangerEventMessage>{
@@ -22,11 +23,14 @@ public class ChatListAdapter extends ArrayAdapter<StrangerEventMessage>{
     private LayoutInflater layoutInflater;
     private List<StrangerEventMessage> messages;
 
+
     public ChatListAdapter(@NonNull Context context, @NonNull List<StrangerEventMessage> messages) {
         super(context, R.layout.chat_row_layout, messages);
+        super.setNotifyOnChange(true);
         this.context = context;
         this.layoutInflater = LayoutInflater.from(context);
         this.messages = messages;
+        //this.messages.addAll(messages);
     }
 
     private class ViewHolder{
@@ -66,14 +70,8 @@ public class ChatListAdapter extends ArrayAdapter<StrangerEventMessage>{
         return this.messages.size();
     }
 
-    public void addMessage(StrangerEventMessage message){
-        this.messages.add(message);
-        notifyDataSetChanged();
-    }
-
-    public void setMessages(List<StrangerEventMessage> messages){
-        this.messages.clear();
-        this.messages.addAll(messages);
+    public void addMessages(List<StrangerEventMessage> newMessages){
+        this.messages.addAll(newMessages);
         notifyDataSetChanged();
     }
 

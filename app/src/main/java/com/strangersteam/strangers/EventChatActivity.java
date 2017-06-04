@@ -18,6 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.strangersteam.strangers.adapters.ChatListAdapter;
@@ -49,6 +50,7 @@ public class EventChatActivity extends AppCompatActivity {
     private TextView emptyListView;
 
     private Long eventId;
+    private ChatListAdapter listAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,7 +153,7 @@ public class EventChatActivity extends AppCompatActivity {
         HashMap<String, String> params = new HashMap<>();
         params.put("content", content);
 
-        JsonArrayRequest jsonArrayRequest = new AuthJsonArrayRequest(
+        AuthJsonArrayRequest jsonArrayRequest = new AuthJsonArrayRequest(
                 getApplicationContext(),
                 Request.Method.POST,
                 eventUrl,
@@ -166,7 +168,7 @@ public class EventChatActivity extends AppCompatActivity {
                             String jsonString = response.toString();
 
                             events = mapper.readValue(jsonString,listType);
-                            fillChatListViewFromServer(events);
+                            addToChatListViewFromServer(events);
                         }catch (IOException e){
                             e.printStackTrace();
                         }
@@ -190,7 +192,7 @@ public class EventChatActivity extends AppCompatActivity {
 
 
     private void fillChatListViewFromServer(List<StrangerEventMessage> eventMessages){
-        ChatListAdapter listAdapter = new ChatListAdapter(this, eventMessages);
+        listAdapter = new ChatListAdapter(this, eventMessages);
         mChatListView.setAdapter(listAdapter);
         setupAutoScroll();
 
@@ -202,6 +204,12 @@ public class EventChatActivity extends AppCompatActivity {
             mChatListView.setVisibility(View.VISIBLE);
             emptyListView.setVisibility(View.GONE);
         }
+    }
+
+    private void addToChatListViewFromServer(List<StrangerEventMessage> newMessages) {
+        mChatListAdapter.addMessages(newMessages);
+        mChatListAdapter.clearMessager();
+
     }
 
     private void setupAutoScroll(){
