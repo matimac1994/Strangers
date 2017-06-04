@@ -129,17 +129,6 @@ public class ShowEventActivity extends AppCompatActivity implements
         mMap.getUiSettings().setZoomControlsEnabled(false);
     }
 
-    public void onClickChat(View view) {
-        Intent intent = new Intent(this, EventChatActivity.class);
-        intent.putExtra(EventChatActivity.EVENT_ID, mEvent.getId());
-        startActivity(intent);
-    }
-
-    public void onClickProfilePhoto(View view) {
-        Intent intent = new Intent(this, UserEventsActivity.class);
-        startActivity(intent);
-    }
-
     private void getEventRequest(Long eventId) {
         String eventUrl = ServerConfig.eventById(eventId);
         JsonObjectRequest jsonObjectRequest = new AuthJsonObjectRequest(
@@ -311,6 +300,8 @@ public class ShowEventActivity extends AppCompatActivity implements
                 endEventRequest();
             }
         };
+    }
+
     public void onClickChat(View view) {
         Intent intent = new Intent(this, EventChatActivity.class);
         intent.putExtra(EventChatActivity.EVENT_ID, mEvent.getId());
@@ -335,12 +326,13 @@ public class ShowEventActivity extends AppCompatActivity implements
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), "error: " + error.getMessage(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
         );
 
         RequestQueueSingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+    }
     public void onClickProfilePhoto(View view) {
         Intent intent = new Intent(this, UserEventsActivity.class);
         intent.putExtra("USER_NICK", mEvent.getOwner().getNick());

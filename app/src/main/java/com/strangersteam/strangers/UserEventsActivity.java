@@ -98,7 +98,7 @@ public class UserEventsActivity extends AppCompatActivity {
 
         String myEventsUrl = ServerConfig.MY_EVENTS;
 
-        JsonArrayRequest jsonArrayRequest = new AuthJsonArrayRequest(
+        AuthJsonArrayRequest jsonArrayRequest = new AuthJsonArrayRequest(
                 this.getApplicationContext(),
                 Request.Method.GET,
                 myEventsUrl,

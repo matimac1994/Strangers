@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -50,7 +51,6 @@ public class EventChatActivity extends AppCompatActivity {
     private TextView emptyListView;
 
     private Long eventId;
-    private ChatListAdapter listAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +92,7 @@ public class EventChatActivity extends AppCompatActivity {
             return;
         }else{
             sendMsgRequest(eventId,msgContent);
+            messageET.setText("");
         }
     }
 
@@ -168,7 +169,7 @@ public class EventChatActivity extends AppCompatActivity {
                             String jsonString = response.toString();
 
                             events = mapper.readValue(jsonString,listType);
-                            addToChatListViewFromServer(events);
+                            fillChatListViewFromServer(events);
                         }catch (IOException e){
                             e.printStackTrace();
                         }
@@ -185,15 +186,19 @@ public class EventChatActivity extends AppCompatActivity {
 
     }
 
-    private void fillEventData(StrangersEvent event) {
+    private void fillEventData(final StrangersEvent event) {
         getSupportActionBar().setTitle(getString(R.string.chat_event_toolbar_title) + " " + event.getTitle());
         fillChatListViewFromServer(event.getMessages());
+
     }
 
-
-    private void fillChatListViewFromServer(List<StrangerEventMessage> eventMessages){
-        listAdapter = new ChatListAdapter(this, eventMessages);
-        mChatListView.setAdapter(listAdapter);
+    private void fillChatListViewFromServer(final List<StrangerEventMessage> eventMessages){
+        EventChatActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mChatListAdapter.addMessages(eventMessages);
+                mChatListAdapter.notifyDataSetChanged();
+            }});
         setupAutoScroll();
 
         if(eventMessages.isEmpty()){
@@ -204,12 +209,6 @@ public class EventChatActivity extends AppCompatActivity {
             mChatListView.setVisibility(View.VISIBLE);
             emptyListView.setVisibility(View.GONE);
         }
-    }
-
-    private void addToChatListViewFromServer(List<StrangerEventMessage> newMessages) {
-        mChatListAdapter.addMessages(newMessages);
-        mChatListAdapter.clearMessager();
-
     }
 
     private void setupAutoScroll(){
