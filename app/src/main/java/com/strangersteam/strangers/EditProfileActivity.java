@@ -1,6 +1,8 @@
 package com.strangersteam.strangers;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -17,8 +19,15 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.squareup.picasso.Picasso;
+import com.strangersteam.strangers.serverConn.AuthMultipartFileRequest;
+import com.strangersteam.strangers.serverConn.RequestQueueSingleton;
+import com.strangersteam.strangers.serverConn.ServerConfig;
 
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -41,6 +50,10 @@ public class EditProfileActivity extends AppCompatActivity implements EditProfil
     private TextView nickTV;
     private TextView dateSelectedTV;
 
+    private ImageView photoIV;
+
+    private RadioGroup radioGroup;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +74,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditProfil
     }
 
     private void setUpButtons(){
+        radioGroup = (RadioGroup) findViewById(R.id.edit_profile_radio_group);
         chooseImageBtn = (Button) findViewById(R.id.edit_profile_choose_photo_button);
         chooseImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,18 +93,45 @@ public class EditProfileActivity extends AppCompatActivity implements EditProfil
     }
 
     private void saveAll() {
-        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.edit_profile_radio_group);
-        if (radioGroup.getCheckedRadioButtonId() == -1) {
-            Toast.makeText(this, "Wybierz płeć", Toast.LENGTH_SHORT).show();
-        } else {
-            //Płeć będzie wymagana i chuj XD
-            // TODO: 31.05.2017 Przesłać dane na serwer
-        }
+        byte[] data = getPhoto();
+
+        AuthMultipartFileRequest request = new AuthMultipartFileRequest(
+                getApplicationContext(),
+                Request.Method.POST,
+                ServerConfig.UPLOAD_PHOTO,
+                "photo",
+                data,
+                new Response.Listener<String>(){
+
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(getApplicationContext(),"OK",Toast.LENGTH_SHORT).show();
+                    }
+                },
+                new Response.ErrorListener(){
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), error.getMessage() ,Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        RequestQueueSingleton.getInstance(getApplicationContext()).addToRequestQueue(request);
+    }
+
+    private byte[] getPhoto() {
+        Bitmap bitmap = ((BitmapDrawable)photoIV.getDrawable()).getBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        return byteArray;
     }
 
     private void initializeValuesAndShow(){
         dateSelectedTV = (TextView) findViewById(R.id.edit_profile_birthday_tv);
         nickTV = (TextView) findViewById(R.id.edit_profile_username);
+        photoIV = (ImageView) findViewById(R.id.edit_profile_photo_iv);
         Intent intent;
         intent = this.getIntent();
         if(intent.hasExtra("USER_NICK")){
@@ -124,6 +165,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditProfil
     private void pickImage(){
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, RESULT_LOAD_IMAGE);
+
     }
 
     @Override
@@ -151,7 +193,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditProfil
                     .noPlaceholder()
                     .centerCrop()
                     .fit()
-                    .into((ImageView) findViewById(R.id.edit_profile_photo_iv));
+                    .into(photoIV);
         }
     }
 
