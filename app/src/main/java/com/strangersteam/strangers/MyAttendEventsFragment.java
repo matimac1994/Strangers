@@ -15,6 +15,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.strangersteam.strangers.adapters.MyEventsListAdapter;
@@ -72,7 +73,7 @@ public class MyAttendEventsFragment extends Fragment {
 
         String myEventsUrl = ServerConfig.MY_ATTEND_EVENTS;
 
-        JsonArrayRequest jsonArrayRequest = new AuthJsonArrayRequest(
+        AuthJsonArrayRequest jsonArrayRequest = new AuthJsonArrayRequest(
                 getActivity().getApplicationContext(),
                 Request.Method.GET,
                 myEventsUrl,

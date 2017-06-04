@@ -19,6 +19,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.google.android.gms.common.ConnectionResult;
@@ -229,7 +230,7 @@ public class GMapFragment extends Fragment implements
 
         String markersUrl = ServerConfig.markersOnMapByBounds(mapBound);
 
-        JsonArrayRequest jsonArrayRequest = new AuthJsonArrayRequest(
+        AuthJsonArrayRequest jsonArrayRequest = new AuthJsonArrayRequest(
                 getActivity().getApplicationContext(),
                 Request.Method.GET,
                 markersUrl,
