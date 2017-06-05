@@ -111,5 +111,7 @@
     <string name="type_birthday">Podaj date urodzenia</string>
     <string name="valid_birthday">Podaj poprawną dare urodzenia</string>
     <string name="valid_sex">Wybierz płeć</string>
+    <string name="drawer_logout">Wyloguj</string>
+    <string name="drawer_attend_events">Biorę udział</string>
 
 </resources>
