@@ -304,13 +304,6 @@ public class ShowEventActivity extends AppCompatActivity implements
         };
     }
 
-    public void onClickChat(View view) {
-        Intent intent = new Intent(this, EventChatActivity.class);
-        intent.putExtra(EventChatActivity.EVENT_ID, mEvent.getId());
-        startActivity(intent);
-        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-    }
-
     private void joinEventRequest(final Long eventId) {
         String joinEventUrl = ServerConfig.joinEvent(eventId);
 
@@ -334,13 +327,6 @@ public class ShowEventActivity extends AppCompatActivity implements
         );
 
         RequestQueueSingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
-    }
-    public void onClickProfilePhoto(View view) {
-        Intent intent = new Intent(this, UserEventsActivity.class);
-        intent.putExtra("USER_NICK", mEvent.getOwner().getNick());
-        intent.putExtra(EventChatActivity.EVENT_ID, mEvent.getId());
-        startActivity(intent);
-        finish();
     }
 
     private void cancelEventRequest(final Long eventId) {
