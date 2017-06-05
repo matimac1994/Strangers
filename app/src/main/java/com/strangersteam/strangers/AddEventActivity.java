@@ -143,7 +143,7 @@ public class AddEventActivity extends AppCompatActivity implements
 
     private void setUpTimeSelectedTV(){
         calendar = new GregorianCalendar();
-        calendar.set(Calendar.HOUR, hour);
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);
         timeSelectedTV.setText(new SimpleDateFormat("HH:mm", new Locale("pl", "PL")).format(calendar.getTimeInMillis()));
     }
@@ -227,9 +227,10 @@ public class AddEventActivity extends AppCompatActivity implements
     }
 
     private boolean validate() {
-        if(calendar.after(Calendar.getInstance())){
+        if(calendar.before(Calendar.getInstance())){
             calendar.add(Calendar.DATE, 1);
         }
+
         return true;
     }
 
