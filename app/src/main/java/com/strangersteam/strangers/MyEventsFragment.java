@@ -55,7 +55,7 @@ public class MyEventsFragment extends Fragment {
     }
 
     private void initList(List<StrangersEventListItem> strangersEventList) {
-        RecyclerView.Adapter adapter = new MyEventsListAdapter(strangersEventList);
+        RecyclerView.Adapter adapter = new MyEventsListAdapter(getContext(),strangersEventList);
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
     }
