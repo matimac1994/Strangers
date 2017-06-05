@@ -200,7 +200,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditProfil
     }
 
     private void initProfileImageView(String uri){
-        if(uri != null){
+        if(uri != null && !uri.isEmpty()){
             Picasso.with(EditProfileActivity.this)
                     .load(uri)
                     .noPlaceholder()
