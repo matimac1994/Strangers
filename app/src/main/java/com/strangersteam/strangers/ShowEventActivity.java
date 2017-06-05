@@ -2,6 +2,7 @@ package com.strangersteam.strangers;
 
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -75,6 +76,7 @@ public class ShowEventActivity extends AppCompatActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_show_event);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -302,6 +304,13 @@ public class ShowEventActivity extends AppCompatActivity implements
         };
     }
 
+    public void onClickChat(View view) {
+        Intent intent = new Intent(this, EventChatActivity.class);
+        intent.putExtra(EventChatActivity.EVENT_ID, mEvent.getId());
+        startActivity(intent);
+        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+    }
+
     private void joinEventRequest(final Long eventId) {
         String joinEventUrl = ServerConfig.joinEvent(eventId);
 
@@ -325,6 +334,13 @@ public class ShowEventActivity extends AppCompatActivity implements
         );
 
         RequestQueueSingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
+    }
+    public void onClickProfilePhoto(View view) {
+        Intent intent = new Intent(this, UserEventsActivity.class);
+        intent.putExtra("USER_NICK", mEvent.getOwner().getNick());
+        intent.putExtra(EventChatActivity.EVENT_ID, mEvent.getId());
+        startActivity(intent);
+        finish();
     }
 
     private void cancelEventRequest(final Long eventId) {

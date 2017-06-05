@@ -108,5 +108,8 @@
     <string name="show_event_action_button_quit_event">Zrezygnuj</string>
     <string name="show_event_joined_to_event">Dołączono do wydarzenia</string>
     <string name="show_event_canceled_event">Nie bierzesz już udziału</string>
+    <string name="type_birthday">Podaj date urodzenia</string>
+    <string name="valid_birthday">Podaj poprawną dare urodzenia</string>
+    <string name="valid_sex">Wybierz płeć</string>
 
 </resources>

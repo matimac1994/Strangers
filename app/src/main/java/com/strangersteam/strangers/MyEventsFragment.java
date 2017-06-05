@@ -72,7 +72,7 @@ public class MyEventsFragment extends Fragment {
 
         String myEventsUrl = ServerConfig.MY_EVENTS;
 
-        JsonArrayRequest jsonArrayRequest = new AuthJsonArrayRequest(
+        AuthJsonArrayRequest jsonArrayRequest = new AuthJsonArrayRequest(
                 getActivity().getApplicationContext(),
                 Request.Method.GET,
                 myEventsUrl,

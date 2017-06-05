@@ -56,7 +56,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="top"
         android:layout_marginTop="8dp"
-        android:gravity="top"
+        android:gravity="end"
         android:orientation="vertical"
         android:layout_below="@id/chat_event_toolbar"
         android:layout_above="@id/chat_event_post">
@@ -67,7 +67,8 @@
             android:layout_height="wrap_content"
             android:scrollbars="none"
             android:scrollingCache="true"
-            android:smoothScrollbar="true" />
+            android:smoothScrollbar="true"
+            android:layout_gravity="end"/>
 
         <TextView
             android:id="@+id/chat_event_empty_tv_list_view"

@@ -1,6 +1,7 @@
 package com.strangersteam.strangers;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -44,6 +45,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditProfil
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_edit_profile);
 
         setUpToolbar();

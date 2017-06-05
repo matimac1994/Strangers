@@ -12,7 +12,7 @@ public final class ServerConfig {
     public static final String MY_EVENTS = SERVER_IP + "user/myEvents";
     public static final String MY_ATTEND_EVENTS = SERVER_IP + "user/events";
     public static final String ADD_EVENT = SERVER_IP + "user/addEvent";
-    public static final String SEND_MESSAGE = SERVER_IP + "event/{eventId}/attend";
+    public static final String SEND_MESSAGE = SERVER_IP + "event/{eventId}/message";
     public static final String ATTEND_EVENT = SERVER_IP + "event/{eventId}/attend";
     public static final String QUIT_EVENT = SERVER_IP + "event/{eventId}/cancel";
 
