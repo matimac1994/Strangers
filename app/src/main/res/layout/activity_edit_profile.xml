@@ -24,7 +24,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="top">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -32,6 +32,7 @@
             android:gravity="center">
 
             <LinearLayout
+                android:id="@+id/edit_profile_photo_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -62,106 +63,106 @@
             </LinearLayout>
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:orientation="vertical">
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="16dp"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:gravity="center"-->
+                <!--android:orientation="vertical">-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center">
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:gravity="center">-->
 
-                    <TextView
-                        android:id="@+id/edit_profile_birthday_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/edit_profile_birthday_text_view"
-                        android:textSize="12sp"
-                        android:textStyle="bold"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_weight="2"
-                    android:layout_gravity="center"
-                    android:gravity="center">
+                    <!--<TextView-->
+                        <!--android:id="@+id/edit_profile_birthday_label"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="@string/edit_profile_birthday_text_view"-->
+                        <!--android:textSize="12sp"-->
+                        <!--android:textStyle="bold"/>-->
+                <!--</LinearLayout>-->
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:orientation="horizontal"-->
+                    <!--android:layout_weight="2"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:gravity="center">-->
 
-                    <TextView
-                        android:id="@+id/edit_profile_birthday_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="35sp"
-                        android:text="@string/edit_profile_birthday_not_select_tv"
-                        android:layout_marginEnd="16dp"/>
+                    <!--<TextView-->
+                        <!--android:id="@+id/edit_profile_birthday_tv"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:textSize="35sp"-->
+                        <!--android:text="@string/edit_profile_birthday_not_select_tv"-->
+                        <!--android:layout_marginEnd="16dp"/>-->
 
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/edit"
-                        android:onClick="showDatePickerDialog"
-                        android:theme="@style/AppTheme.ButtonLogin"
-                        android:layout_marginStart="16dp" />
+                    <!--<Button-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="@string/edit"-->
+                        <!--android:onClick="showDatePickerDialog"-->
+                        <!--android:theme="@style/AppTheme.ButtonLogin"-->
+                        <!--android:layout_marginStart="16dp" />-->
 
-                </LinearLayout>
-            </LinearLayout>
+                <!--</LinearLayout>-->
+            <!--</LinearLayout>-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp">
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:gravity="center"-->
+                <!--android:orientation="vertical"-->
+                <!--android:layout_marginTop="16dp"-->
+                <!--android:layout_marginBottom="16dp">-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center">
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:gravity="center">-->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Płeć"
-                        android:textSize="12sp"
-                        android:textStyle="bold"/>
-                </LinearLayout>
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="Płeć"-->
+                        <!--android:textSize="12sp"-->
+                        <!--android:textStyle="bold"/>-->
+                <!--</LinearLayout>-->
 
-                <RadioGroup
-                    android:id="@+id/edit_profile_radio_group"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                <!--<RadioGroup-->
+                    <!--android:id="@+id/edit_profile_radio_group"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:gravity="center"-->
+                    <!--android:orientation="horizontal">-->
 
-                    <RadioButton
-                        android:id="@+id/edit_profile_male"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Mężczyzna"
-                        android:layout_marginEnd="8dp"
-                        android:onClick="onRadioButtonClicked"/>
+                    <!--<RadioButton-->
+                        <!--android:id="@+id/edit_profile_male"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="Mężczyzna"-->
+                        <!--android:layout_marginEnd="8dp"-->
+                        <!--android:onClick="onRadioButtonClicked"/>-->
 
-                    <RadioButton
-                        android:id="@+id/edit_profile_female"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Kobieta"
-                        android:layout_marginStart="8dp"
-                        android:onClick="onRadioButtonClicked"/>
+                    <!--<RadioButton-->
+                        <!--android:id="@+id/edit_profile_female"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="Kobieta"-->
+                        <!--android:layout_marginStart="8dp"-->
+                        <!--android:onClick="onRadioButtonClicked"/>-->
 
 
-                </RadioGroup>
+                <!--</RadioGroup>-->
 
-            </LinearLayout>
+            <!--</LinearLayout>-->
 
             <Button
                 android:id="@+id/edit_profile_save_button"
@@ -169,10 +170,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/save"
                 android:theme="@style/AppTheme.ButtonSignIn"
+                android:layout_marginTop="24dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"/>
+                android:layout_marginEnd="24dp"
+                android:layout_below="@id/edit_profile_photo_layout"
+                android:layout_alignParentBottom="true"
+                />
 
-        </LinearLayout>
+        </RelativeLayout>
 
     </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

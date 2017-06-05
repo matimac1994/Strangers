@@ -93,7 +93,6 @@ public class MyProfileFragment extends Fragment{
                     intent.putExtra("USER_NICK", user.getNick());
                     intent.putExtra("USER_PHOTO", user.getPhotoUrl());
                     //intent.putExtra("USER_BIRTHDAY", user.getBirthday());
-                    intent.putExtra("USER_SEX", user.isFemale());
                 }
 
                 startActivity(intent);

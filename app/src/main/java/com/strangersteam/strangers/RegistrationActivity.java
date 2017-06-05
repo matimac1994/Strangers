@@ -236,11 +236,11 @@ public class RegistrationActivity extends AppCompatActivity implements EditProfi
         boolean checked = ((RadioButton) view).isChecked();
 
         switch (view.getId()){
-            case R.id.edit_profile_female:
+            case R.id.registration_female:
                 if(checked)
                     isFemale = true;
                 break;
-            case R.id.edit_profile_male:
+            case R.id.registration_male:
                 if(checked)
                     isFemale = false;
                 break;
