@@ -11,9 +11,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.strangersteam.strangers.notifications.FewEventMsgNotificationBuildStrategy;
 import com.strangersteam.strangers.notifications.FewMyEventsMsgNotificationBuildStrategy;
+import com.strangersteam.strangers.serverConn.AuthStringRequest;
+import com.strangersteam.strangers.serverConn.RequestQueueSingleton;
+import com.strangersteam.strangers.serverConn.ServerConfig;
 
 
 public class MainActivity extends AppCompatActivity
@@ -106,13 +113,37 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.fragment_map, new MyEventsFragment()).commit();
         } else if (id == R.id.nav_my_attend_events){
             fragmentManager.beginTransaction().replace(R.id.fragment_map, new MyAttendEventsFragment()).commit();
+        } else if (id == R.id.nav_logout) {
+            logoutRequest();
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
         return true;
     }
 
+    public void logoutRequest(){
+        String logoutUrl = ServerConfig.LOGOUT;
 
+        AuthStringRequest authStringRequest = new AuthStringRequest(
+                getApplicationContext(),
+                Request.Method.POST,
+                logoutUrl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        LogoutHandler.logout(getApplicationContext());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "Niepowodzenie", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        RequestQueueSingleton.getInstance(getApplicationContext()).addToRequestQueue(authStringRequest);
+    }
 }

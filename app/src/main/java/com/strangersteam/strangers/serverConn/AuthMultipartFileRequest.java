@@ -76,7 +76,16 @@ public class AuthMultipartFileRequest extends Request<String> {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             DataOutputStream dataOutputStream = new DataOutputStream(bos);
             dataOutputStream.writeBytes(twoHyphens + boundary + lineEnd);
-            dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\"; filename=\""
+            dataOutputStream.writeBytes("Content-Type: image/jpeg");
+            dataOutputStream.writeBytes(lineEnd);
+            dataOutputStream.writeBytes("Content-ID: <950118.AECB@XIson.com>");
+            dataOutputStream.writeBytes(lineEnd);
+            dataOutputStream.writeBytes("Content-Transfer-Encoding: BASE64");
+            dataOutputStream.writeBytes(lineEnd);
+            dataOutputStream.writeBytes("Content-Description: Picture B");
+            dataOutputStream.writeBytes(lineEnd);
+            dataOutputStream.writeBytes("Content-Disposition: form-data;");
+            dataOutputStream.writeBytes("name=\"photo\"; filename=\""
                     + fileName + "\"" + lineEnd);
             dataOutputStream.writeBytes(lineEnd);
 
@@ -96,8 +105,9 @@ public class AuthMultipartFileRequest extends Request<String> {
                 bufferSize = Math.min(bytesAvailable, maxBufferSize);
                 bytesRead = fileInputStream.read(buffer, 0, bufferSize);
             }
+            dataOutputStream.writeBytes(lineEnd);
+            dataOutputStream.writeBytes(twoHyphens + boundary + twoHyphens);
 
-            dataOutputStream.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
             return bos.toByteArray();
         } catch (IOException e) {
             e.printStackTrace();

@@ -248,6 +248,8 @@ public class ShowEventActivity extends AppCompatActivity implements
         if(event.getType() != EventType.HISTORIC){
             eventActionButton.setText(getActionButtonText(event.getUsEvRelation()));
             eventActionButton.setOnClickListener(chooseActionButtonListener(event.getUsEvRelation(),event.getId()));
+        }else{
+            eventActionButton.setVisibility(View.GONE);
         }
     }
 
