@@ -87,4 +87,9 @@ public class ChatListAdapter extends ArrayAdapter<StrangerEventMessage>{
         this.messages.clear();
         notifyDataSetChanged();
     }
+
+    public void setMessages(List<StrangerEventMessage> eventMessages) {
+        this.clearMessager();
+        this.addMessages(eventMessages);
+    }
 }

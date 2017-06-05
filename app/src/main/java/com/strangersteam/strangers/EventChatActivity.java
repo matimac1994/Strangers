@@ -76,8 +76,8 @@ public class EventChatActivity extends AppCompatActivity {
             }
         };
         mHandler = new Handler();
-        mHandler.post(refresh);
-            }
+
+    }
 
     private void setUpToolbar(){
         final Toolbar toolbar = (Toolbar) findViewById(R.id.chat_event_toolbar);
@@ -132,8 +132,14 @@ public class EventChatActivity extends AppCompatActivity {
         if(eventId == -1){
             Toast.makeText(this,"Brak eventu do wyswietlenia, błąd", Toast.LENGTH_SHORT).show();
         }else{
-            eventRequest(eventId);
+            mHandler.post(refresh);
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mHandler.removeCallbacks(refresh);
     }
 
     private void eventRequest(Long eventId) {
@@ -185,7 +191,7 @@ public class EventChatActivity extends AppCompatActivity {
                             String jsonString = response.toString();
 
                             events = mapper.readValue(jsonString,listType);
-                            fillChatListViewFromServer(events);
+                            addChatListViewFromServer(events);
                         }catch (IOException e){
                             e.printStackTrace();
                         }
@@ -200,6 +206,13 @@ public class EventChatActivity extends AppCompatActivity {
 
         RequestQueueSingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonArrayRequest);
 
+    }
+
+    private void addChatListViewFromServer(List<StrangerEventMessage> newMsgs) {
+        if(newMsgs.size()>0){
+            mChatListAdapter.addMessages(newMsgs);
+            scrollMyListViewToBottom();
+        }
     }
 
     private void fillEventData(final StrangersEvent event) {
@@ -221,8 +234,7 @@ public class EventChatActivity extends AppCompatActivity {
         EventChatActivity.this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mChatListAdapter.addMessages(eventMessages);
-                mChatListAdapter.notifyDataSetChanged();
+                mChatListAdapter.setMessages(eventMessages);
                 scrollMyListViewToBottom();
             }
         });
