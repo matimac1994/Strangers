@@ -2,6 +2,7 @@ package com.strangersteam.strangers;
 
 import android.app.DownloadManager;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
@@ -66,6 +67,7 @@ public class AddEventActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_add_event);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -225,7 +227,9 @@ public class AddEventActivity extends AppCompatActivity implements
     }
 
     private boolean validate() {
-        //// TODO: 30.05.2017
+        if(calendar.after(Calendar.getInstance())){
+            calendar.add(Calendar.DATE, 1);
+        }
         return true;
     }
 

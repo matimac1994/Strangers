@@ -1,12 +1,15 @@
 package com.strangersteam.strangers;
 
+import android.content.pm.ActivityInfo;
 import android.database.DataSetObserver;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,6 +46,9 @@ public class EventChatActivity extends AppCompatActivity {
 
     public static final String EVENT_ID = "EVENT_ID";
 
+    Handler mHandler;
+    Runnable refresh;
+
     private ListView mChatListView;
     private ChatListAdapter mChatListAdapter;
 
@@ -55,12 +61,23 @@ public class EventChatActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_event_chat);
 
         setUpToolbar();
         initViews();
 
-    }
+        refresh = new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplication(),"TEKST", Toast.LENGTH_SHORT).show();
+                eventRequest(eventId);
+                mHandler.postDelayed(refresh, 5000);
+            }
+        };
+        mHandler = new Handler();
+        mHandler.post(refresh);
+            }
 
     private void setUpToolbar(){
         final Toolbar toolbar = (Toolbar) findViewById(R.id.chat_event_toolbar);
@@ -111,11 +128,10 @@ public class EventChatActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Long eventId = this.getIntent().getLongExtra(EVENT_ID,-1);
+        eventId = this.getIntent().getLongExtra(EVENT_ID,-1);
         if(eventId == -1){
             Toast.makeText(this,"Brak eventu do wyswietlenia, błąd", Toast.LENGTH_SHORT).show();
         }else{
-            this.eventId= eventId;
             eventRequest(eventId);
         }
     }
@@ -193,14 +209,6 @@ public class EventChatActivity extends AppCompatActivity {
     }
 
     private void fillChatListViewFromServer(final List<StrangerEventMessage> eventMessages){
-        EventChatActivity.this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mChatListAdapter.addMessages(eventMessages);
-                mChatListAdapter.notifyDataSetChanged();
-            }});
-        setupAutoScroll();
-
         if(eventMessages.isEmpty()){
             mChatListView.setVisibility(View.GONE);
             emptyListView.setVisibility(View.VISIBLE);
@@ -209,6 +217,24 @@ public class EventChatActivity extends AppCompatActivity {
             mChatListView.setVisibility(View.VISIBLE);
             emptyListView.setVisibility(View.GONE);
         }
+
+        EventChatActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mChatListAdapter.addMessages(eventMessages);
+                mChatListAdapter.notifyDataSetChanged();
+                scrollMyListViewToBottom();
+            }
+        });
+    }
+
+    private void scrollMyListViewToBottom() {
+        mChatListView.post(new Runnable() {
+            @Override
+            public void run() {
+                mChatListView.setSelection(mChatListAdapter.getCount() - 1);
+            }
+        });
     }
 
     private void setupAutoScroll(){
@@ -216,8 +242,7 @@ public class EventChatActivity extends AppCompatActivity {
             @Override
             public void onChanged() {
                 super.onChanged();
-                //mChatListView.setSelection(mChatListView.getCount() - 1);
-                mChatListView.smoothScrollToPosition(mChatListAdapter.getCount()-1);
+                mChatListView.setSelection(mChatListView.getCount() - 1);
             }
         });
     }

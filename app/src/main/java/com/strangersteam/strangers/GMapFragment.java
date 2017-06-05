@@ -2,6 +2,7 @@ package com.strangersteam.strangers;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.annotation.NonNull;
