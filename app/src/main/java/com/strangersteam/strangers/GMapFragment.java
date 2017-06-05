@@ -217,9 +217,9 @@ public class GMapFragment extends Fragment implements
             return;
         }
 
-        mMap.getUiSettings().setScrollGesturesEnabled(false);
+       /* mMap.getUiSettings().setScrollGesturesEnabled(false);
         Toast.makeText(getActivity(),"Pobieram se dane, nie ruszaj ", Toast.LENGTH_SHORT).show();
-        downloadMarkersAndAddToMap();
+        downloadMarkersAndAddToMap();*/
     }
 
     private void downloadMarkersAndAddToMap() {

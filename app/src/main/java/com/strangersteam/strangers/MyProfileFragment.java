@@ -59,6 +59,8 @@ public class MyProfileFragment extends Fragment{
     TextView ownerSexTV;
 
     StrangerUser user;
+    String femaleString;
+    String maleString;
 
     public MyProfileFragment() {
         // Required empty public constructor
@@ -67,7 +69,8 @@ public class MyProfileFragment extends Fragment{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        femaleString = getString(R.string.female);
+        maleString = getString(R.string.male);
     }
 
     @Override
@@ -157,6 +160,6 @@ public class MyProfileFragment extends Fragment{
 
         ownerNickTV.setText(user.getNick());
         ownerAgeTV.setText(String.valueOf(user.getAge()));
-        ownerSexTV.setText(user.isFemale()?getString(R.string.female):getString(R.string.male));
+        ownerSexTV.setText(user.isFemale()?femaleString:maleString);
     }
 }
