@@ -34,26 +34,26 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-public class EditProfileActivity extends AppCompatActivity implements EditProfileDatePickerFragment.OnCompleteListener {
+public class EditProfileActivity extends AppCompatActivity
+//        implements EditProfileDatePickerFragment.OnCompleteListener
+{
 
     private static final int RESULT_LOAD_IMAGE = 1;
 
     private Uri imageUri;
 
-    private Calendar birthdayDate;
+
     private String nick;
     private String phootoUrl;
-    private boolean isFemale;
 
     private Button chooseImageBtn;
     private Button saveButton;
 
     private TextView nickTV;
-    private TextView dateSelectedTV;
-
     private ImageView photoIV;
 
-    private RadioGroup radioGroup;
+//    private Calendar birthdayDate;
+//    private TextView dateSelectedTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +76,6 @@ public class EditProfileActivity extends AppCompatActivity implements EditProfil
     }
 
     private void setUpButtons(){
-        radioGroup = (RadioGroup) findViewById(R.id.edit_profile_radio_group);
         chooseImageBtn = (Button) findViewById(R.id.edit_profile_choose_photo_button);
         chooseImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,7 +130,7 @@ public class EditProfileActivity extends AppCompatActivity implements EditProfil
     }
 
     private void initializeValuesAndShow(){
-        dateSelectedTV = (TextView) findViewById(R.id.edit_profile_birthday_tv);
+        //dateSelectedTV = (TextView) findViewById(R.id.edit_profile_birthday_tv);
         nickTV = (TextView) findViewById(R.id.edit_profile_username);
         photoIV = (ImageView) findViewById(R.id.edit_profile_photo_iv);
         Intent intent;
@@ -139,7 +138,6 @@ public class EditProfileActivity extends AppCompatActivity implements EditProfil
         if(intent.hasExtra("USER_NICK")){
             nick = intent.getStringExtra("USER_NICK");
             phootoUrl = intent.getStringExtra("USER_PHOTO");
-            isFemale = intent.getBooleanExtra("USER_SEX",false);
             //birthdayDate = (Calendar)intent.getSerializableExtra("USER_BIRTHDAY");
         }
         setUpDateSelectedTV();
@@ -147,12 +145,12 @@ public class EditProfileActivity extends AppCompatActivity implements EditProfil
 
 
     private void setUpDateSelectedTV(){
-        if(birthdayDate != null){
-            dateSelectedTV.setText(new SimpleDateFormat("dd.MM.yyyy", new Locale("pl", "PL")).format(birthdayDate.getTimeInMillis()));
-        }
-        else {
-            dateSelectedTV.setText(getString(R.string.edit_profile_birthday_not_select_tv));
-        }
+//        if(birthdayDate != null){
+//            dateSelectedTV.setText(new SimpleDateFormat("dd.MM.yyyy", new Locale("pl", "PL")).format(birthdayDate.getTimeInMillis()));
+//        }
+//        else {
+//            dateSelectedTV.setText(getString(R.string.edit_profile_birthday_not_select_tv));
+//        }
 
         if(phootoUrl != null){
             initProfileImageView(phootoUrl);
@@ -210,43 +208,28 @@ public class EditProfileActivity extends AppCompatActivity implements EditProfil
         }
     }
 
-    @Override
-    public void onComplete(int year, int month, int day) {
-        birthdayDate = new GregorianCalendar();
-        birthdayDate.set(Calendar.YEAR, year);
-        birthdayDate.set(Calendar.MONTH, month);
-        birthdayDate.set(Calendar.DAY_OF_MONTH, day);
-        setUpDateSelectedTV();
-    }
+//    @Override
+//    public void onComplete(int year, int month, int day) {
+//        birthdayDate = new GregorianCalendar();
+//        birthdayDate.set(Calendar.YEAR, year);
+//        birthdayDate.set(Calendar.MONTH, month);
+//        birthdayDate.set(Calendar.DAY_OF_MONTH, day);
+//        setUpDateSelectedTV();
+//    }
 
 
-    public void onRadioButtonClicked(View view){
-        boolean checked = ((RadioButton) view).isChecked();
 
-        switch (view.getId()){
-            case R.id.edit_profile_female:
-                if(checked)
-                    isFemale = true;
-                break;
-            case R.id.edit_profile_male:
-                if(checked)
-                    isFemale = false;
-                break;
-        }
-    }
-
-
-    public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new EditProfileDatePickerFragment();
-        newFragment.show(getSupportFragmentManager(), "datePicker");
-    }
+//    public void showDatePickerDialog(View v) {
+//        DialogFragment newFragment = new EditProfileDatePickerFragment();
+//        newFragment.show(getSupportFragmentManager(), "datePicker");
+//    }
 
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        if(birthdayDate != null){
-            outState.putSerializable("BIRTHDAY_DATE", birthdayDate);
-        }
+//        if(birthdayDate != null){
+//            outState.putSerializable("BIRTHDAY_DATE", birthdayDate);
+//        }
 
         if(imageUri != null){
             outState.putParcelable("IMAGE_URI", imageUri);
@@ -258,10 +241,10 @@ public class EditProfileActivity extends AppCompatActivity implements EditProfil
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        if(savedInstanceState.containsKey("BIRTHDAY_DATE")){
-            birthdayDate = (Calendar)savedInstanceState.getSerializable("BIRTHDAY_DATE");
-            setUpDateSelectedTV();
-        }
+//        if(savedInstanceState.containsKey("BIRTHDAY_DATE")){
+//            birthdayDate = (Calendar)savedInstanceState.getSerializable("BIRTHDAY_DATE");
+//            setUpDateSelectedTV();
+//        }
 
         if(savedInstanceState.containsKey("IMAGE_URI")){
             imageUri = (Uri)savedInstanceState.getParcelable("IMAGE_URI");
