@@ -17,6 +17,7 @@ public final class ServerConfig {
     public static final String QUIT_EVENT = SERVER_IP + "event/{eventId}/cancel";
     public static final String UPLOAD_PHOTO = SERVER_IP +"photo/upload";
     public static final String LOGOUT = SERVER_IP + "user/session/logout";
+    public static final String REGISTER = SERVER_IP +"register";
 
 
     public static String markersOnMapByBounds(LatLngBounds mapBound) {

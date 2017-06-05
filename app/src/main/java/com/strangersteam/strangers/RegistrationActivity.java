@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,10 +14,25 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.strangersteam.strangers.serverConn.AuthJsonObjectRequest;
+import com.strangersteam.strangers.serverConn.AuthStringRequest;
+import com.strangersteam.strangers.serverConn.AuthTokenProvider;
+import com.strangersteam.strangers.serverConn.RequestQueueSingleton;
+import com.strangersteam.strangers.serverConn.ServerConfig;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -55,8 +71,82 @@ public class RegistrationActivity extends AppCompatActivity implements EditProfi
 
     public void onClickSignIn(View view){
         if(validate()){
-            goToMap();
+           registerRequest();
         }
+    }
+
+    private void registerRequest() {
+        String url = ServerConfig.REGISTER;
+
+        final String login = _loginET.getText().toString();
+        final String password = _passET.getText().toString();
+
+        Map<String,String> params = new HashMap<>();
+        params.put("login", login);
+        params.put("hashedPw", password);
+        params.put("birthdate", Long.toString(birthdayDate.getTimeInMillis()));
+        params.put("female", Boolean.toString(isFemale));
+
+        AuthJsonObjectRequest request = new AuthJsonObjectRequest(
+                getApplicationContext(),
+                Request.Method.POST,
+                url,
+                new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Toast.makeText(getApplicationContext(),"Zarejestrowano",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"Logowanie...",Toast.LENGTH_SHORT).show();
+                        loginRequest(login,password);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if(error.networkResponse.statusCode == 400){
+                            _loginET.setError("Login zajęty");
+                        }
+                    }
+                }
+        );
+
+        RequestQueueSingleton.getInstance(getApplicationContext()).addToRequestQueue(request);
+    }
+
+    private void loginRequest(String loginString, String passwordString) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("login",loginString);
+        params.put("password",passwordString);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, ServerConfig.LOGIN, new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            String token = response.getString("token");
+                            AuthTokenProvider.saveToken(getApplicationContext(),token);
+                            goToMap();
+                        } catch (JSONException e) {
+                            Log.e("JSONException", e.getMessage());
+                            _passET.setError(getString(R.string.unknown_error));
+                            return;
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        if(error.networkResponse != null && error.networkResponse.statusCode == 403){
+                            _passET.setError(getString(R.string.login_invalid_data));
+                        }else{
+                            _passET.setError(getString(R.string.unknown_error));
+                        }
+
+                    }
+                });
+
+        RequestQueueSingleton.getInstance(this.getApplicationContext()).addToRequestQueue(jsonObjectRequest);
     }
 
     private boolean validate(){
