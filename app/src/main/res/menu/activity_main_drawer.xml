@@ -16,12 +16,12 @@
             android:title="@string/drawer_my_events" />
         <item
             android:id="@+id/nav_my_attend_events"
-            android:icon="@drawable/ic_event_black_24dp"
+            android:icon="@drawable/ic_event_available_black_24dp"
             android:title="@string/drawer_attend_events" />
 
         <item
             android:id="@+id/nav_logout"
-            android:icon="@drawable/ic_delete_black_24dp"
+            android:icon="@drawable/ic_power_settings_new_black_24dp"
             android:title="@string/drawer_logout" />
     </group>
 
