@@ -70,7 +70,6 @@ public class EventChatActivity extends AppCompatActivity {
         refresh = new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(getApplication(),"TEKST", Toast.LENGTH_SHORT).show();
                 eventRequest(eventId);
                 mHandler.postDelayed(refresh, 5000);
             }
@@ -208,20 +207,15 @@ public class EventChatActivity extends AppCompatActivity {
 
     }
 
-    private void addChatListViewFromServer(List<StrangerEventMessage> newMsgs) {
-        if(newMsgs.size()>0){
-            mChatListAdapter.addMessages(newMsgs);
-            scrollMyListViewToBottom();
-        }
-    }
+
 
     private void fillEventData(final StrangersEvent event) {
         getSupportActionBar().setTitle(getString(R.string.chat_event_toolbar_title) + " " + event.getTitle());
-        fillChatListViewFromServer(event.getMessages());
+        fillNewChatListViewFromServer(event.getMessages());
 
     }
 
-    private void fillChatListViewFromServer(final List<StrangerEventMessage> eventMessages){
+    private void fillNewChatListViewFromServer(final List<StrangerEventMessage> eventMessages){
         if(eventMessages.isEmpty()){
             mChatListView.setVisibility(View.GONE);
             emptyListView.setVisibility(View.VISIBLE);
@@ -238,6 +232,13 @@ public class EventChatActivity extends AppCompatActivity {
                 scrollMyListViewToBottom();
             }
         });
+    }
+
+    private void addChatListViewFromServer(List<StrangerEventMessage> newMsgs) {
+        if(newMsgs.size()>0){
+            mChatListAdapter.addMessages(newMsgs);
+            scrollMyListViewToBottom();
+        }
     }
 
     private void scrollMyListViewToBottom() {
