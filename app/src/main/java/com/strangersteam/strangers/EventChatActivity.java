@@ -70,7 +70,6 @@ public class EventChatActivity extends AppCompatActivity {
         refresh = new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(getApplication(),"TEKST", Toast.LENGTH_SHORT).show();
                 eventRequest(eventId);
                 mHandler.postDelayed(refresh, 5000);
             }

@@ -1,13 +1,17 @@
 package com.strangersteam.strangers.adapters;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.strangersteam.strangers.R;
+import com.strangersteam.strangers.ShowEventActivity;
 import com.strangersteam.strangers.model.StrangersEvent;
 import com.strangersteam.strangers.model.StrangersEventListItem;
 import com.strangersteam.strangers.model.StrangersEventMarker;
@@ -19,6 +23,8 @@ import java.util.Locale;
 
 
 public class MyEventsListAdapter extends RecyclerView.Adapter<MyEventsListAdapter.ViewHolder> {
+
+    private Context mContext;
 
     private List<StrangersEventListItem> strangersEventList;
 
@@ -33,7 +39,8 @@ public class MyEventsListAdapter extends RecyclerView.Adapter<MyEventsListAdapte
         }
     }
 
-    public MyEventsListAdapter(List<StrangersEventListItem> strangersEventList){
+    public MyEventsListAdapter(Context context, List<StrangersEventListItem> strangersEventList){
+        mContext = context;
         this.strangersEventList = strangersEventList;
     }
 
@@ -48,10 +55,18 @@ public class MyEventsListAdapter extends RecyclerView.Adapter<MyEventsListAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        StrangersEventListItem event = strangersEventList.get(position);
+        final StrangersEventListItem event = strangersEventList.get(position);
         viewHolder.titleTextView.setText(event.getTitle() + " "  + event.getUnreadMsg());
         viewHolder.descriptionTextView.setText(new SimpleDateFormat("HH:mm EEEE, dd-MMM-yyyy", new Locale("pl","PL")).format(new Date(event.getDate().getTimeInMillis())));
         viewHolder.descriptionTextView.append("\n" + event.getWhere());
+        viewHolder.titleTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, ShowEventActivity.class);
+                intent.putExtra(ShowEventActivity.EVENT_ID, event.getId());
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override
