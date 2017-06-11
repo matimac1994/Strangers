@@ -28,11 +28,15 @@ public class UserEventsListAdapter extends RecyclerView.Adapter<UserEventsListAd
     protected static class ViewHolder extends RecyclerView.ViewHolder{
         private TextView titleTextView;
         private TextView infoTextView;
+        private TextView unreadedMsgsTextView;
+        private LinearLayout unreaedMsgsTable;
 
         private ViewHolder(LinearLayout linearLayout){
             super(linearLayout);
             titleTextView = (TextView) linearLayout.findViewById(R.id.my_events_title);
             infoTextView = (TextView) linearLayout.findViewById(R.id.my_events_description);
+            unreadedMsgsTextView = (TextView) linearLayout.findViewById(R.id.my_events_unreaded_msgs);
+            unreaedMsgsTable = (LinearLayout) linearLayout.findViewById(R.id.my_events_unreaded_msgs_table);
         }
 
     }
@@ -66,6 +70,13 @@ public class UserEventsListAdapter extends RecyclerView.Adapter<UserEventsListAd
                 ((Activity)mContext).finish();
             }
         });
+
+        if(event.getUnreadMsg()==0){
+            viewHolder.unreaedMsgsTable.setVisibility(View.GONE);
+        }else{
+            viewHolder.unreaedMsgsTable.setVisibility(View.VISIBLE);
+            viewHolder.unreadedMsgsTextView.setText(event.getUnreadMsg());
+        }
     }
 
     @Override

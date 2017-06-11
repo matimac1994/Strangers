@@ -20,7 +20,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
-import com.strangersteam.strangers.adapters.MyEventsListAdapter;
 import com.strangersteam.strangers.adapters.UserEventsListAdapter;
 import com.strangersteam.strangers.model.StrangersEventListItem;
 import com.strangersteam.strangers.serverConn.AuthJsonArrayRequest;
@@ -36,17 +35,10 @@ import java.util.Collections;
 import java.util.List;
 
 public class UserEventsActivity extends AppCompatActivity {
-
     public static final String EVENT_ID = "EVENT_ID";
-
-    StrangersEventListItem event;
-
     private RecyclerView recyclerView;
     private String ownerNick;
-
-
     private Long eventId;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,21 +50,16 @@ public class UserEventsActivity extends AppCompatActivity {
         ownerNick = intent.getStringExtra("USER_NICK");
         setUpToolbar();
 
-
-
         recyclerView = (RecyclerView) findViewById(R.id.user_events_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         initList(Collections.EMPTY_LIST);
     }
-
-
 
     private void initList(List<StrangersEventListItem> strangersEventList) {
         RecyclerView.Adapter adapter = new UserEventsListAdapter(this, strangersEventList);
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
     }
-
 
     private void setUpToolbar(){
         final Toolbar toolbar = (Toolbar) findViewById(R.id.user_events_toolbar);
@@ -93,7 +80,6 @@ public class UserEventsActivity extends AppCompatActivity {
             this.eventId= eventId;
         }
         myEventsRequest();
-
     }
 
     private void myEventsRequest() {

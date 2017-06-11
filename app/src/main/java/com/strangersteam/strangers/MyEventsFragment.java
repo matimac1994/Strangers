@@ -17,7 +17,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
-import com.strangersteam.strangers.adapters.MyEventsListAdapter;
+import com.strangersteam.strangers.adapters.UserEventsListAdapter;
 import com.strangersteam.strangers.model.StrangersEventListItem;
 import com.strangersteam.strangers.serverConn.AuthJsonArrayRequest;
 import com.strangersteam.strangers.serverConn.RequestQueueSingleton;
@@ -55,7 +55,7 @@ public class MyEventsFragment extends Fragment {
     }
 
     private void initList(List<StrangersEventListItem> strangersEventList) {
-        RecyclerView.Adapter adapter = new MyEventsListAdapter(getContext(),strangersEventList);
+        RecyclerView.Adapter adapter = new UserEventsListAdapter(getContext(),strangersEventList);
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
     }
