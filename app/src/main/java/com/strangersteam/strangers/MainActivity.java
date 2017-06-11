@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.strangersteam.strangers.notifications.FewEventMsgNotificationBuildStrategy;
+import com.strangersteam.strangers.notifications.FewAttendEventMsgNotificationBuildStrategy;
 import com.strangersteam.strangers.notifications.FewMyEventsMsgNotificationBuildStrategy;
 import com.strangersteam.strangers.serverConn.AuthStringRequest;
 import com.strangersteam.strangers.serverConn.RequestQueueSingleton;
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity
         if(fragmentIdExtra != -1){
             if(fragmentIdExtra == FewMyEventsMsgNotificationBuildStrategy.FEW_MY_EVENTS_NOTIFICATION_ID){
                 fragment = new MyEventsFragment();
-            }else if(fragmentIdExtra == FewEventMsgNotificationBuildStrategy.FEW_ATTENDING_EVENTS_NOTIFICATION_ID){
+            }else if(fragmentIdExtra == FewAttendEventMsgNotificationBuildStrategy.FEW_ATTENDING_EVENTS_NOTIFICATION_ID){
                 fragment = new MyAttendEventsFragment();
             }
             else

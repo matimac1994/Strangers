@@ -38,8 +38,12 @@ public class NotificationService {
             case FEW_MY_EVENTS_MSG:
                 strategy = new FewMyEventsMsgNotificationBuildStrategy();
                 break;
-            case FEW_EVENTS_MSG:
-                strategy = new FewEventMsgNotificationBuildStrategy();
+            case FEW_ATTEND_EVENTS_MSG:
+                strategy = new FewAttendEventMsgNotificationBuildStrategy();
+                break;
+            case NEW_MY_EVENT_ATTENDERS:
+               // strategy = new NewAttendersNotificationBuildStrategy();
+                strategy= null;
                 break;
             default:
                 throw new IllegalArgumentException();
@@ -48,7 +52,7 @@ public class NotificationService {
        return new NotificationBuilder(context,strategy);
     }
 
-    public static void notifyAll(Context applicationContext, List<StrangerNotification<?>> notifications) {
+    public static void notifyAll(Context applicationContext, List<StrangerNotification> notifications) {
         for( StrangerNotification notification : notifications){
             notify(applicationContext,notification);
         }

@@ -38,10 +38,6 @@ import com.strangersteam.strangers.model.StrangersEventMarker;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
-import com.strangersteam.strangers.notifications.FewEventsMsgNotificationContent;
-import com.strangersteam.strangers.notifications.NotificationService;
-import com.strangersteam.strangers.notifications.NotificationType;
-import com.strangersteam.strangers.notifications.StrangerNotification;
 import com.strangersteam.strangers.serverConn.AuthJsonArrayRequest;
 import com.strangersteam.strangers.serverConn.RequestQueueSingleton;
 import com.strangersteam.strangers.serverConn.ServerConfig;

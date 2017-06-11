@@ -114,5 +114,6 @@
     <string name="valid_sex">Wybierz płeć</string>
     <string name="drawer_logout">Wyloguj</string>
     <string name="drawer_attend_events">Biorę udział</string>
+    <string name="notification_title_new_msgs">Nowe wiadomości!</string>
 
 </resources>

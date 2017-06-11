@@ -28,8 +28,8 @@ public class NotificationBuilder {
          NotificationCompat.Builder mBuilder =
                  new NotificationCompat.Builder(context)
                          .setSmallIcon(R.drawable.strangers_logo)
-                         .setContentTitle(strangerNotification.getNotificationContent().getTitle())
-                         .setContentText(strangerNotification.getNotificationContent().getContent())
+                         .setContentTitle(strategy.getNotificationTitle(context, strangerNotification))
+                         .setContentText(strategy.getNotificationContent(context, strangerNotification))
                          .setAutoCancel(true);
 
 
@@ -59,7 +59,7 @@ public class NotificationBuilder {
 
     private Intent createNotificationIntent(StrangerNotification strangerNotification) {
         Intent intent = new Intent(context, strategy.getNotificationTargetClass());
-        strategy.putExtraData(intent,strangerNotification.getNotificationContent());
+        strategy.putExtraData(intent,strangerNotification);
         return intent;
     }
 

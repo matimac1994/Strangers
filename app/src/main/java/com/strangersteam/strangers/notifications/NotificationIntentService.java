@@ -70,7 +70,7 @@ public class NotificationIntentService extends IntentService {
                             ObjectMapper mapper = new ObjectMapper();
                             CollectionType listType = mapper.getTypeFactory().constructCollectionType(ArrayList.class, StrangerNotification.class);
 
-                            List<StrangerNotification<?>> notifications = mapper.readValue(response.toString(), listType);
+                            List<StrangerNotification> notifications = mapper.readValue(response.toString(), listType);
                             NotificationService.notifyAll(getApplicationContext(), notifications);
                         }catch (IOException e){
                             e.printStackTrace();

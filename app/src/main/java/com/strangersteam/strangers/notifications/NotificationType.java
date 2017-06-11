@@ -7,5 +7,6 @@ package com.strangersteam.strangers.notifications;
 public enum NotificationType {
     ONE_EVENT_MSG,
     FEW_MY_EVENTS_MSG,
-    FEW_EVENTS_MSG
+    FEW_ATTEND_EVENTS_MSG,
+    NEW_MY_EVENT_ATTENDERS
 }

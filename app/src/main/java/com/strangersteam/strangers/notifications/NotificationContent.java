@@ -6,8 +6,9 @@ package com.strangersteam.strangers.notifications;
 
 public interface NotificationContent {
 
-    public void setTitle(String title);
+    public NotificationType getNotificationType();
     public String getTitle();
-    public void setContent(String content);
     public String getContent();
+    public Long getItemId();
 }
+
