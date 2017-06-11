@@ -27,6 +27,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -55,9 +57,9 @@ public class GMapFragment extends Fragment implements
         OnMapReadyCallback,
         GoogleMap.OnMarkerClickListener,
         GoogleMap.OnInfoWindowClickListener,
-        GoogleMap.OnInfoWindowLongClickListener,
         GoogleMap.OnCameraIdleListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
+    private static final String MARKERS_REQUEST_TAG = "MARKERS_REQUEST_TAG";
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private Location mLocation;
@@ -70,6 +72,9 @@ public class GMapFragment extends Fragment implements
     private FloatingActionMenu _floatingActionMenu;
     private double latitudeDefault = 50.07222148;
     private double longitudeDefault = 19.9410975;
+
+    private BitmapDescriptor nowBitmapDescriptor;
+    private BitmapDescriptor futureBitmapDescriptor;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -157,8 +162,10 @@ public class GMapFragment extends Fragment implements
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.setOnMarkerClickListener(this);
         mMap.setOnInfoWindowClickListener(this);
-        mMap.setOnInfoWindowLongClickListener(this);
         mMap.setOnCameraIdleListener(this);
+
+        nowBitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.now_icon);
+        futureBitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.future_icon);
 
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -166,7 +173,6 @@ public class GMapFragment extends Fragment implements
         }
         mMap.setMyLocationEnabled(true);
         downloadMarkersAndAddToMap();
-        mMap.getUiSettings().setScrollGesturesEnabled(true);
     }
 
     @Override
@@ -208,9 +214,6 @@ public class GMapFragment extends Fragment implements
             isCameraMoveIntoMarker = !isCameraMoveIntoMarker;
             return;
         }
-
-        mMap.getUiSettings().setScrollGesturesEnabled(false);
-        Toast.makeText(getActivity(),"Pobieram se dane, nie ruszaj ", Toast.LENGTH_SHORT).show();
         downloadMarkersAndAddToMap();
     }
 
@@ -242,8 +245,6 @@ public class GMapFragment extends Fragment implements
                         } catch (IOException e) {
                             e.printStackTrace();
                             Toast.makeText(getActivity(),"Parsing markers error", Toast.LENGTH_LONG).show();
-                        } finally {
-                            mMap.getUiSettings().setScrollGesturesEnabled(true);
                         }
 
                     }
@@ -251,14 +252,12 @@ public class GMapFragment extends Fragment implements
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        //todo co teraz??
-                        mMap.getUiSettings().setScrollGesturesEnabled(true);
                         System.out.println(error.getMessage());
                         Toast.makeText(getActivity(), "onErrorResponse: " + error.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
 
-        RequestQueueSingleton.getInstance(getActivity().getApplicationContext()).addToRequestQueue(jsonArrayRequest);
+        RequestQueueSingleton.getInstance(getActivity().getApplicationContext()).addToRequestQueue(jsonArrayRequest, MARKERS_REQUEST_TAG);
     }
 
     private void refreshMarkersOnMap(List<StrangersEventMarker> downloadedMarkers) {
@@ -289,10 +288,12 @@ public class GMapFragment extends Fragment implements
         mopt.draggable(false);
 
         if(event.getType() == EventType.FUTURE){
-            mopt.alpha(0.6f);//trzeba zrobic cos zeby rozrozniac eventy pod wzgledem wygladu
+            mopt.alpha(0.6f);
+            mopt.icon(futureBitmapDescriptor);
             mopt.snippet(new SimpleDateFormat("HH:mm EEEE, dd-MMM", new Locale("pl","PL")).format(new Date(event.getDate().getTimeInMillis())));
         }else{
             mopt.snippet("teraz!");
+            mopt.icon(nowBitmapDescriptor);
             mopt.alpha(1.0f);
         }
 
@@ -303,7 +304,6 @@ public class GMapFragment extends Fragment implements
 
     @Override
     public boolean onMarkerClick(final Marker marker) {
-
         mLastSelectedMarker = marker;
         mLastSelectedMarker.showInfoWindow();
         isCameraMoveIntoMarker = true;
@@ -313,26 +313,8 @@ public class GMapFragment extends Fragment implements
     @Override
     public void onInfoWindowClick(Marker marker) {
         Intent intent = new Intent(getContext(), ShowEventActivity.class);
-        intent.putExtra("EVENT_ID", (Long)marker.getTag());
+        intent.putExtra(ShowEventActivity.EVENT_ID, (Long)marker.getTag());
         startActivity(intent);
-    }
-
-
-    @Override
-    public void onInfoWindowLongClick(Marker marker) {
-
-/*        NotificationService notificationService = new NotificationService();
-        StrangerNotification strangerNotification = new StrangerNotification();
-        strangerNotification.setNotificationType(NotificationType.FEW_EVENTS_MSG);
-
-        FewEventsMsgNotificationContent content = new FewEventsMsgNotificationContent();
-        content.setTitle("Nowe wiadomości");
-        String[] temp = {"Wyjscie na piwo","łyżwy"};
-        content.setEvents(temp);
-
-        strangerNotification.setNotificationContent(content);
-        notificationService.notify(getContext(), strangerNotification);*/
-
     }
 
     @Override

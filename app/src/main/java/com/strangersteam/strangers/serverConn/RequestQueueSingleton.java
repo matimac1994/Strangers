@@ -46,4 +46,10 @@ public class RequestQueueSingleton {
         getRequestQueue().add(req);
     }
 
+    public <T> void addToRequestQueue(Request<T> req, String tag) {
+        getRequestQueue().cancelAll(tag);
+        req.setTag(tag);
+        addToRequestQueue(req);
+    }
+
 }
