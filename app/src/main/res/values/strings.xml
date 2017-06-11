@@ -1,8 +1,5 @@
 <resources>
-        <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
-        AIzaSyApA4oKrkg_T_CjcM0ID5fb6nRDG3Sx1lM
-    </string>
-
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyDWsGze3BekyDXe4-FHl-4vQ8yziD5Ej-8</string>
     <string name="app_name">Strangers</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
