@@ -18,6 +18,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.strangersteam.strangers.notifications.NotificationEventReceiver;
 import com.strangersteam.strangers.serverConn.AuthJsonObjectRequest;
 import com.strangersteam.strangers.serverConn.AuthStringRequest;
 import com.strangersteam.strangers.serverConn.AuthTokenProvider;
@@ -126,6 +127,7 @@ public class RegistrationActivity extends AppCompatActivity implements EditProfi
                             String token = response.getString("token");
                             AuthTokenProvider.saveToken(getApplicationContext(),token);
                             goToMap();
+                            NotificationEventReceiver.setupAlarm(getApplicationContext());
                         } catch (JSONException e) {
                             Log.e("JSONException", e.getMessage());
                             _passET.setError(getString(R.string.unknown_error));

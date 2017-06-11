@@ -14,6 +14,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.strangersteam.strangers.notifications.NotificationEventReceiver;
 import com.strangersteam.strangers.serverConn.RequestQueueSingleton;
 import com.strangersteam.strangers.serverConn.AuthTokenProvider;
 import com.strangersteam.strangers.serverConn.ServerConfig;
@@ -46,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if(AuthTokenProvider.isTokenExist(getApplicationContext())){
             Toast.makeText(this,"Debug Jesteś już zalogowany",Toast.LENGTH_SHORT).show();
-            goToMap();
+            LoginHandler.onLogged(getApplicationContext(),LoginActivity.this);
         }
 
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -118,9 +119,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            String token = response.getString("token");
-                            AuthTokenProvider.saveToken(getApplicationContext(),token);
-                            goToMap();
+                            LoginHandler.onLogin(getApplicationContext(), response, LoginActivity.this);
                         } catch (JSONException e) {
                             Log.e("JSONException", e.getMessage());
                             _passET.setError(getString(R.string.unknown_error));
@@ -143,14 +142,6 @@ public class LoginActivity extends AppCompatActivity {
                 });
 
         RequestQueueSingleton.getInstance(this.getApplicationContext()).addToRequestQueue(jsonObjectRequest);
-    }
-
-    private void goToMap() {
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        finish();
-        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
 
 }

@@ -6,10 +6,15 @@ import com.strangersteam.strangers.R;
  * Created by kroli on 02.06.2017.
  */
 
-public class FewEventsMsgContent implements NotificationContent{
+public class FewEventsMsgNotificationContent implements NotificationContent{
 
     private String title;
     private String[] events;
+
+    @Override
+    public void setContent(String content) {
+
+    }
 
     @Override
     public String getTitle() {

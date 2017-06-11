@@ -8,7 +8,7 @@ import com.strangersteam.strangers.MainActivity;
  * Created by kroli on 02.06.2017.
  */
 
-public class FewEventMsgNotificationBuildStrategy implements NotificationBuildStrategy<FewEventsMsgContent> {
+public class FewEventMsgNotificationBuildStrategy implements NotificationBuildStrategy<FewEventsMsgNotificationContent> {
     public static final int FEW_ATTENDING_EVENTS_NOTIFICATION_ID = 3;
 
     @Override
@@ -22,7 +22,7 @@ public class FewEventMsgNotificationBuildStrategy implements NotificationBuildSt
     }
 
     @Override
-    public void putExtraData(Intent intent, FewEventsMsgContent notificationContent) {
+    public void putExtraData(Intent intent, FewEventsMsgNotificationContent notificationContent) {
         intent.putExtra(MainActivity.FRAGMENT_ID_EXTRA, FEW_ATTENDING_EVENTS_NOTIFICATION_ID);
     }
 

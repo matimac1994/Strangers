@@ -19,7 +19,8 @@ public class AuthJsonObjectRequest extends JsonObjectRequest {
 
     private Context applicationContext;
 
-    public AuthJsonObjectRequest(Context applicationContext, int method, String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
+    public
+    AuthJsonObjectRequest(Context applicationContext, int method, String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         super(method, url, jsonRequest, listener, ForbiddenErrorListener.create(errorListener,applicationContext));
         this.applicationContext = applicationContext;
     }

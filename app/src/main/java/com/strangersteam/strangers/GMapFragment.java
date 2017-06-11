@@ -2,7 +2,6 @@ package com.strangersteam.strangers;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.annotation.NonNull;
@@ -19,8 +18,6 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.google.android.gms.common.ConnectionResult;
@@ -41,8 +38,7 @@ import com.strangersteam.strangers.model.StrangersEventMarker;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
-import com.strangersteam.strangers.notifications.FewEventsMsgContent;
-import com.strangersteam.strangers.notifications.OneMsgNotificationContent;
+import com.strangersteam.strangers.notifications.FewEventsMsgNotificationContent;
 import com.strangersteam.strangers.notifications.NotificationService;
 import com.strangersteam.strangers.notifications.NotificationType;
 import com.strangersteam.strangers.notifications.StrangerNotification;
@@ -329,17 +325,17 @@ public class GMapFragment extends Fragment implements
     @Override
     public void onInfoWindowLongClick(Marker marker) {
 
-        NotificationService notificationService = new NotificationService();
+/*        NotificationService notificationService = new NotificationService();
         StrangerNotification strangerNotification = new StrangerNotification();
         strangerNotification.setNotificationType(NotificationType.FEW_EVENTS_MSG);
 
-        FewEventsMsgContent content = new FewEventsMsgContent();
+        FewEventsMsgNotificationContent content = new FewEventsMsgNotificationContent();
         content.setTitle("Nowe wiadomości");
         String[] temp = {"Wyjscie na piwo","łyżwy"};
         content.setEvents(temp);
 
         strangerNotification.setNotificationContent(content);
-        notificationService.notify(getContext(), strangerNotification);
+        notificationService.notify(getContext(), strangerNotification);*/
 
     }
 

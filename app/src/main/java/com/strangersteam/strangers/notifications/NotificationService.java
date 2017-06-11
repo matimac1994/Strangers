@@ -4,18 +4,20 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 
+import java.util.List;
+
 /**
  * Created by kroli on 02.06.2017.
  */
 
 public class NotificationService {
 
-    public void cancel(Context context, int notificationId){
+    public static void cancel(Context context, int notificationId){
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.cancel(notificationId);
     }
 
-    public void notify(Context context, StrangerNotification strangerNotification){
+    private static void notify(Context context, StrangerNotification strangerNotification){
 
         NotificationBuilder notificationBuilder = createNotificationBuilder(context,strangerNotification.getNotificationType());
 
@@ -44,5 +46,11 @@ public class NotificationService {
         }
 
        return new NotificationBuilder(context,strategy);
+    }
+
+    public static void notifyAll(Context applicationContext, List<StrangerNotification<?>> notifications) {
+        for( StrangerNotification notification : notifications){
+            notify(applicationContext,notification);
+        }
     }
 }

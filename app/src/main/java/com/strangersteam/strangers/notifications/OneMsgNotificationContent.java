@@ -11,6 +11,16 @@ public class OneMsgNotificationContent implements NotificationContent{
     private String messageContent;
 
     @Override
+    public void setTitle(String title) {
+        this.eventName = title;
+    }
+
+    @Override
+    public void setContent(String content) {
+        this.messageContent = content;
+    }
+
+    @Override
     public String getTitle() {
         return eventName;
     }

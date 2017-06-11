@@ -3,8 +3,8 @@ package com.strangersteam.strangers.serverConn;
 import com.google.android.gms.maps.model.LatLngBounds;
 
 public final class ServerConfig {
-    private static final String SERVER_IP = "http://164.132.57.18:9997/";
-   // private static final String SERVER_IP = "http://10.0.3.2:9997/";
+   // private static final String SERVER_IP = "http://164.132.57.18:9997/";
+    private static final String SERVER_IP = "http://10.0.3.2:9997/";
     private static final String GET_MARKERS = SERVER_IP + "events";
     private static final String GET_EVENT = SERVER_IP + "event";
     public static final String MY_USER = SERVER_IP + "user";
@@ -18,6 +18,7 @@ public final class ServerConfig {
     public static final String UPLOAD_PHOTO = SERVER_IP +"photo/upload";
     public static final String LOGOUT = SERVER_IP + "user/session/logout";
     public static final String REGISTER = SERVER_IP +"register";
+    public static final String NOTIFICATIONS = SERVER_IP + "user/notifications";
 
 
     public static String markersOnMapByBounds(LatLngBounds mapBound) {

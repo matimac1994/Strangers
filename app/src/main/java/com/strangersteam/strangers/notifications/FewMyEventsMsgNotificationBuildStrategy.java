@@ -3,13 +3,12 @@ package com.strangersteam.strangers.notifications;
 import android.content.Intent;
 
 import com.strangersteam.strangers.MainActivity;
-import com.strangersteam.strangers.R;
 
 /**
  * Created by kroli on 02.06.2017.
  */
 
-public class FewMyEventsMsgNotificationBuildStrategy implements NotificationBuildStrategy<FewEventsMsgContent> {
+public class FewMyEventsMsgNotificationBuildStrategy implements NotificationBuildStrategy<FewEventsMsgNotificationContent> {
 
     public static final int FEW_MY_EVENTS_NOTIFICATION_ID = 2;
 
@@ -24,7 +23,7 @@ public class FewMyEventsMsgNotificationBuildStrategy implements NotificationBuil
     }
 
     @Override
-    public void putExtraData(Intent intent, FewEventsMsgContent notificationContent) {
+    public void putExtraData(Intent intent, FewEventsMsgNotificationContent notificationContent) {
         intent.putExtra(MainActivity.FRAGMENT_ID_EXTRA, FEW_MY_EVENTS_NOTIFICATION_ID);
     }
 
