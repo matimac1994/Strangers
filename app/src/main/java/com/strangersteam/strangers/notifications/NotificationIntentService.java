@@ -50,14 +50,11 @@ public class NotificationIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Log.d(getClass().getSimpleName(), "onHandleIntent, started handling a notification event");
 
-        processStartNotification();
-
-        WakefulBroadcastReceiver.completeWakefulIntent(intent);
+        processStartNotification(intent);
 
     }
 
-    private void processStartNotification() {
-        System.out.println("XDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD----------------------------------------------------------");
+    private void processStartNotification(final Intent intent) {
         AuthJsonArrayRequest jsonObjectRequest = new AuthJsonArrayRequest(
                 getApplicationContext(),
                 Request.Method.GET,
@@ -71,15 +68,19 @@ public class NotificationIntentService extends IntentService {
                             CollectionType listType = mapper.getTypeFactory().constructCollectionType(ArrayList.class, StrangerNotification.class);
 
                             List<StrangerNotification> notifications = mapper.readValue(response.toString(), listType);
+                            Log.d(getClass().getSimpleName(), "received " + notifications.size() + " notifications");
                             NotificationService.notifyAll(getApplicationContext(), notifications);
                         }catch (IOException e){
                             e.printStackTrace();
+                        }finally {
+                            WakefulBroadcastReceiver.completeWakefulIntent(intent);
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        WakefulBroadcastReceiver.completeWakefulIntent(intent);
                         Log.e(getClass().getSimpleName(),"error: " + error.getMessage());
                     }
                 }

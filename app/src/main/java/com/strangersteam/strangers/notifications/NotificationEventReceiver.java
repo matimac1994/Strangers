@@ -26,7 +26,7 @@ public class NotificationEventReceiver extends WakefulBroadcastReceiver {
         alarmIntent = getStartPendingIntent(context);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
                 getTriggerAt(new Date()),
-                5000,
+                10000,
                 alarmIntent);
     }
 
@@ -43,20 +43,13 @@ public class NotificationEventReceiver extends WakefulBroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        String action = intent.getAction();
-        Intent serviceIntent = null;
-        if (ACTION_START_NOTIFICATION_SERVICE.equals(action)) {
-            Log.i(getClass().getSimpleName(), "onReceive from alarm, starting notification service");
-            serviceIntent = NotificationIntentService.createIntentStartNotificationService(context);
-        } else if (ACTION_DELETE_NOTIFICATION.equals(action)) {
-            Log.i(getClass().getSimpleName(), "onReceive delete notification action, starting notification service to handle delete");
-            //serviceIntent = NotificationIntentService.createIntentDeleteNotification(context);
-        }
-        Toast.makeText(context,action,Toast.LENGTH_SHORT).show();
+        Log.i(getClass().getSimpleName(), "onReceive from alarm, starting notification service");
+        Intent serviceIntent = NotificationIntentService.createIntentStartNotificationService(context);
 
-        if (serviceIntent != null) {
-            startWakefulService(context, serviceIntent);
-        }
+        Toast.makeText(context,intent.getAction(),Toast.LENGTH_SHORT).show();
+
+        startWakefulService(context, serviceIntent);
+
     }
 
     private static long getTriggerAt(Date now) {
@@ -72,9 +65,4 @@ public class NotificationEventReceiver extends WakefulBroadcastReceiver {
         return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    public static PendingIntent getDeleteIntent(Context context) {
-        Intent intent = new Intent(context, NotificationEventReceiver.class);
-        intent.setAction(ACTION_DELETE_NOTIFICATION);
-        return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
 }
