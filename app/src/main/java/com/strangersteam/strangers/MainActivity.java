@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final String FRAGMENT_ID_EXTRA = "FRAGMENT_ID";
+    public static final int FRAGMENT_MY_EVENTS = 3;
+    public static final int FRAGMENT_ATTEND_EVENTS = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +58,9 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment;
         int fragmentIdExtra = getIntent().getIntExtra(FRAGMENT_ID_EXTRA,-1);
         if(fragmentIdExtra != -1){
-            if(fragmentIdExtra == FewMyEventsMsgNotificationBuildStrategy.FEW_MY_EVENTS_NOTIFICATION_ID){
+            if(fragmentIdExtra == FRAGMENT_MY_EVENTS){
                 fragment = new MyEventsFragment();
-            }else if(fragmentIdExtra == FewAttendEventMsgNotificationBuildStrategy.FEW_ATTENDING_EVENTS_NOTIFICATION_ID){
+            }else if(fragmentIdExtra == FRAGMENT_ATTEND_EVENTS){
                 fragment = new MyAttendEventsFragment();
             }
             else

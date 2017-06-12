@@ -41,8 +41,11 @@ public class NotificationService {
             case FEW_ATTEND_EVENTS_MSG:
                 strategy = new FewAttendEventMsgNotificationBuildStrategy();
                 break;
-            case NEW_MY_EVENT_ATTENDERS:
-                strategy = new NewAttendersNotificationBuildStrategy();
+            case NEW_FEW_MY_EVENT_ATTENDERS:
+                strategy = new FewEventsNewAttendersNotificationBuildStrategy();
+                break;
+            case NEW_ONE_MY_EVENT_ATTENDERS:
+                strategy = new OneEventNewAttendersNotificationBuildStratedy();
                 break;
             default:
                 throw new IllegalArgumentException();

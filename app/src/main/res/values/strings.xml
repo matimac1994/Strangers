@@ -118,5 +118,7 @@
     <string name="my_events_unreaded_msgs_label">Nowe wiadomości:</string>
     <string name="add_event_marker_toast">Przytrzymaj dłużej by dodać event</string>
     <string name="notifications_somebody_joined_to_your_event">Dołączono do Twojego wydarzenia:</string>
+    <string name="notifications_new_attenders">Nowe osoby!</string>
+    <string name="notifications_to_your_event_joined_users">Do Twoich wydarzeń dołączyli:</string>
 
 </resources>
