@@ -7,6 +7,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -65,6 +66,8 @@ public class AddEventMarkerActivity extends AppCompatActivity implements
         mMap.setOnInfoWindowClickListener(this);
         mMap.setOnMarkerDragListener(this);
         mMap.setOnInfoWindowLongClickListener(this);
+
+        Toast.makeText(this, getString(R.string.add_event_marker_toast), Toast.LENGTH_SHORT).show();
 
         if(cameraLatLng != null){
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(cameraLatLng, 14));
