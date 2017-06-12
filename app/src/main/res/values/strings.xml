@@ -116,5 +116,6 @@
     <string name="drawer_attend_events">Biorę udział</string>
     <string name="notification_title_new_msgs">Nowe wiadomości!</string>
     <string name="my_events_unreaded_msgs_label">Nowe wiadomości:</string>
+    <string name="add_event_marker_toast">Przytrzymaj dłużej by dodać event</string>
 
 </resources>

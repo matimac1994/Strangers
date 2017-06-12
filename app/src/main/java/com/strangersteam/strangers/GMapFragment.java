@@ -164,8 +164,8 @@ public class GMapFragment extends Fragment implements
         mMap.setOnInfoWindowClickListener(this);
         mMap.setOnCameraIdleListener(this);
 
-        nowBitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.now_icon);
-        futureBitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.future_icon);
+        nowBitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.now_marker);
+        futureBitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.future_marker);
 
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -288,7 +288,6 @@ public class GMapFragment extends Fragment implements
         mopt.draggable(false);
 
         if(event.getType() == EventType.FUTURE){
-            mopt.alpha(0.6f);
             mopt.icon(futureBitmapDescriptor);
             mopt.snippet(new SimpleDateFormat("HH:mm EEEE, dd-MMM", new Locale("pl","PL")).format(new Date(event.getDate().getTimeInMillis())));
         }else{
