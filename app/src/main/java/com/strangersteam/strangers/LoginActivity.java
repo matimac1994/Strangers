@@ -46,7 +46,6 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         if(AuthTokenProvider.isTokenExist(getApplicationContext())){
-            Toast.makeText(this,"Debug Jesteś już zalogowany",Toast.LENGTH_SHORT).show();
             LoginHandler.onLogged(getApplicationContext(),LoginActivity.this);
         }
 

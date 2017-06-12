@@ -45,9 +45,6 @@ public class NotificationEventReceiver extends WakefulBroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.i(getClass().getSimpleName(), "onReceive from alarm, starting notification service");
         Intent serviceIntent = NotificationIntentService.createIntentStartNotificationService(context);
-
-        Toast.makeText(context,intent.getAction(),Toast.LENGTH_SHORT).show();
-
         startWakefulService(context, serviceIntent);
 
     }
